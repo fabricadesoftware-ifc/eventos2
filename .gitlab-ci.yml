@@ -1,0 +1,84 @@
+image: nikolaik/python-nodejs:python3.7-nodejs12
+
+variables:
+    PIP_CACHE_DIR: "$CI_PROJECT_DIR/.cache/pip"
+
+stages:
+  - lint
+  - test
+  - deploy
+
+cache:
+  key: ${CI_COMMIT_REF_SLUG}
+  paths:
+    - .cache/pip/
+    - .cache/venvs/
+    - frontend/node_modules/
+
+default:
+  before_script:
+    - cd backend
+    - pip install --pre poetry
+    - mkdir -p ~/.config/pypoetry
+    - touch ~/.config/pypoetry/config.toml
+    - poetry config virtualenvs.path $CI_PROJECT_DIR/.cache/venvs
+    - poetry install
+    - cd ..
+    - cd frontend
+    - npm install
+    - cd ..
+
+lint:
+  stage: lint
+  script:
+    - cd backend
+    - poetry run black --check .
+    - poetry run isort --check-only
+    - poetry run flake8 .
+    - poetry run bandit --quiet --exclude=./tests/ --recursive .
+    - cd ..
+    - cd frontend
+    - npm run lint --no-fix
+
+test:
+  stage: test
+  script:
+    - cd backend
+    - poetry run pytest
+    - cd ..
+
+deploy_test:
+  stage: deploy
+  script:
+    - cd backend
+    - poetry export -f requirements.txt > requirements.txt
+    - |
+        cat << EOF >.env
+        SECRET_KEY=$TEST_SECRET_KEY
+        DATABASE_URL=postgres://eventos2@/eventos2
+        ALLOWED_HOSTS=eventos2.fabricadesoftware.ifc.edu.br
+        DEBUG=True
+        EOF
+    - poetry run python manage.py collectstatic
+    - cd ..
+    - cd frontend
+    - npm run build
+    - cd ..
+    - rm -rf .cache
+    - apt-get update -y
+    - apt-get install -yqq openssh-client
+    - mkdir -p ~/.ssh
+    - chmod 700 ~/.ssh
+    - echo "[eventos2.fabricadesoftware.ifc.edu.br]:1022 ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIAQHt8NDADsuuX0yyLocmnA+L4MLEyrQZvSV7M0KRz9m" >> ~/.ssh/known_hosts
+    - eval $(ssh-agent -s)
+    - echo "$TEST_SSH_PRIVATE_KEY" | tr -d '\r' | ssh-add -
+    - export TEST_DEPLOY=$(date +%Y%m%d%H%M%S)
+    - ssh -p 1022 eventos2@eventos2.fabricadesoftware.ifc.edu.br "mkdir \"/srv/eventos2/$TEST_DEPLOY/\""
+    - scp -r -P 1022 backend "eventos2@eventos2.fabricadesoftware.ifc.edu.br:/srv/eventos2/$TEST_DEPLOY/backend"
+    - scp -r -P 1022 frontend/dist "eventos2@eventos2.fabricadesoftware.ifc.edu.br:/srv/eventos2/$TEST_DEPLOY/frontend_dist"
+    - ssh -p 1022 eventos2@eventos2.fabricadesoftware.ifc.edu.br "ln -s /srv/eventos2/media \"/srv/eventos2/$TEST_DEPLOY/backend/media\""
+    - ssh -p 1022 eventos2@eventos2.fabricadesoftware.ifc.edu.br "ln -snf \"/srv/eventos2/$TEST_DEPLOY\" /srv/eventos2/current"
+    - ssh -p 1022 eventos2@eventos2.fabricadesoftware.ifc.edu.br "sudo systemctl restart netfab-django-gunicorn-eventos2.service"
+  environment:
+    name: test
+    url: https://eventos2.fabricadesoftware.ifc.edu.br
