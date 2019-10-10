@@ -1,0 +1,14 @@
+---
+
+version: '3.1'
+
+services:
+  db:
+    image: postgres:12
+    restart: always
+    environment:
+      POSTGRES_USER: eventos2
+      POSTGRES_PASSWORD: eventos2
+      POSTGRES_DB: eventos2
+    ports:
+      - '8254:5432'
