@@ -8,5 +8,6 @@ router = DefaultRouter()
 router.register(r"event", views.EventViewSet)
 router.register(r"sponsorship", views.SponsorshipViewSet)
 router.register(r"sponsorship_category", views.SponsorshipCategoryViewSet)
+router.register(r"image", views.ImageUploadViewSet)
 
 urlpatterns = router.urls

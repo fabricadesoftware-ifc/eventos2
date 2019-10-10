@@ -1,11 +1,16 @@
-from rest_framework import viewsets
+from rest_framework import mixins, viewsets
 
-from core.models import Event, Sponsorship, SponsorshipCategory
+from core.models import Event, Image, Sponsorship, SponsorshipCategory
 from core.serializers import (
     EventSerializer,
+    ImageSerializer,
     SponsorshipCategorySerializer,
     SponsorshipDetailSerializer,
 )
+
+
+class CreateViewSet(mixins.CreateModelMixin, viewsets.GenericViewSet):
+    pass
 
 
 class EventViewSet(viewsets.ModelViewSet):
@@ -21,3 +26,8 @@ class SponsorshipViewSet(viewsets.ModelViewSet):
 class SponsorshipCategoryViewSet(viewsets.ModelViewSet):
     queryset = SponsorshipCategory.objects.all()
     serializer_class = SponsorshipCategorySerializer
+
+
+class ImageUploadViewSet(CreateViewSet):
+    queryset = Image.objects.all()
+    serializer_class = ImageSerializer
