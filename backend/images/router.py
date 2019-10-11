@@ -5,6 +5,4 @@ from images import views
 app_name = "images"
 
 router = DefaultRouter()
-router.register("", views.ImageUploadViewSet)
-
-urlpatterns = router.urls
+router.register("image", views.ImageUploadViewSet)

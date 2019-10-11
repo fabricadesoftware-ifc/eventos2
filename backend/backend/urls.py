@@ -5,8 +5,16 @@ from django.urls import include, path, re_path
 from drf_yasg import openapi
 from drf_yasg.views import get_schema_view
 from rest_framework import permissions
+from rest_framework.routers import DefaultRouter
 
 from backend import __version__
+from core.router import router as core_router
+from images.router import router as images_router
+
+# Junção das rotas de todos os aplicativos
+global_router = DefaultRouter()
+global_router.registry.extend(core_router.registry)
+global_router.registry.extend(images_router.registry)
 
 schema_view = get_schema_view(
     openapi.Info(title="Eventos2", default_version=__version__),
@@ -35,8 +43,7 @@ urlpatterns = [
                     schema_view.with_ui("redoc", cache_timeout=0),
                     name="schema-redoc",
                 ),
-                path("", include("core.urls")),
-                path("image", include("images.urls")),
+                path("", include(global_router.urls)),
             ]
         ),
     )
