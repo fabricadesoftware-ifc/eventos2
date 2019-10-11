@@ -80,7 +80,7 @@ deploy_test:
     - ssh -p 1022 eventos2@eventos2.fabricadesoftware.ifc.edu.br "cd \"/srv/eventos2/$TEST_DEPLOY/backend\" && ../venv/bin/python manage.py migrate"
     - ssh -p 1022 eventos2@eventos2.fabricadesoftware.ifc.edu.br "ln -s /srv/eventos2/media \"/srv/eventos2/$TEST_DEPLOY/backend/media\""
     - ssh -p 1022 eventos2@eventos2.fabricadesoftware.ifc.edu.br "ln -snf \"/srv/eventos2/$TEST_DEPLOY\" /srv/eventos2/current"
-    - ssh -p 1022 eventos2@eventos2.fabricadesoftware.ifc.edu.br "sudo systemctl restart netfab-django-gunicorn-eventos2.service"
+    - ssh -p 1022 eventos2@eventos2.fabricadesoftware.ifc.edu.br "sudo systemctl restart projeto-eventos2-eventos2.service"
   environment:
     name: test
     url: https://eventos2.fabricadesoftware.ifc.edu.br
