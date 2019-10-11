@@ -98,7 +98,7 @@ python-versions = "*"
 version = "3.0.4"
 
 [[package]]
-category = "dev"
+category = "main"
 description = "Composable command line interface toolkit"
 name = "click"
 optional = false
@@ -162,6 +162,23 @@ name = "django-environ"
 optional = false
 python-versions = "*"
 version = "0.4.5"
+
+[[package]]
+category = "main"
+description = "An app that provides django integration for RQ (Redis Queue)"
+name = "django-rq"
+optional = false
+python-versions = "*"
+version = "2.1.0"
+
+[package.dependencies]
+django = ">=1.8.0"
+redis = ">=3"
+rq = ">=1.0"
+
+[package.extras]
+sentry = ["raven (>=6.1.0)"]
+testing = ["mock (>=2.0.0)"]
 
 [[package]]
 category = "main"
@@ -510,6 +527,17 @@ version = "5.1.2"
 
 [[package]]
 category = "main"
+description = "Python client for Redis key-value store"
+name = "redis"
+optional = false
+python-versions = ">=2.7, !=3.0.*, !=3.1.*, !=3.2.*, !=3.3.*"
+version = "3.3.10"
+
+[package.extras]
+hiredis = ["hiredis (>=0.1.3)"]
+
+[[package]]
+category = "main"
 description = "Python HTTP for Humans."
 name = "requests"
 optional = false
@@ -525,6 +553,18 @@ urllib3 = ">=1.21.1,<1.25.0 || >1.25.0,<1.25.1 || >1.25.1,<1.26"
 [package.extras]
 security = ["pyOpenSSL (>=0.14)", "cryptography (>=1.3.4)", "idna (>=2.0.0)"]
 socks = ["PySocks (>=1.5.6,<1.5.7 || >1.5.7)", "win-inet-pton"]
+
+[[package]]
+category = "main"
+description = "RQ is a simple, lightweight, library for creating background jobs, and processing them."
+name = "rq"
+optional = false
+python-versions = ">=2.7"
+version = "1.1.0"
+
+[package.dependencies]
+click = ">=5.0"
+redis = ">=3.0.0"
 
 [[package]]
 category = "main"
@@ -645,7 +685,7 @@ docs = ["sphinx", "jaraco.packaging (>=3.2)", "rst.linker (>=1.9)"]
 testing = ["pathlib2", "contextlib2", "unittest2"]
 
 [metadata]
-content-hash = "884fce690390bbe7b88ffca44843a5f63fd149a32db6ac9a7a3b1609a8f97dc7"
+content-hash = "47257758639dc7e57fec4fca242d58403c95bd0a459fd61e00860dac0bee11a9"
 python-versions = "^3.7"
 
 [metadata.hashes]
@@ -664,6 +704,7 @@ coreapi = ["46145fcc1f7017c076a2ef684969b641d18a2991051fddec9458ad3f78ffc1cb", "
 coreschema = ["5e6ef7bf38c1525d5e55a895934ab4273548629f16aed5c0a6caa74ebf45551f", "9503506007d482ab0867ba14724b93c18a33b22b6d19fb419ef2d239dd4a1607"]
 django = ["148a4a2d1a85b23883b0a4e99ab7718f518a83675e4485e44dc0c1d36988c5fa", "deb70aa038e59b58593673b15e9a711d1e5ccd941b5973b30750d5d026abfd56"]
 django-environ = ["6c9d87660142608f63ec7d5ce5564c49b603ea8ff25da595fd6098f6dc82afde", "c57b3c11ec1f319d9474e3e5a79134f40174b17c7cc024bbb2fad84646b120c4"]
+django-rq = ["1eda0efe0ad1638c5671412edc28a3574a9a69fdc567be56dc86a7a0a8687343", "d9377e851336430676e5fb52c5efae379348355be84d5fc0ece70c0479dc0600"]
 djangorestframework = ["5488aed8f8df5ec1d70f04b2114abc52ae6729748a176c453313834a9ee179c8", "dc81cbf9775c6898a580f6f1f387c4777d12bd87abf0f5406018d32ccae71090"]
 drf-yasg = ["68fded2ffdf46e03f33e766184b7d8f1e1a5236f94acfd0c4ba932a57b812566", "fcef74709ead2b365410be3d12afbfd0a6e49d1efe615a15a929da7e950bb83c"]
 entrypoints = ["589f874b313739ad35be6e0cd7efde2a4e9b6fea91edcc34e58ecbb8dbe56d19", "c70dd71abe5a8c85e55e12c19bd91ccfeec11a6e99044204511f9ed547d48451"]
@@ -696,7 +737,9 @@ pyparsing = ["6f98a7b9397e206d78cc01df10131398f1c8b8510a2f4d97d9abd82e1aacdd80",
 pytest = ["3f193df1cfe1d1609d4c583838bea3d532b18d6160fd3f55c9447fdca30848ec", "e246cf173c01169b9617fc07264b7b1316e78d7a650055235d6d897bc80d9660"]
 pytz = ["26c0b32e437e54a18161324a2fca3c4b9846b74a8dccddd843113109e1116b32", "c894d57500a4cd2d5c71114aaab77dbab5eabd9022308ce5ac9bb93a60a6f0c7"]
 pyyaml = ["0113bc0ec2ad727182326b61326afa3d1d8280ae1122493553fd6f4397f33df9", "01adf0b6c6f61bd11af6e10ca52b7d4057dd0be0343eb9283c878cf3af56aee4", "5124373960b0b3f4aa7df1707e63e9f109b5263eca5976c66e08b1c552d4eaf8", "5ca4f10adbddae56d824b2c09668e91219bb178a1eee1faa56af6f99f11bf696", "7907be34ffa3c5a32b60b95f4d95ea25361c951383a894fec31be7252b2b6f34", "7ec9b2a4ed5cad025c2278a1e6a19c011c80a3caaac804fd2d329e9cc2c287c9", "87ae4c829bb25b9fe99cf71fbb2140c448f534e24c998cc60f39ae4f94396a73", "9de9919becc9cc2ff03637872a440195ac4241c80536632fffeb6a1e25a74299", "a5a85b10e450c66b49f98846937e8cfca1db3127a9d5d1e31ca45c3d0bef4c5b", "b0997827b4f6a7c286c01c5f60384d218dca4ed7d9efa945c3e1aa623d5709ae", "b631ef96d3222e62861443cc89d6563ba3eeb816eeb96b2629345ab795e53681", "bf47c0607522fdbca6c9e817a6e81b08491de50f3766a7a0e6a5be7905961b41", "f81025eddd0327c7d4cfe9b62cf33190e1e736cc6e97502b3ec425f574b3e7a8"]
+redis = ["a657a62ca12d20deb700c3c00b4923bc29893740f2c072e7b1b669777401295d", "bf027fdd92aead8e49ab9d29e72498eef6ca7a38a15b2f88c5d9146145e93049"]
 requests = ["11e007a8a2aa0323f5a921e9e6a2d7e4e67d9877e85773fba9ba6419025cbeb4", "9cf5292fcd0f598c671cfc1e0d7d1a7f13bb8085e9a590f48c010551dc6c4b31"]
+rq = ["2798d26a7b850e759f23f69695a389d676a9c08f2c14f96f0d34d9648c9d5616", "4f27c6a690d1bd02b9157e615d8819555b9b359c0c4ec8ff0013d160c31b40bb"]
 "ruamel.yaml" = ["0db639b1b2742dae666c6fc009b8d1931ef15c9276ef31c0673cc6dcf766cf40", "412a6f5cfdc0525dee6a27c08f5415c7fd832a7afcb7a0ed7319628aed23d408"]
 "ruamel.yaml.clib" = ["0bbe19d3e099f8ba384e1846e6b54f245f58aeec8700edbbf9abb87afa54fd82", "2f38024592613f3a8772bbc2904be027d9abf463518ba145f2d0c8e6da27009f", "44449b3764a3f75815eea8ae5930b98e8326be64a90b0f782747318f861abfe0", "5710be9a357801c31c1eaa37b9bc92d38176d785af5b2f0c9751385c5dc9659a", "5a089acb6833ed5f412e24cbe3e665683064c1429824d2819137b5ade54435c3", "6143386ddd61599ea081c012a69a16e5bdd7b3c6c231bd039534365a48940f30", "6726aaf851f5f9e4cbdd3e1e414bc700bdd39220e8bc386415fd41c87b1b53c2", "68fbc3b5d94d145a391452f886ae5fca240cb7e3ab6bd66e1a721507cdaac28a", "75ebddf99ba9e0b48f32b5bdcf9e5a2b84c017da9e0db7bf11995fa414aa09cd", "79948a6712baa686773a43906728e20932c923f7b2a91be7347993be2d745e55", "8a2dd8e8b08d369558cade05731172c4b5e2f4c5097762c6b352bd28fd9f9dc4", "c747acdb5e8c242ab2280df6f0c239e62838af4bee647031d96b3db2f9cefc04", "cadc8eecd27414dca30366b2535cb5e3f3b47b4e2d6be7a0b13e4e52e459ff9f", "cee86ecc893a6a8ecaa7c6a9c2d06f75f614176210d78a5f155f8e78d6989509", "e59af39e895aff28ee5f55515983cab3466d1a029c91c04db29da1c0f09cf333", "eee7ecd2eee648884fae6c51ae50c814acdcc5d6340dc96c970158aebcd25ac6", "ef8d4522d231cb9b29f6cdd0edc8faac9d9715c60dc7becbd6eb82c915a98e5b", "f504d45230cc9abf2810623b924ae048b224a90adb01f97db4e766cfdda8e6eb"]
 six = ["3350809f0555b11f552448330d0b52d5f24c91a322ea4a15ef22629740f3761c", "d16a0141ec1a18405cd4ce8b4613101da75da0e9a7aec5bdd4fa804d0e0eba73"]

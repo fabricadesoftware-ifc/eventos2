@@ -15,6 +15,8 @@ ALLOWED_HOSTS = env("ALLOWED_HOSTS", list, ["127.0.0.1", "localhost"])
 
 DATABASES = {"default": env.db()}
 
+RQ_QUEUES = {"default": {"URL": env("REDIS_URL")}}
+
 
 INSTALLED_APPS = [
     "django.contrib.admin",
@@ -25,6 +27,7 @@ INSTALLED_APPS = [
     "django.contrib.staticfiles",
     "rest_framework",
     "drf_yasg",
+    "django_rq",
     "core",
     "images",
 ]

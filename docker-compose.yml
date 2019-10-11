@@ -12,3 +12,8 @@ services:
       POSTGRES_DB: eventos2
     ports:
       - '8254:5432'
+  redis:
+    image: redis:5
+    restart: always
+    ports:
+      - '8255:6379'
