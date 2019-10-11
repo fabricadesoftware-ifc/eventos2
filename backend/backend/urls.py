@@ -36,6 +36,7 @@ urlpatterns = [
                     name="schema-redoc",
                 ),
                 path("", include("core.urls")),
+                path("image", include("images.urls")),
             ]
         ),
     )

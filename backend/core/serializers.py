@@ -1,6 +1,8 @@
 from rest_framework import serializers
 
-from core.models import Event, Image, Sponsorship, SponsorshipCategory
+from core.models import Event, Sponsorship, SponsorshipCategory
+from images.models import Image
+from images.serializers import ImageSerializer
 
 
 class SponsorshipCategorySerializer(serializers.ModelSerializer):
@@ -26,17 +28,29 @@ class SponsorshipDetailSerializer(serializers.ModelSerializer):
 
 
 class EventSerializer(serializers.ModelSerializer):
-    sponsorships = SponsorshipSerializer(many=True)
+    sponsorships = SponsorshipSerializer(many=True, required=False, read_only=True)
+    logo_attachment_key = serializers.SlugRelatedField(
+        source="logo",
+        queryset=Image.objects.all(),
+        slug_field="attachment_key",
+        required=False,
+        write_only=True,
+        error_messages={
+            "does_not_exist": "Image with {slug_name}={value} does not exist"
+        },
+    )
+    logo = ImageSerializer(required=False, read_only=True)
 
     class Meta:
         model = Event
-        fields = ["id", "name", "name_english", "starts_on", "ends_on", "sponsorships"]
-        read_only_fields = ["sponsorships"]
-
-
-class ImageSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Image
-        fields = ["public_id", "file", "description", "uploaded_at"]
-        read_only_fields = ["public_id", "uploaded_at"]
-        extra_kwargs = {"file": {"write_only": True}}
+        fields = [
+            "id",
+            "name",
+            "name_english",
+            "starts_on",
+            "ends_on",
+            "sponsorships",
+            "logo_attachment_key",
+            "logo",
+        ]
+        read_only_fields = ["sponsorships", "logo"]

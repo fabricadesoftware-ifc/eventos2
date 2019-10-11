@@ -1,6 +1,7 @@
 from django.db import models
 
 from core.models.soft_deletion import SoftDeletableModel
+from images.models import Image
 
 
 class Event(SoftDeletableModel):
@@ -14,6 +15,9 @@ class Event(SoftDeletableModel):
     ends_on = models.DateTimeField()
     location = models.CharField(
         max_length=255, help_text="Where the event will take place"
+    )
+    logo = models.ForeignKey(
+        Image, on_delete=models.CASCADE, related_name="+", blank=True, null=True
     )
 
     def __str__(self):
