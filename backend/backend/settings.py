@@ -15,6 +15,9 @@ ALLOWED_HOSTS = env("ALLOWED_HOSTS", list, ["127.0.0.1", "localhost"])
 
 DATABASES = {"default": env.db()}
 
+EMAIL_CONFIG = env.email_url("EMAIL_URL", default="memorymail://")
+vars().update(EMAIL_CONFIG)
+
 HUEY = {"connection": {"url": env("REDIS_URL", default=None)}}
 
 
