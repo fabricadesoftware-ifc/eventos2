@@ -16,7 +16,8 @@ drf-yasg = "^1.16"
 packaging = "^19.2"
 Pillow = "^6.2.0"
 gunicorn = "^19.9.0"
-django-rq = "^2.1.0"
+huey = "^2.1.2"
+redis = "^3.3.11"
 
 [tool.poetry.dev-dependencies]
 pytest = "^3.0"
