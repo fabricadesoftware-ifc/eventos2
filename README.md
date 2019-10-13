@@ -29,10 +29,11 @@ poetry run python manage.py migrate
 poetry run python manage.py runserver &
 
 cd ../frontend
+npm install
 npm run serve &
 ```
 
-Acessar o frontend: http://localhost:8000/
+Acessar o frontend: http://localhost:8080/
 
 Acessar o backend: http://localhost:8000/api/v1/
 
