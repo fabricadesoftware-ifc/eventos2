@@ -100,3 +100,5 @@ STATIC_ROOT = os.path.join(BASE_DIR, "static/")
 MEDIA_URL = "/api/media/"
 
 MEDIA_ROOT = os.path.join(BASE_DIR, "media/")
+
+FILE_UPLOAD_PERMISSIONS = 0o640
