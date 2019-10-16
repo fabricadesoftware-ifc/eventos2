@@ -30,6 +30,10 @@ class SponsorshipCategory(models.Model):
     def __str__(self):
         return self.name
 
+    class Meta:
+        verbose_name = "sponsorship category"
+        verbose_name_plural = "sponsorship categories"
+
 
 class Sponsorship(models.Model):
     sponsored_event = models.ForeignKey(
