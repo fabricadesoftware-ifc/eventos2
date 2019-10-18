@@ -80,7 +80,7 @@ deploy_test:
     - scp -r -p -P 1022 backend "eventos2@eventos2.fabricadesoftware.ifc.edu.br:/srv/eventos2/$TEST_DEPLOY/backend"
     - scp -r -p -P 1022 frontend/dist "eventos2@eventos2.fabricadesoftware.ifc.edu.br:/srv/eventos2/$TEST_DEPLOY/frontend_dist"
     - ssh -p 1022 eventos2@eventos2.fabricadesoftware.ifc.edu.br "cd \"/srv/eventos2/$TEST_DEPLOY/\" && virtualenv -p python3 venv && ./venv/bin/pip install -r backend/requirements.txt"
-    - ssh -p 1022 eventos2@eventos2.fabricadesoftware.ifc.edu.br "cd \"/srv/eventos2/$TEST_DEPLOY/backend/\" && PYTHONPATH='.' ../venv/bin/python manage.py migrate"
+    - ssh -p 1022 eventos2@eventos2.fabricadesoftware.ifc.edu.br "cd \"/srv/eventos2/$TEST_DEPLOY/backend/\" && PYTHONPATH='.' ../venv/bin/python eventos2/manage.py migrate"
     - ssh -p 1022 eventos2@eventos2.fabricadesoftware.ifc.edu.br "ln -s /srv/eventos2/media \"/srv/eventos2/$TEST_DEPLOY/backend/media\""
     - ssh -p 1022 eventos2@eventos2.fabricadesoftware.ifc.edu.br "ln -snf \"/srv/eventos2/$TEST_DEPLOY\" /srv/eventos2/current"
     - ssh -p 1022 eventos2@eventos2.fabricadesoftware.ifc.edu.br "sudo systemctl restart projeto-eventos2-eventos2.service"
