@@ -45,7 +45,7 @@ MIDDLEWARE = [
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
 ]
 
-ROOT_URLCONF = "urls"
+ROOT_URLCONF = "eventos2.urls"
 
 TEMPLATES = [
     {
@@ -63,7 +63,7 @@ TEMPLATES = [
     }
 ]
 
-WSGI_APPLICATION = "wsgi.application"
+WSGI_APPLICATION = "eventos2.wsgi.application"
 
 
 # Password validation
