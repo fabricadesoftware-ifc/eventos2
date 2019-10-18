@@ -2,8 +2,8 @@ from rest_framework import mixins, permissions, status, viewsets
 from rest_framework.decorators import action
 from rest_framework.response import Response
 
-from .models import Event, Sponsorship, SponsorshipCategory, User
-from .serializers import (
+from eventos2.core.models import Event, Sponsorship, SponsorshipCategory, User
+from eventos2.core.serializers import (
     EventSerializer,
     SponsorshipCategorySerializer,
     SponsorshipDetailSerializer,
