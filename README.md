@@ -25,8 +25,8 @@ cp .env.sample .env
 # Instalar as dependências do backend
 poetry install
 # Executar os comandos dentro do virtualenv (criado automaticamente)
-poetry run python manage.py migrate
-poetry run python manage.py runserver &
+poetry run python eventos2/manage.py migrate
+poetry run python eventos2/manage.py runserver &
 
 cd ../frontend
 npm install
