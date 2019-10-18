@@ -2,9 +2,10 @@ from django.contrib.auth.hashers import make_password
 from django.contrib.auth.password_validation import validate_password
 from rest_framework import serializers
 
-from core.models import Event, Sponsorship, SponsorshipCategory, User
-from images.models import Image
-from images.serializers import ImageSerializer
+from eventos2.images.models import Image
+from eventos2.images.serializers import ImageSerializer
+
+from .models import Event, Sponsorship, SponsorshipCategory, User
 
 
 class UserSerializer(serializers.ModelSerializer):

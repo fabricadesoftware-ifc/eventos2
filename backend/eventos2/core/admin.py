@@ -1,7 +1,7 @@
 from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin
 
-from core.models import Event, Sponsorship, SponsorshipCategory, User
+from .models import Event, Sponsorship, SponsorshipCategory, User
 
 admin.site.register(Event)
 admin.site.register(Sponsorship)

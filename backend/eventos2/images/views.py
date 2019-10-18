@@ -1,7 +1,7 @@
 from rest_framework import mixins, parsers, viewsets
 
-from images.models import Image
-from images.serializers import ImageUploadSerializer
+from eventos2.images.models import Image
+from eventos2.images.serializers import ImageUploadSerializer
 
 
 class CreateViewSet(mixins.CreateModelMixin, viewsets.GenericViewSet):

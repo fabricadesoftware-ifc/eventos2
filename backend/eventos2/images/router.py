@@ -1,6 +1,6 @@
 from rest_framework.routers import DefaultRouter
 
-from images import views
+from eventos2.images import views
 
 app_name = "images"
 

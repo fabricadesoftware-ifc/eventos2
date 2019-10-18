@@ -4,7 +4,7 @@ import secrets
 
 from django.db import migrations, models
 
-import images.models
+import eventos2.images.models
 
 
 class Migration(migrations.Migration):
@@ -44,7 +44,10 @@ class Migration(migrations.Migration):
                         unique=True,
                     ),
                 ),
-                ("file", models.ImageField(upload_to=images.models.image_file_path)),
+                (
+                    "file",
+                    models.ImageField(upload_to=eventos2.images.models.image_file_path),
+                ),
                 ("description", models.CharField(blank=True, max_length=255)),
                 ("uploaded_on", models.DateTimeField(auto_now_add=True)),
             ],

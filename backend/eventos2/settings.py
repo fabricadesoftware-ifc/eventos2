@@ -31,8 +31,8 @@ INSTALLED_APPS = [
     "rest_framework",
     "drf_yasg",
     "huey.contrib.djhuey",
-    "core",
-    "images",
+    "eventos2.core",
+    "eventos2.images",
 ]
 
 MIDDLEWARE = [
@@ -45,7 +45,7 @@ MIDDLEWARE = [
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
 ]
 
-ROOT_URLCONF = "backend.urls"
+ROOT_URLCONF = "urls"
 
 TEMPLATES = [
     {
@@ -63,7 +63,7 @@ TEMPLATES = [
     }
 ]
 
-WSGI_APPLICATION = "backend.wsgi.application"
+WSGI_APPLICATION = "wsgi.application"
 
 
 # Password validation

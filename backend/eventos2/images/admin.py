@@ -1,5 +1,5 @@
 from django.contrib import admin
 
-from images.models import Image
+from eventos2.images.models import Image
 
 admin.site.register(Image)

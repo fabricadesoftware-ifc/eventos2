@@ -1,6 +1,6 @@
 from rest_framework import serializers
 
-from images.models import Image
+from eventos2.images.models import Image
 
 
 class ImageUploadSerializer(serializers.ModelSerializer):

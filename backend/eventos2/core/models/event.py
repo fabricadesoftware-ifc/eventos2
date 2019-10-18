@@ -1,7 +1,8 @@
 from django.db import models
 
-from core.models.soft_deletion import SoftDeletableModel
-from images.models import Image
+from eventos2.images.models import Image
+
+from .soft_deletion import SoftDeletableModel
 
 
 class Event(SoftDeletableModel):

@@ -1,6 +1,6 @@
 from rest_framework.routers import DefaultRouter
 
-from core import views
+from . import views
 
 router = DefaultRouter()
 router.register(r"event", views.EventViewSet)
