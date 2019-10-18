@@ -27,7 +27,6 @@ urlpatterns = [
         "api/v1/",
         include(
             [
-                path("admin/", admin.site.urls),
                 re_path(
                     r"^swagger(?P<format>\.json|\.yaml)$",
                     schema_view.without_ui(cache_timeout=0),
@@ -48,6 +47,10 @@ urlpatterns = [
         ),
     )
 ]
+
+# Habilitar a interface de administração apenas em modo debug.
+if settings.DEBUG:
+    urlpatterns.append(path("api/admin/", admin.site.urls))
 
 # Servir arquivos de media. Só será efetivo quando rodando no modo debug.
 # Em produção, o nginx é quem serve estes arquivos.

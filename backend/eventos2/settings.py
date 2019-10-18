@@ -22,7 +22,6 @@ HUEY = {"connection": {"url": env("REDIS_URL", default=None)}}
 
 
 INSTALLED_APPS = [
-    "django.contrib.admin",
     "django.contrib.auth",
     "django.contrib.contenttypes",
     "django.contrib.sessions",
@@ -34,6 +33,10 @@ INSTALLED_APPS = [
     "eventos2.core",
     "eventos2.images",
 ]
+
+# Habilitar a interface de administração apenas em modo debug.
+if DEBUG:
+    INSTALLED_APPS.append("django.contrib.admin")
 
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
