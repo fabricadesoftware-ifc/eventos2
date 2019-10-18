@@ -56,6 +56,7 @@ deploy_test:
         cat << EOF >.env
         SECRET_KEY=$TEST_SECRET_KEY
         DATABASE_URL=postgres://eventos2@/eventos2
+        SENTRY_URL=$TEST_SENTRY_URL
         ALLOWED_HOSTS=eventos2.fabricadesoftware.ifc.edu.br
         DEBUG=True
         EOF

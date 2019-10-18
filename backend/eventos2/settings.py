@@ -1,6 +1,8 @@
 import os
 
 import environ
+import sentry_sdk
+from sentry_sdk.integrations.django import DjangoIntegration
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
@@ -110,3 +112,11 @@ MEDIA_URL = "/api/media/"
 MEDIA_ROOT = os.path.join(BASE_DIR, "media/")
 
 FILE_UPLOAD_PERMISSIONS = 0o640
+
+
+# Sentry error reporting
+# https://docs.sentry.io/platforms/python/django/
+
+SENTRY_URL = env.url("SENTRY_URL", default=None)
+if SENTRY_URL:
+    sentry_sdk.init(dsn=SENTRY_URL.geturl(), integrations=[DjangoIntegration()])
