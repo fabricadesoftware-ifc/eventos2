@@ -1,8 +1,7 @@
-from rest_framework import serializers
-
 from eventos2.core.models import Event, Sponsorship, SponsorshipCategory
 from eventos2.images.models import Image
 from eventos2.images.serializers import ImageSerializer
+from rest_framework import serializers
 
 
 class SponsorshipCategorySerializer(serializers.ModelSerializer):
@@ -35,9 +34,6 @@ class EventSerializer(serializers.ModelSerializer):
         slug_field="attachment_key",
         required=False,
         write_only=True,
-        error_messages={
-            "does_not_exist": "Image with {slug_name}={value} does not exist"
-        },
     )
     logo = ImageSerializer(required=False, read_only=True)
 
