@@ -32,10 +32,10 @@ lint:
   stage: lint
   script:
     - cd backend
-    - poetry run black --check .
-    - poetry run isort --check-only
-    - poetry run flake8 .
-    - poetry run bandit --quiet --exclude=./tests/ --recursive .
+    - poetry run -- black --check .
+    - poetry run -- isort --check-only
+    - poetry run -- flake8 .
+    - poetry run -- bandit --quiet --exclude=./tests/ --recursive .
     - cd ..
     - cd frontend
     - npm run lint --no-fix
@@ -60,7 +60,7 @@ deploy_test:
         ALLOWED_HOSTS=eventos2.fabricadesoftware.ifc.edu.br
         DEBUG=True
         EOF
-    - poetry run python eventos2/manage.py collectstatic
+    - poetry run -- python eventos2/manage.py collectstatic
     # Allow web server (nginx) to traverse directories and read files,
     # so that it can serve the static files.
     - chmod -R u=rwX,go=rX static/
