@@ -1,7 +1,8 @@
+from rest_framework import serializers
+
 from eventos2.core.models import Event, Sponsorship, SponsorshipCategory
 from eventos2.images.models import Image
 from eventos2.images.serializers import ImageSerializer
-from rest_framework import serializers
 
 
 class SponsorshipCategorySerializer(serializers.ModelSerializer):
