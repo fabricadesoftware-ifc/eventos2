@@ -1,5 +1,6 @@
 from drf_yasg.utils import swagger_auto_schema
 from rest_framework import status
+from rest_framework.decorators import action
 from rest_framework.response import Response
 from rest_framework.viewsets import GenericViewSet
 
@@ -9,6 +10,8 @@ from eventos2.core.serializers import (
     EventDetailSerializer,
     EventUpdateSerializer,
 )
+from eventos2.core.models import EventRegistrationType
+from eventos2.core.serializers import EventRegistrationTypeSerializer
 
 
 class EventViewSet(GenericViewSet):

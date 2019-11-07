@@ -12,10 +12,7 @@ class Migration(migrations.Migration):
             model_name="event",
             name="slug",
             field=models.CharField(
-                default="slug",
-                help_text="A unique, readable identifier",
-                max_length=255,
-                unique=True,
+                help_text="A unique, readable identifier", max_length=255, unique=True
             ),
         )
     ]

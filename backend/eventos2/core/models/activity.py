@@ -1,0 +1,39 @@
+from django.db import models
+
+from eventos2.core.models.event import EventRegistration
+from eventos2.core.models.soft_deletion import SoftDeletableModel
+from eventos2.core.models.user import User
+
+
+class Activity(SoftDeletableModel):
+    slug = models.CharField(
+        max_length=255, unique=True, help_text="A unique, readable identifier"
+    )
+    name = models.CharField(
+        max_length=255, help_text="The event's name in its native language"
+    )
+    name_english = models.CharField(
+        max_length=255, blank=True, help_text="The event's name in english"
+    )
+    starts_on = models.DateTimeField()
+    ends_on = models.DateTimeField()
+
+    owners = models.ManyToManyField(
+        User, through="ActivityOwnership", related_name="activities_owned"
+    )
+
+
+class ActivityOwnership(models.Model):
+    activity = models.ForeignKey(Activity, on_delete=models.PROTECT)
+    user = models.ForeignKey(User, on_delete=models.PROTECT)
+
+
+class ActivityRegistration(models.Model):
+    activity = models.ForeignKey(
+        Activity, on_delete=models.PROTECT, related_name="registrations"
+    )
+    event_registration = models.ForeignKey(
+        EventRegistration,
+        on_delete=models.PROTECT,
+        related_name="activity_registrations",
+    )
