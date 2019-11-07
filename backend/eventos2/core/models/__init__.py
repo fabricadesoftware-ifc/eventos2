@@ -1,2 +1,2 @@
-from eventos2.core.models.event import Event
-from eventos2.core.models.user import User
+from eventos2.core.models.event import *
+from eventos2.core.models.user import *
