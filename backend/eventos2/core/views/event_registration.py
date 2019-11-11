@@ -25,13 +25,6 @@ class EventRegistrationViewSet(GenericViewSet):
         response_serializer = EventRegistrationDetailSerializer(event_registration)
         return Response(response_serializer.data, status=status.HTTP_201_CREATED)
 
-    @swagger_auto_schema(manual_parameters=, responses={200: EventRegistrationDetailSerializer(many=True)})
-    def list(self, request):
-        event = request.query_params.get("event", None)
-        registrations = self.get_queryset().filter(event=event)
-        serializer = EventRegistrationDetailSerializer(registrations, many=True)
-        return Response(serializer.data)
-
     @swagger_auto_schema(responses={204: "Success", 404: "Not found"})
     def destroy(self, request, *args, **kwargs):
         registration = self.get_object()

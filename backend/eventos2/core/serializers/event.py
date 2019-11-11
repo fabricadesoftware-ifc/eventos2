@@ -55,9 +55,11 @@ class EventUpdateSerializer(EventBaseSerializer):
     def update(self, event, validated_data):
         for k, v in validated_data.items():
             setattr(event, k, v)
+        event.save()
         return event
 
 
 class EventDetailSerializer(EventBaseSerializer):
+    id = serializers.IntegerField()
     logo = ImageSerializer(required=False)
     registration_types = EventRegistrationTypeDetailSerializer(many=True)
