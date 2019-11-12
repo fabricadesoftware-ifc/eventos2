@@ -49,6 +49,9 @@ test:
 
 deploy_test:
   stage: deploy
+  only:
+    - master
+    - test
   script:
     - cd backend
     - poetry export -f requirements.txt > requirements.txt
