@@ -85,6 +85,12 @@ deploy_test:
     - ssh -p 1022 eventos2@eventos2.fabricadesoftware.ifc.edu.br "ln -s /srv/eventos2/media \"/srv/eventos2/$TEST_DEPLOY/backend/media\""
     - ssh -p 1022 eventos2@eventos2.fabricadesoftware.ifc.edu.br "ln -snf \"/srv/eventos2/$TEST_DEPLOY\" /srv/eventos2/current"
     - ssh -p 1022 eventos2@eventos2.fabricadesoftware.ifc.edu.br "sudo systemctl restart projeto-eventos2-eventos2.service"
+  artifacts:
+    when: always
+    name: ${CI_COMMIT_REF_SLUG}
+    expire_in: 1 week
+    paths:
+      - backend/requirements.txt
   environment:
     name: test
     url: https://eventos2.fabricadesoftware.ifc.edu.br
