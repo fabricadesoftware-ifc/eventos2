@@ -18,7 +18,7 @@ cache:
 default:
   before_script:
     - cd backend
-    - pip install --pre poetry
+    - pip install --pre poetry==1.0.0b3
     - mkdir -p ~/.config/pypoetry
     - touch ~/.config/pypoetry/config.toml
     - poetry config virtualenvs.path $CI_PROJECT_DIR/.cache/venvs
