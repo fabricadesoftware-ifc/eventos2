@@ -42,9 +42,10 @@ lint:
 
 test:
   stage: test
+  coverage: '/TOTAL.*\s+(\d+%)$/'
   script:
     - cd backend
-    - poetry run pytest
+    - poetry run -- pytest --cov=eventos2
     - cd ..
 
 deploy_test:
