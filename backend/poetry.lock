@@ -606,6 +606,14 @@ version = "0.2.0"
 
 [[package]]
 category = "main"
+description = "Awesome Django authorization, without the database"
+name = "rules"
+optional = false
+python-versions = "*"
+version = "2.1"
+
+[[package]]
+category = "main"
 description = "Python client for Sentry (https://getsentry.com)"
 name = "sentry-sdk"
 optional = false
@@ -715,7 +723,7 @@ docs = ["sphinx", "jaraco.packaging (>=3.2)", "rst.linker (>=1.9)"]
 testing = ["pathlib2", "contextlib2", "unittest2"]
 
 [metadata]
-content-hash = "a312f72c03ec687a55e038e553bff35d9f76a6fe0a86de43d067bc029f190fef"
+content-hash = "7496c10b0497c07842ae1a7af9fbc66f7e7d6f6433c8319dd6fbbd4531a8067e"
 python-versions = "^3.7"
 
 [metadata.files]
@@ -1069,6 +1077,9 @@ requests = [
     {file = "ruamel.yaml.clib-0.2.0-cp37-cp37m-win32.whl", hash = "sha256:57933a6986a3036257ad7bf283529e7c19c2810ff24c86f4a0cfeb49d2099919"},
     {file = "ruamel.yaml.clib-0.2.0-cp37-cp37m-win_amd64.whl", hash = "sha256:b1b7fcee6aedcdc7e62c3a73f238b3d080c7ba6650cd808bce8d7761ec484070"},
     {file = "ruamel.yaml.clib-0.2.0.tar.gz", hash = "sha256:b66832ea8077d9b3f6e311c4a53d06273db5dc2db6e8a908550f3c14d67e718c"},
+]
+rules = [
+    {file = "rules-2.1.tar.gz", hash = "sha256:2c0a3707e5e935a883ef8fe65fd080e7169f67ac1ef0c5e2d2e6932cb3ef5318"},
 ]
 sentry-sdk = [
     {file = "sentry-sdk-0.13.2.tar.gz", hash = "sha256:ff1fa7fb85703ae9414c8b427ee73f8363232767c9cd19158f08f6e4f0b58fc7"},

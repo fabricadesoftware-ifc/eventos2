@@ -31,6 +31,7 @@ INSTALLED_APPS = [
     "django.contrib.staticfiles",
     "rest_framework",
     "drf_yasg",
+    "rules.apps.AutodiscoverRulesConfig",
     "huey.contrib.djhuey",
     "eventos2.core",
     "eventos2.images",
@@ -69,6 +70,15 @@ TEMPLATES = [
 ]
 
 WSGI_APPLICATION = "eventos2.wsgi.application"
+
+
+# Authentication
+# https://docs.djangoproject.com/en/2.2/ref/settings/#authentication-backends
+
+AUTHENTICATION_BACKENDS = (
+    "rules.permissions.ObjectPermissionBackend",
+    "django.contrib.auth.backends.ModelBackend",
+)
 
 
 # Password validation

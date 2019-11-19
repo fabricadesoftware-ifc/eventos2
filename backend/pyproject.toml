@@ -19,6 +19,7 @@ gunicorn = "^19.9.0"
 huey = "^2.1.2"
 redis = "^3.3.11"
 sentry-sdk = "^0.13.0"
+rules = "^2.1"
 
 [tool.poetry.dev-dependencies]
 pytest = "^3.0"
