@@ -29,8 +29,12 @@ class Event(SoftDeletableModel):
 
 
 class EventOwnership(models.Model):
-    event = models.ForeignKey(Event, on_delete=models.PROTECT)
-    user = models.ForeignKey(User, on_delete=models.PROTECT)
+    event = models.ForeignKey(
+        Event, on_delete=models.PROTECT, related_name="ownerships"
+    )
+    user = models.ForeignKey(
+        User, on_delete=models.PROTECT, related_name="event_ownerships"
+    )
 
 
 class EventRegistrationType(models.Model):
