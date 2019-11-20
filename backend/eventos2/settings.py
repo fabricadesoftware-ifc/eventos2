@@ -124,6 +124,10 @@ MEDIA_ROOT = os.path.join(BASE_DIR, "media/")
 FILE_UPLOAD_PERMISSIONS = 0o640
 
 
+# Django Rest Framework
+# https://www.django-rest-framework.org/
+REST_FRAMEWORK = {"DEFAULT_METADATA_CLASS": "eventos2.utils.metadata.MinimalMetadata"}
+
 # Sentry error reporting
 # https://docs.sentry.io/platforms/python/django/
 
