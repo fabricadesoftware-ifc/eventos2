@@ -126,7 +126,10 @@ FILE_UPLOAD_PERMISSIONS = 0o640
 
 # Django Rest Framework
 # https://www.django-rest-framework.org/
-REST_FRAMEWORK = {"DEFAULT_METADATA_CLASS": "eventos2.utils.metadata.MinimalMetadata"}
+REST_FRAMEWORK = {
+    "DEFAULT_METADATA_CLASS": "eventos2.utils.metadata.MinimalMetadata",
+    "DEFAULT_RENDERER_CLASSES": ["rest_framework.renderers.JSONRenderer"],
+}
 
 # Sentry error reporting
 # https://docs.sentry.io/platforms/python/django/
