@@ -11,10 +11,19 @@ from eventos2.core.serializers import (
     EventRegistrationDetailSerializer,
     EventUpdateSerializer,
 )
+from eventos2.utils.permissions import PerActionPermissions
 
 
 class EventViewSet(GenericViewSet):
     queryset = Event.available_objects.all()
+    permission_classes = [PerActionPermissions]
+    per_action_permissions = {
+        "create": ["core.add_event"],
+        "destroy": ["core.delete_event"],
+        "list_registrations": ["core.view_event_registration"],
+        "retrieve": PerActionPermissions.ALLOW_ANY,
+        "update": ["core.change_event"],
+    }
 
     @swagger_auto_schema(
         request_body=EventCreateSerializer,
