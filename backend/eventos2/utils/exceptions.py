@@ -15,3 +15,9 @@ class DuplicateIdentifierError(EventosException):
     status_code = 409
     default_detail = "The supplied identifier has already been used."
     default_code = "duplicate_identifier"
+
+
+class NotAuthorizedError(EventosException):
+    status_code = 403
+    default_detail = "You cannot access the requested resource."
+    default_code = "forbidden"

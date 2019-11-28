@@ -1,19 +1,26 @@
 from datetime import datetime
 
-from eventos2.core.models import Event, EventRegistration
+from eventos2.core.models import Event, EventRegistration, User
 from eventos2.images.models import Image
-from eventos2.utils.exceptions import DuplicateIdentifierError, NotFoundError
+from eventos2.utils.exceptions import (
+    DuplicateIdentifierError,
+    NotAuthorizedError,
+    NotFoundError,
+)
 
 
 def get_by_id(event_id: int) -> Event:
     try:
-        return Event.available_objects.get(pk=event_id)
+        event = Event.available_objects.get(pk=event_id)
     except Event.DoesNotExist:
         raise NotFoundError("Event not found")
+
+    return event
 
 
 def create(
     *,
+    actor: User,
     slug: str,
     name: str,
     name_english: str = None,
@@ -21,11 +28,14 @@ def create(
     ends_on: datetime,
     logo: Image = None
 ) -> Event:
+    if not actor.has_perm("core.add_event"):
+        raise NotAuthorizedError("Not authorized to create an event.")
+
     slug_is_taken = Event.objects.filter(slug=slug).exists()
     if slug_is_taken:
         raise DuplicateIdentifierError("Slug already used.")
 
-    return Event.objects.create(
+    event = Event.objects.create(
         slug=slug,
         name=name,
         name_english=name_english or "",
@@ -33,11 +43,14 @@ def create(
         ends_on=ends_on,
         logo=logo,
     )
+    event.owners.add(actor)
+    return event
 
 
 def update(
-    event_id: int,
     *,
+    actor: User,
+    event_id: int,
     slug: str,
     name: str,
     name_english: str = None,
@@ -46,6 +59,9 @@ def update(
     logo: Image = None
 ) -> Event:
     event = get_by_id(event_id)
+
+    if not actor.has_perm("core.change_event", event):
+        raise NotAuthorizedError("Not authorized to edit this event.")
 
     event_pks_using_slug = (
         Event.objects.filter(slug=slug).values_list("pk", flat=True).first()
@@ -63,11 +79,19 @@ def update(
     return event
 
 
-def delete(event_id: int) -> None:
+def delete(*, actor: User, event_id: int) -> None:
     event = get_by_id(event_id)
+
+    if not actor.has_perm("core.delete_event", event):
+        raise NotAuthorizedError("Not authorized to delete this event.")
+
     event.delete()
 
 
-def find_registrations(event_id: int) -> None:
+def find_registrations(*, actor: User, event_id: int) -> None:
     event = get_by_id(event_id)
+
+    if not actor.has_perm("core.view_registrations_for_event", event):
+        raise NotAuthorizedError("Not authorized to view registrations for this event")
+
     return EventRegistration.objects.filter(registration_type__event=event)

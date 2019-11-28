@@ -38,8 +38,8 @@ class EventViewSet(GenericViewSet):
         return Response(response_serializer.data, status=status.HTTP_201_CREATED)
 
     @swagger_auto_schema(responses={200: EventDetailSerializer, 404: "Not found"})
-    def retrieve(self, request, *args, **kwargs):
-        event = self.get_object()
+    def retrieve(self, request, pk):
+        event = event_service.get_by_id(pk)
         return Response(EventDetailSerializer(event).data)
 
     @swagger_auto_schema(
@@ -67,8 +67,9 @@ class EventViewSet(GenericViewSet):
 
     @swagger_auto_schema(responses={200: EventRegistrationDetailSerializer(many=True)})
     @action(detail=True, url_path="registrations")
-    def list_registrations(self, request, *args, **kwargs):
-        event = self.get_object()
-        registrations = EventRegistration.objects.filter(registration_type__event=event)
-        serializer = EventRegistrationDetailSerializer(registrations, many=True)
-        return Response(serializer.data)
+    def list_registrations(self, request, pk):
+        registrations = event_service.find_registrations(
+            actor=request.user, event_id=pk
+        )
+        out_serializer = EventRegistrationDetailSerializer(registrations, many=True)
+        return Response(out_serializer.data)
