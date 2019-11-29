@@ -1,6 +1,5 @@
-from rest_framework import serializers, validators
+from rest_framework import serializers
 
-from eventos2.core.models import Event
 from eventos2.core.serializers.event_registration_type import (
     EventRegistrationTypeDetailSerializer,
 )
@@ -10,13 +9,7 @@ from eventos2.images.serializers import ImageSerializer
 
 class EventBaseSerializer(serializers.Serializer):
     slug = serializers.CharField(
-        help_text="A unique, readable identifier",
-        max_length=255,
-        validators=[
-            validators.UniqueValidator(
-                queryset=Event.objects.all(), message="Este slug já foi utilizado."
-            )
-        ],
+        help_text="A unique, readable identifier", max_length=255
     )
     name = serializers.CharField(
         help_text="The event's name in its native language", max_length=255
@@ -39,10 +32,6 @@ class EventCreateSerializer(EventBaseSerializer):
         required=False,
     )
 
-    def create(self, validated_data):
-        event = Event.objects.create(**validated_data)
-        return event
-
 
 class EventUpdateSerializer(EventBaseSerializer):
     logo_attachment_key = serializers.SlugRelatedField(
@@ -51,12 +40,6 @@ class EventUpdateSerializer(EventBaseSerializer):
         slug_field="attachment_key",
         required=False,
     )
-
-    def update(self, event, validated_data):
-        for k, v in validated_data.items():
-            setattr(event, k, v)
-        event.save()
-        return event
 
 
 class EventDetailSerializer(EventBaseSerializer):
