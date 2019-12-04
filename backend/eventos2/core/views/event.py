@@ -58,7 +58,7 @@ class EventViewSet(ViewSet):
         return Response(status=status.HTTP_204_NO_CONTENT)
 
     @swagger_auto_schema(responses={200: EventRegistrationDetailSerializer(many=True)})
-    @action(detail=True, url_path="registrations")
+    @action(detail=True, url_path="registrations", url_name="list-registrations")
     def list_registrations(self, request, pk):
         registrations = event_service.find_registrations(
             actor=request.user, event_id=pk
