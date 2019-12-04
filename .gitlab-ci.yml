@@ -45,7 +45,7 @@ test:
   coverage: '/TOTAL.*\s+(\d+%)$/'
   script:
     - cd backend
-    - poetry run -- pytest --cov=eventos2
+    - SECRET_KEY=unsafe-key-for-testing poetry run -- pytest --cov=eventos2
     - cd ..
 
 deploy_test:
