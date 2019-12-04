@@ -5,4 +5,4 @@ from eventos2.images import views
 app_name = "images"
 
 router = DefaultRouter()
-router.register("image", views.ImageUploadViewSet)
+router.register("images", views.ImageUploadViewSet)
