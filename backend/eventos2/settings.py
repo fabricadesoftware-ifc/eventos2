@@ -129,6 +129,7 @@ FILE_UPLOAD_PERMISSIONS = 0o640
 REST_FRAMEWORK = {
     "DEFAULT_METADATA_CLASS": "eventos2.utils.metadata.MinimalMetadata",
     "DEFAULT_RENDERER_CLASSES": ["rest_framework.renderers.JSONRenderer"],
+    "TEST_REQUEST_DEFAULT_FORMAT": "json",
 }
 
 # Sentry error reporting

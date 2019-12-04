@@ -20,6 +20,7 @@ huey = "^2.1.2"
 redis = "^3.3.11"
 sentry-sdk = "^0.13.0"
 rules = "^2.1"
+pytest-django = "^3.7.0"
 
 [tool.poetry.dev-dependencies]
 pytest = "^3.0"
