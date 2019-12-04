@@ -18,6 +18,19 @@ def get_by_id(event_id: int) -> Event:
     return event
 
 
+def get_by_slug(slug: str) -> Event:
+    try:
+        event = Event.available_objects.get(slug=slug)
+    except Event.DoesNotExist:
+        raise NotFoundError("Event not found")
+
+    return event
+
+
+def exists_by_slug(slug: str) -> bool:
+    return Event.available_objects.filter(slug=slug).exists()
+
+
 def create(
     *,
     actor: User,
@@ -31,8 +44,7 @@ def create(
     if not actor.has_perm("core.add_event"):
         raise NotAuthorizedError("Not authorized to create an event.")
 
-    slug_is_taken = Event.objects.filter(slug=slug).exists()
-    if slug_is_taken:
+    if exists_by_slug(slug):
         raise DuplicateIdentifierError("Slug already used.")
 
     event = Event.objects.create(
@@ -63,10 +75,7 @@ def update(
     if not actor.has_perm("core.change_event", event):
         raise NotAuthorizedError("Not authorized to edit this event.")
 
-    event_pks_using_slug = (
-        Event.objects.filter(slug=slug).values_list("pk", flat=True).first()
-    )
-    if event_pks_using_slug is not None and event_pks_using_slug != event.pk:
+    if exists_by_slug(slug) and get_by_slug(slug) != event:
         raise DuplicateIdentifierError("Slug already used.")
 
     event.slug = slug
