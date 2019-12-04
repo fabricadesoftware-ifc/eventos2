@@ -1,7 +1,13 @@
 image: nikolaik/python-nodejs:python3.7-nodejs12
 
+services:
+  - postgres:12
+
 variables:
     PIP_CACHE_DIR: "$CI_PROJECT_DIR/.cache/pip"
+    POSTGRES_DB: test_eventos2
+    POSTGRES_USER: eventos2
+    POSTGRES_PASSWORD: unsafe-password-for-testing
 
 stages:
   - lint
@@ -45,7 +51,9 @@ test:
   coverage: '/TOTAL.*\s+(\d+%)$/'
   script:
     - cd backend
-    - SECRET_KEY=unsafe-key-for-testing poetry run -- pytest --cov=eventos2
+    - DATABASE_URL=postgres://eventos2:unsafe-password-for-testing@postgres/eventos2
+      SECRET_KEY=unsafe-key-for-testing
+      poetry run -- pytest --cov=eventos2
     - cd ..
 
 deploy_test:
