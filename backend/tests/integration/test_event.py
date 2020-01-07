@@ -10,7 +10,7 @@ from eventos2.core.models import Event, EventRegistration, EventRegistrationType
 def test_create_valid(api_client, user_factory):
     # DADO um usuário autenticado com as permissões adequadas.
     user = user_factory(name="user", permissions=["core.add_event"])
-    api_client.login(email=user.email, password=user.username)
+    api_client.force_authenticate(user=user)
 
     # E DADO dados de evento válidos.
     # QUANDO a API é chamada.
@@ -38,7 +38,7 @@ def test_create_valid(api_client, user_factory):
 def test_create_invalid(api_client, user_factory):
     # DADO um usuário autenticado com as permissões adequadas.
     user = user_factory(name="user", permissions=["core.add_event"])
-    api_client.login(email=user.email, password=user.username)
+    api_client.force_authenticate(user=user)
 
     # E DADO dados de evento inválidos (valor de slug é nulo).
     # QUANDO a API é chamada.
@@ -90,7 +90,7 @@ def test_retrieve_invalid(api_client, user_factory):
 def test_update_valid(api_client, user_factory):
     # DADO um usuário autenticado.
     user = user_factory(name="user", permissions=[])
-    api_client.login(email=user.email, password=user.username)
+    api_client.force_authenticate(user=user)
 
     # E DADO um evento existente no banco, pertencente ao usuário.
     event = Event.objects.create(
@@ -124,7 +124,7 @@ def test_update_valid(api_client, user_factory):
 def test_update_invalid(api_client, user_factory):
     # DADO um usuário autenticado.
     user = user_factory(name="user", permissions=[])
-    api_client.login(email=user.email, password=user.username)
+    api_client.force_authenticate(user=user)
 
     # E DADO um evento existente no banco, pertencente ao usuário.
     event = Event.objects.create(
@@ -156,7 +156,7 @@ def test_update_invalid(api_client, user_factory):
 def test_delete_valid(api_client, user_factory):
     # DADO um usuário autenticado.
     user = user_factory(name="user", permissions=[])
-    api_client.login(email=user.email, password=user.username)
+    api_client.force_authenticate(user=user)
 
     # E DADO um evento existente no banco, pertencente ao usuário.
     event = Event.objects.create(
@@ -184,7 +184,7 @@ def test_delete_valid(api_client, user_factory):
 def test_delete_invalid(api_client, user_factory):
     # DADO um usuário autenticado.
     user = user_factory(name="user", permissions=[])
-    api_client.login(email=user.email, password=user.username)
+    api_client.force_authenticate(user=user)
 
     # QUANDO a API é chamada para deletar um evento que não existe.
     resp = api_client.delete(reverse("event-detail", args=[999]))
@@ -197,7 +197,7 @@ def test_delete_invalid(api_client, user_factory):
 def test_list_registrations(api_client, user_factory):
     # DADO um usuário autenticado.
     user = user_factory(name="user", permissions=[])
-    api_client.login(email=user.email, password=user.username)
+    api_client.force_authenticate(user=user)
 
     # E DADO um evento existente no banco, pertencente ao usuário.
     event = Event.objects.create(
