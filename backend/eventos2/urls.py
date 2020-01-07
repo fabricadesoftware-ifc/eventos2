@@ -6,6 +6,7 @@ from drf_yasg import openapi
 from drf_yasg.views import get_schema_view
 from rest_framework import permissions
 from rest_framework.routers import SimpleRouter
+from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView
 
 from eventos2 import __version__
 from eventos2.core.router import router as core_router
@@ -43,6 +44,10 @@ urlpatterns = [
                     name="schema-redoc",
                 ),
                 path("", include(global_router.urls)),
+                path("token/", TokenObtainPairView.as_view(), name="token_obtain_pair"),
+                path(
+                    "token/refresh/", TokenRefreshView.as_view(), name="token_refresh"
+                ),
             ]
         ),
     )

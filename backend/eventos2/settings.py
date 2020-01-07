@@ -1,4 +1,5 @@
 import os
+from datetime import timedelta
 
 import environ
 import sentry_sdk
@@ -127,10 +128,14 @@ FILE_UPLOAD_PERMISSIONS = 0o640
 # Django Rest Framework
 # https://www.django-rest-framework.org/
 REST_FRAMEWORK = {
+    "DEFAULT_AUTHENTICATION_CLASSES": [
+        "rest_framework_simplejwt.authentication.JWTAuthentication"
+    ],
     "DEFAULT_METADATA_CLASS": "eventos2.utils.metadata.MinimalMetadata",
     "DEFAULT_RENDERER_CLASSES": ["rest_framework.renderers.JSONRenderer"],
     "TEST_REQUEST_DEFAULT_FORMAT": "json",
 }
+
 
 # Sentry error reporting
 # https://docs.sentry.io/platforms/python/django/
@@ -138,3 +143,22 @@ REST_FRAMEWORK = {
 SENTRY_URL = env.url("SENTRY_URL", default=None)
 if SENTRY_URL:
     sentry_sdk.init(dsn=SENTRY_URL.geturl(), integrations=[DjangoIntegration()])
+
+
+# Simple JWT
+# https://github.com/davesque/django-rest-framework-simplejwt
+
+SIMPLE_JWT = {
+    "ACCESS_TOKEN_LIFETIME": timedelta(minutes=30),
+    "REFRESH_TOKEN_LIFETIME": timedelta(days=2),
+}
+
+
+# drf-yasg (Yet another Swagger generator)
+# https://drf-yasg.readthedocs.io
+
+SWAGGER_SETTINGS = {
+    "SECURITY_DEFINITIONS": {
+        "Bearer": {"type": "apiKey", "name": "Authorization", "in": "header"}
+    }
+}

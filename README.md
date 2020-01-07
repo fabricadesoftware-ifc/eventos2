@@ -54,3 +54,8 @@ kill %1 %2
 # Parar o banco de dados
 sudo docker-compose down
 ```
+
+### Utilização do Swagger (backend)
+
+A interface do Swagger localizada em http://localhost:8000/api/v1/ é usada para explorar a API.
+Para autenticar-se, utilize o endpoint `/token/` para obter um access token, e então submita-o no diálogo acionado pelo botão _Authorize_ no topo da página. Prefixe o valor com a palavra Bearer, seguida de um espaço.
