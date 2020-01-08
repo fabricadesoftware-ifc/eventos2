@@ -21,3 +21,11 @@ class NotAuthorizedError(EventosException):
     status_code = 403
     default_detail = "You cannot access the requested resource."
     default_code = "forbidden"
+
+
+class ConflictError(EventosException):
+    status_code = 409
+    default_detail = (
+        "The requested action cannot be executed because it would result in a conflict."
+    )
+    default_code = "conflict"

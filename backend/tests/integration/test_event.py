@@ -98,7 +98,7 @@ def test_update_valid(api_client, user_factory):
     )
     event.owners.add(user)
 
-    # E DADO datos de evento válidos.
+    # E DADO dados de evento válidos.
     # QUANDO a API é chamada.
     resp = api_client.put(
         reverse("event-detail", args=[event.id]),

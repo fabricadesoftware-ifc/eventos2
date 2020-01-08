@@ -1,6 +1,6 @@
 from rest_framework import serializers
 
-from eventos2.core.models import Event, EventRegistrationType
+from eventos2.core.models import Event
 
 
 class EventRegistrationTypeBaseSerializer(serializers.Serializer):
@@ -13,16 +13,9 @@ class EventRegistrationTypeBaseSerializer(serializers.Serializer):
 class EventRegistrationTypeCreateSerializer(EventRegistrationTypeBaseSerializer):
     event = serializers.PrimaryKeyRelatedField(queryset=Event.available_objects.all())
 
-    def create(self, validated_data):
-        return EventRegistrationType.objects.create(**validated_data)
-
 
 class EventRegistrationTypeUpdateSerializer(EventRegistrationTypeBaseSerializer):
-    def update(self, registration_type, validated_data):
-        for k, v in validated_data.items():
-            setattr(registration_type, k, v)
-        registration_type.save()
-        return registration_type
+    pass
 
 
 class EventRegistrationTypeDetailSerializer(EventRegistrationTypeBaseSerializer):

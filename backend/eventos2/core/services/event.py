@@ -1,4 +1,5 @@
 from datetime import datetime
+from typing import Any, Optional
 
 from eventos2.core.models import Event, EventRegistration, User
 from eventos2.images.models import Image
@@ -36,10 +37,10 @@ def create(
     actor: User,
     slug: str,
     name: str,
-    name_english: str = None,
+    name_english: Optional[str] = None,
     starts_on: datetime,
     ends_on: datetime,
-    logo: Image = None
+    logo: Optional[Image] = None
 ) -> Event:
     if not actor.has_perm("core.add_event"):
         raise NotAuthorizedError("Not authorized to create an event.")
@@ -65,10 +66,10 @@ def update(
     event_id: int,
     slug: str,
     name: str,
-    name_english: str = None,
+    name_english: Optional[str] = None,
     starts_on: datetime,
     ends_on: datetime,
-    logo: Image = None
+    logo: Optional[Image] = None
 ) -> Event:
     event = get_by_id(event_id)
 
@@ -97,7 +98,7 @@ def delete(*, actor: User, event_id: int) -> None:
     event.delete()
 
 
-def find_registrations(*, actor: User, event_id: int) -> None:
+def find_registrations(*, actor: User, event_id: int) -> Any:
     event = get_by_id(event_id)
 
     if not actor.has_perm("core.view_registrations_for_event", event):
