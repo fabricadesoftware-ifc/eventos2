@@ -2,11 +2,12 @@ from unittest import mock
 from unittest.mock import Mock
 
 import pytest
+from django.db.models.deletion import ProtectedError
 
 from eventos2.core.services import (
     event_registration_type as event_registration_type_service,
 )
-from eventos2.utils.exceptions import NotAuthorizedError, NotFoundError
+from eventos2.utils.exceptions import ConflictError, NotAuthorizedError, NotFoundError
 
 
 @mock.patch("eventos2.core.services.event_registration_type.EventRegistrationType")
@@ -111,6 +112,27 @@ def test_delete_valid(mock_get_by_id):
 
     # ENTÃO o ORM deve ser chamado
     assert registration_type.delete.call_count == 1
+
+
+@mock.patch("eventos2.core.services.event_registration_type.get_by_id")
+def test_delete_conflict(mock_get_by_id):
+    # DADO que o registration type a ser deletado existe,
+    # mas causará conflitos ao ser deletado,
+    # pois já tem registration(s) associados.
+    registration_type = Mock()
+    registration_type.delete.side_effect = ProtectedError(None, None)
+    mock_get_by_id.return_value = registration_type
+
+    # E DADO um usuário que tem permissões
+    actor = Mock()
+    actor.has_perm.return_value = True
+
+    # QUANDO tentar deletar o registration type.
+    # ENTÃO o serviço deve gerar sua exceção de conflito.
+    with pytest.raises(ConflictError):
+        event_registration_type_service.delete(
+            actor=actor, event_registration_type_id=1
+        )
 
 
 @mock.patch("eventos2.core.services.event_registration_type.get_by_id")
