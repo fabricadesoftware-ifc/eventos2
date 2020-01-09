@@ -19,21 +19,14 @@ Requisitos:
 # Inicializar o banco de dados
 sudo docker-compose up -d
 
-cd backend
 # Configurações do backend (editar se necessário)
 cp .env.sample .env
 # Instalar as dependências do backend
 poetry install
 # Executar os comandos dentro do virtualenv (criado automaticamente)
 poetry run python eventos2/manage.py migrate
-poetry run python eventos2/manage.py runserver &
-
-cd ../frontend
-npm install
-npm run serve &
+poetry run python eventos2/manage.py runserver
 ```
-
-Acessar o frontend: http://localhost:8080/
 
 Acessar o backend: http://localhost:8000/api/v1/
 
@@ -41,15 +34,13 @@ Acessar o backend: http://localhost:8000/api/v1/
 Use o poetry para isso:
 
 ```
-cd backend
 poetry shell
-cd ..
 ```
 
 ### Teardown
 
 ```
-# Parar os processos do backend e frontend
+# Parar o processos do backend
 kill %1 %2
 # Parar o banco de dados
 sudo docker-compose down

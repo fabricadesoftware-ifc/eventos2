@@ -1,5 +1,4 @@
 ---
-
 - repo: https://github.com/pre-commit/pre-commit-hooks
   rev: v2.3.0
   hooks:
@@ -10,42 +9,35 @@
 - repo: local
   hooks:
     - id: black
-      name: 'backend: format code with black'
+      name: "backend: format code with black"
       entry: black
       language: system
       types:
         - python
     - id: isort
-      name: 'backend: format imports with isort'
+      name: "backend: format imports with isort"
       entry: isort
       language: system
       types:
         - python
     - id: flake8
-      name: 'backend: lint code with flake8'
+      name: "backend: lint code with flake8"
       entry: flake8
       language: system
       types:
         - python
     - id: bandit
-      name: 'backend: check security'
+      name: "backend: check security"
       entry: bandit
       language: system
       args:
         - --quiet
-        - --exclude=backend/tests/
+        - --exclude=tests/
       types:
         - python
     - id: pytest
-      name: 'backend: run tests'
-      entry: pytest -v backend/tests/
+      name: "backend: run tests"
+      entry: pytest -v tests/
       language: system
       pass_filenames: false
       stages: [push]
-    - id: frontend_lint
-      name: 'frontend: lint'
-      entry: sh -c 'cd frontend && npm run lint'
-      pass_filenames: false
-      language: system
-      types:
-        - javascript

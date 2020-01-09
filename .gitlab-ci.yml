@@ -19,42 +19,30 @@ cache:
   paths:
     - .cache/pip/
     - .cache/venvs/
-    - frontend/node_modules/
 
 default:
   before_script:
-    - cd backend
     - pip install poetry==1.0.0
     - mkdir -p ~/.config/pypoetry
     - touch ~/.config/pypoetry/config.toml
     - poetry config virtualenvs.path $CI_PROJECT_DIR/.cache/venvs
     - poetry install
-    - cd ..
-    - cd frontend
-    - npm install
-    - cd ..
 
 lint:
   stage: lint
   script:
-    - cd backend
     - poetry run black --check .
     - poetry run isort --check-only
     - poetry run flake8 .
     - poetry run bandit --quiet --exclude=./tests/ --recursive .
-    - cd ..
-    - cd frontend
-    - npm run lint --no-fix
 
 test:
   stage: test
   coverage: '/TOTAL.*\s+(\d+%)$/'
   script:
-    - cd backend
     - DATABASE_URL=postgres://eventos2:unsafe-password-for-testing@postgres/eventos2
       SECRET_KEY=unsafe-key-for-testing
       poetry run pytest --cov=eventos2
-    - cd ..
 
 deploy_test:
   stage: deploy
@@ -62,7 +50,6 @@ deploy_test:
     - master
     - test
   script:
-    - cd backend
     - poetry export -f requirements.txt > requirements.txt
     - |
       cat << EOF >.env
@@ -76,10 +63,6 @@ deploy_test:
     # Allow web server (nginx) to traverse directories and read files,
     # so that it can serve the static files.
     - chmod -R u=rwX,go=rX static/
-    - cd ..
-    - cd frontend
-    - npm run build
-    - cd ..
     - rm -rf .cache
     - apt-get update -y
     - apt-get install -yqq openssh-client
@@ -90,11 +73,10 @@ deploy_test:
     - echo "$TEST_SSH_PRIVATE_KEY" | tr -d '\r' | ssh-add -
     - export TEST_DEPLOY=$(date +%Y%m%d%H%M%S)
     - ssh -p 1022 eventos2@eventos2.fabricadesoftware.ifc.edu.br "mkdir \"/srv/eventos2/$TEST_DEPLOY/\""
-    - scp -r -p -P 1022 backend "eventos2@eventos2.fabricadesoftware.ifc.edu.br:/srv/eventos2/$TEST_DEPLOY/backend"
-    - scp -r -p -P 1022 frontend/dist "eventos2@eventos2.fabricadesoftware.ifc.edu.br:/srv/eventos2/$TEST_DEPLOY/frontend_dist"
-    - ssh -p 1022 eventos2@eventos2.fabricadesoftware.ifc.edu.br "cd \"/srv/eventos2/$TEST_DEPLOY/\" && virtualenv -p python3 venv && ./venv/bin/pip install -r backend/requirements.txt"
-    - ssh -p 1022 eventos2@eventos2.fabricadesoftware.ifc.edu.br "cd \"/srv/eventos2/$TEST_DEPLOY/backend/\" && PYTHONPATH='.' ../venv/bin/python eventos2/manage.py migrate"
-    - ssh -p 1022 eventos2@eventos2.fabricadesoftware.ifc.edu.br "ln -s /srv/eventos2/media \"/srv/eventos2/$TEST_DEPLOY/backend/media\""
+    - scp -r -p -P 1022 . "eventos2@eventos2.fabricadesoftware.ifc.edu.br:/srv/eventos2/$TEST_DEPLOY"
+    - ssh -p 1022 eventos2@eventos2.fabricadesoftware.ifc.edu.br "cd \"/srv/eventos2/$TEST_DEPLOY/\" && virtualenv -p python3 venv && ./venv/bin/pip install -r requirements.txt"
+    - ssh -p 1022 eventos2@eventos2.fabricadesoftware.ifc.edu.br "cd \"/srv/eventos2/$TEST_DEPLOY/\" && PYTHONPATH='.' ../venv/bin/python eventos2/manage.py migrate"
+    - ssh -p 1022 eventos2@eventos2.fabricadesoftware.ifc.edu.br "ln -s /srv/eventos2/media \"/srv/eventos2/$TEST_DEPLOY/media\""
     - ssh -p 1022 eventos2@eventos2.fabricadesoftware.ifc.edu.br "ln -snf \"/srv/eventos2/$TEST_DEPLOY\" /srv/eventos2/current"
     - ssh -p 1022 eventos2@eventos2.fabricadesoftware.ifc.edu.br "sudo systemctl restart projeto-eventos2-eventos2.service"
   artifacts:
@@ -102,7 +84,7 @@ deploy_test:
     name: ${CI_COMMIT_REF_SLUG}
     expire_in: 1 week
     paths:
-      - backend/requirements.txt
+      - requirements.txt
   environment:
     name: test
     url: https://eventos2.fabricadesoftware.ifc.edu.br

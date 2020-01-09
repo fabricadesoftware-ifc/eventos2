@@ -96,10 +96,3 @@ node_modules/
 
 npm-debug.log*
 yarn-debug.log*
-
-### Frontend ###
-frontend/dist/
-
-# local env files
-frontend/.env.local
-frontend/.env.*.local
