@@ -31,10 +31,10 @@ default:
 lint:
   stage: lint
   script:
-    - poetry run black --check .
-    - poetry run isort --check-only
-    - poetry run flake8 .
-    - poetry run bandit --quiet --exclude=./tests/ --recursive .
+    - poetry run black --check eventos2 tests
+    - poetry run isort -rc eventos2 tests
+    - poetry run flake8 eventos2 tests
+    - poetry run bandit --quiet --recursive eventos2
 
 test:
   stage: test
