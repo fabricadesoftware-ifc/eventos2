@@ -23,6 +23,10 @@ vars().update(EMAIL_CONFIG)
 
 HUEY = {"connection": {"url": env("REDIS_URL", default=None)}}
 
+CORS_ORIGIN_WHITELIST = env(
+    "CORS_ORIGIN_WHITELIST", list, ["http://localhost:3000", "http://127.0.0.1:3000"]
+)
+
 
 INSTALLED_APPS = [
     "django.contrib.auth",
@@ -34,6 +38,7 @@ INSTALLED_APPS = [
     "drf_yasg",
     "rules.apps.AutodiscoverRulesConfig",
     "huey.contrib.djhuey",
+    "corsheaders",
     "eventos2.core",
     "eventos2.images",
 ]
@@ -45,6 +50,7 @@ if DEBUG:
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
+    "corsheaders.middleware.CorsMiddleware",
     "django.middleware.common.CommonMiddleware",
     "django.middleware.csrf.CsrfViewMiddleware",
     "django.contrib.auth.middleware.AuthenticationMiddleware",
