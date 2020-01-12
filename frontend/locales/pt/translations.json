@@ -1,0 +1,54 @@
+{
+  "appName": "Eventos2",
+  "components": {
+    "footer": {
+      "menuItems": {
+        "home": "Início",
+        "login": "Login",
+        "signup": "Criar conta"
+      },
+      "menuTitle": "Links rápidos"
+    },
+    "navbar": {
+      "userMenu": {
+        "logout": "Sair",
+        "settings": "Preferências"
+      }
+    }
+  },
+  "forms": {
+    "labels": {
+      "email": "E-mail",
+      "firstName": "Nome",
+      "lastName": "Sobrenome",
+      "password": "Senha"
+    },
+    "validation": {
+      "email": "Por favor informe um endereço de e-mail válido.",
+      "required": "Este campo é obrigatório."
+    }
+  },
+  "genericErrors": {
+    "api": "Ops, tivemos um problema interno. Por favor tente novamente.",
+    "network": "Ops, não conseguimos conectar aos nossos servidores. Por favor verifique sua conexão de internet e tente novamente."
+  },
+  "pages": {
+    "index": {
+      "welcome": "Bem-vindo ao Eventos2!"
+    },
+    "login": {
+      "description": "Você precisa se identificar para obter acesso a todas as funcionalidades.",
+      "submitButton": "Fazer login",
+      "title": "Log in"
+    },
+    "signup": {
+      "description": "Por favor infome seus dados para criar uma conta.",
+      "submitButton": "Criar conta",
+      "title": "Criar conta"
+    },
+    "userSettings": {
+      "submitButton": "Salvar",
+      "title": "Suas preferências"
+    }
+  }
+}

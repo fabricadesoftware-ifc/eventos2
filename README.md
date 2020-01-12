@@ -2,51 +2,67 @@
 
 A segunda versão do Sistema de Eventos.
 
-## Desenvolvimento
+## Setup para desenvolvimento
 
-### Setup
+O sistema é composto por duas partes: o **backend**, construído em Django, implementa a persistência de dados e regras de negócio, e disponibiliza uma API que segue os princípios REST; e o **frontend**, feito com o framework Nuxt.js.
+
+### Backend
 
 Requisitos:
 
 * [Docker](https://docs.docker.com/install/linux/docker-ce/ubuntu/)
-  `apt install docker`
 * [Docker Compose](https://docs.docker.com/compose/install/)
-  `apt install docker-compose`
 * [Poetry](https://poetry.eustace.io/docs/)
-  `pip install --user --pre poetry`
 
 ```sh
 # Inicializar o banco de dados
 sudo docker-compose up -d
 
-# Configurações do backend (editar se necessário)
+# Configurações (editar se necessário)
 cp .env.sample .env
-# Instalar as dependências do backend
+# Instalar as dependências
 poetry install
 # Executar os comandos dentro do virtualenv (criado automaticamente)
 poetry run python manage.py migrate
 poetry run python manage.py runserver
 ```
 
-Acessar o backend: http://localhost:8000/api/v1/
+O backend responde localmente na porta 8000: http://localhost:8000/api/v1/swagger/. Para mais detalhes sobre o seu funcionamento, leia o [README do diretório eventos2](eventos2/README.md).
 
 **Para fazer um commit, você deve estar dentro do virtualenv do backend.**
-Use o poetry para isso:
 
-```
+Use o poetry para isso:
+```sh
 poetry shell
 ```
 
-### Teardown
+Configure os hooks de commit para executar verificações de código antes de fazer um commit.
+
+```sh
+pre-commit install
+```
+
+### Frontend
+
+Requisitos:
+
+* [Node.js](https://nodejs.org/)
+
+```sh
+# Todas as operações do frontend devem ser feitas a partir deste diretório
+cd frontend
+
+# Instalar as dependências
+npm install
+# Executar em modo de desenvolvimento
+npm run dev
+```
+
+O frontend responde localmente na porta 3000: http://localhost:3000/. Para mais detalhes sobre o seu funcionamento, leia o [README do diretório frontend](frontend/README.md).
+
+## Teardown
 
 ```
-# Parar o processos do backend
-kill %1 %2
 # Parar o banco de dados
 sudo docker-compose down
 ```
-
-### Utilização do Swagger (backend)
-
-A interface do Swagger localizada em http://localhost:8000/api/v1/ é usada para explorar a API.
-Para autenticar-se, utilize o endpoint `/token/` para obter um access token, e então submita-o no diálogo acionado pelo botão _Authorize_ no topo da página. Prefixe o valor com a palavra Bearer, seguida de um espaço.

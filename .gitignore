@@ -96,3 +96,9 @@ node_modules/
 
 npm-debug.log*
 yarn-debug.log*
+
+### Frontend ###
+.i18n-editor-metadata
+/frontend/.eslintcache/
+/frontend/.nuxt/
+/frontend/dist/

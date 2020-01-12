@@ -1,0 +1,54 @@
+{
+  "appName": "Eventos2",
+  "components": {
+    "footer": {
+      "menuItems": {
+        "home": "Home",
+        "login": "Login",
+        "signup": "Sign up"
+      },
+      "menuTitle": "Quick links"
+    },
+    "navbar": {
+      "userMenu": {
+        "logout": "Log out",
+        "settings": "Settings"
+      }
+    }
+  },
+  "forms": {
+    "labels": {
+      "email": "Email",
+      "firstName": "First name",
+      "lastName": "Last name",
+      "password": "Password"
+    },
+    "validation": {
+      "email": "Please provide a valid e-mail address.",
+      "required": "This field is required."
+    }
+  },
+  "genericErrors": {
+    "api": "Sorry, we've encountered a problem on our end. Please wait a moment and try again.",
+    "network": "Sorry, we couldn't reach our servers. Please check your internet connection and try again."
+  },
+  "pages": {
+    "index": {
+      "welcome": "Welcome to Eventos2!"
+    },
+    "login": {
+      "description": "You must authenticate in order to access all of our features.",
+      "submitButton": "Log in",
+      "title": "Log in"
+    },
+    "signup": {
+      "description": "Please enter your data to create an account.",
+      "submitButton": "Sign up",
+      "title": "Sign up"
+    },
+    "userSettings": {
+      "submitButton": "Save",
+      "title": "Your settings"
+    }
+  }
+}
