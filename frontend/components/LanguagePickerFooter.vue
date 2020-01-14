@@ -1,15 +1,16 @@
 <template>
   <b-dropdown position="is-bottom-left">
-    <b-button
-      v-slot:trigger
-      type="is-primary"
-      icon-left="translate"
-      icon-right="menu-down"
-      inverted
-      outlined
-    >
-      {{ currentLocale.name }}
-    </b-button>
+    <template v-slot:trigger>
+      <b-button
+        type="is-primary"
+        icon-left="translate"
+        icon-right="menu-down"
+        inverted
+        outlined
+      >
+        {{ currentLocale.name }}
+      </b-button>
+    </template>
     <b-dropdown-item
       v-for="locale in availableLocales"
       :key="locale.code"
