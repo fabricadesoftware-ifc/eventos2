@@ -12,6 +12,7 @@ export default {
   ],
   plugins: [
     '~/plugins/api.js',
+    '~/plugins/axios.js',
     '~/plugins/visibility.js',
     '~/plugins/vee-validate.js'
   ],

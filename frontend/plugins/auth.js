@@ -1,4 +1,4 @@
-import { handleAxiosError } from '~/api/utils'
+import { handleAPIError } from '~/api/utils'
 
 /*
   Esse plugin precisa ser carregado pelo módulo auth,
@@ -6,7 +6,7 @@ import { handleAxiosError } from '~/api/utils'
 */
 export default function({ app, $auth }) {
   // Tratamento igual a funcões da API
-  $auth.onError(handleAxiosError)
+  $auth.onError(handleAPIError)
 
   /*
   Faz com que os modules

@@ -8,7 +8,7 @@ function isValidResponse(response) {
   return response.data && response.status < 500
 }
 
-export function handleAxiosError(error) {
+export function handleAPIError(error) {
   if (error.response && isValidResponse(error.response)) {
     const data = error.response.data
     if (isObjectEmpty(data)) {
