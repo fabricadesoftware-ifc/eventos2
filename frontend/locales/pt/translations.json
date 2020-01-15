@@ -24,13 +24,14 @@
       "password": "Senha"
     },
     "validation": {
-      "email": "Por favor informe um endereço de e-mail válido.",
+      "email": "Por favor, informe um endereço de e-mail válido.",
       "required": "Este campo é obrigatório."
     }
   },
   "genericErrors": {
-    "api": "Ops, tivemos um problema interno. Por favor tente novamente.",
-    "network": "Ops, não conseguimos conectar aos nossos servidores. Por favor verifique sua conexão de internet e tente novamente."
+    "api": "Ops, tivemos um problema interno. Por favor, tente novamente.",
+    "formValidation": "Ops, alguns dos valores informados são inválidos. Por favor, arrume os erros informados e tente novamente.",
+    "network": "Ops, não conseguimos conectar aos nossos servidores. Por favor, verifique sua conexão de internet e tente novamente."
   },
   "pages": {
     "index": {
@@ -42,7 +43,7 @@
       "title": "Log in"
     },
     "signup": {
-      "description": "Por favor infome seus dados para criar uma conta.",
+      "description": "Por favor, infome seus dados para criar uma conta.",
       "submitButton": "Criar conta",
       "title": "Criar conta"
     },

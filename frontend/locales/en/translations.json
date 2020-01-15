@@ -30,6 +30,7 @@
   },
   "genericErrors": {
     "api": "Sorry, we've encountered a problem on our end. Please wait a moment and try again.",
+    "formValidation": "Sorry, some of the values you provided are invalid. Please fix the reported errors and try again.",
     "network": "Sorry, we couldn't reach our servers. Please check your internet connection and try again."
   },
   "pages": {

@@ -93,7 +93,7 @@ export default {
     handleError(error) {
       switch (error.name) {
         case 'APIValidationError':
-          this.error = error.message
+          this.error = error.message || this.$t('genericErrors.formValidation')
           this.$refs.form.setErrors(error.fields)
           break
         case 'APIError':
