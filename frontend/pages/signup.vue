@@ -31,6 +31,7 @@
                 type="password"
                 :label="$t('forms.labels.password')"
                 rules="required"
+                password-reveal
               />
               <div class="field">
                 <div class="control">

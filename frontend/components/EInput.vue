@@ -18,6 +18,7 @@
         v-model="innerValue"
         :type="type"
         :name="name"
+        :password-reveal="passwordReveal"
       ></b-input>
     </b-field>
   </ValidationProvider>
@@ -59,6 +60,10 @@ export default {
       default: null
     },
     horizontal: {
+      type: Boolean,
+      default: false
+    },
+    passwordReveal: {
       type: Boolean,
       default: false
     }
