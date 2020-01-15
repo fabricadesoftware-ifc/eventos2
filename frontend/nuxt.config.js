@@ -8,7 +8,7 @@ export default {
     'nuxt-i18n',
     // Disable CSS import so we can customize some variables
     // (see ~/assets/vars)
-    ['nuxt-buefy', { css: false }]
+    ['nuxt-buefy', { css: false, materialDesignIcons: false }]
   ],
   plugins: [
     '~/plugins/api.js',
@@ -55,7 +55,7 @@ export default {
     link: [{ rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' }]
   },
 
-  css: ['~/assets/global.scss'],
+  css: ['~/assets/global.scss', '@mdi/font/css/materialdesignicons.css'],
   styleResources: { scss: ['~/assets/vars/*.scss'] },
   loading: { color: '#fff' },
 
