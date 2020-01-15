@@ -10,12 +10,14 @@
                 v-model="form.first_name"
                 name="first_name"
                 :label="$t('forms.labels.firstName')"
+                autocomplete="given-name"
                 rules="required"
               />
               <e-input
                 v-model="form.last_name"
                 name="last_name"
                 :label="$t('forms.labels.lastName')"
+                autocomplete="family-name"
                 rules="required"
               />
               <e-input
@@ -23,6 +25,7 @@
                 name="email"
                 type="email"
                 :label="$t('forms.labels.email')"
+                autocomplete="email"
                 rules="email|required"
               />
               <e-input
@@ -30,6 +33,7 @@
                 name="password"
                 type="password"
                 :label="$t('forms.labels.password')"
+                autocomplete="new-password"
                 rules="required"
                 password-reveal
               />

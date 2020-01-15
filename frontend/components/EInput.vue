@@ -19,6 +19,7 @@
         :type="type"
         :name="name"
         :password-reveal="passwordReveal"
+        :autocomplete="autocomplete"
       ></b-input>
     </b-field>
   </ValidationProvider>
@@ -66,6 +67,10 @@ export default {
     passwordReveal: {
       type: Boolean,
       default: false
+    },
+    autocomplete: {
+      type: String,
+      default: 'on'
     }
   },
   data: () => ({
