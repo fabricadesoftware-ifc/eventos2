@@ -68,7 +68,7 @@ def test_retrieve_valid(api_client, user_factory):
     )
 
     # QUANDO a API é chamada para obter o evento.
-    resp = api_client.get(reverse("event-detail", args=[event.id]))
+    resp = api_client.get(reverse("event-detail", args=[event.slug]))
 
     # ENTÃO a resposta de sucesso deve conter os dados do evento.
     assert resp.status_code == status.HTTP_200_OK
@@ -80,7 +80,7 @@ def test_retrieve_invalid(api_client, user_factory):
     # DADO nenhum evento no banco.
 
     # QUANDO a API é chamada para obter um evento inexistente.
-    resp = api_client.get(reverse("event-detail", args=[999]))
+    resp = api_client.get(reverse("event-detail", args=['slug-inexistente']))
 
     # ENTÃO a resposta deve ser de falha
     assert resp.status_code == status.HTTP_404_NOT_FOUND
@@ -101,7 +101,7 @@ def test_update_valid(api_client, user_factory):
     # E DADO dados de evento válidos.
     # QUANDO a API é chamada.
     resp = api_client.put(
-        reverse("event-detail", args=[event.id]),
+        reverse("event-detail", args=[event.slug]),
         {
             "slug": "{} modified!".format(event.slug),
             "name": event.name,
@@ -135,7 +135,7 @@ def test_update_invalid(api_client, user_factory):
     # E DADO dados de evento inválidos (valor de slug é nulo).
     # QUANDO a API é chamada.
     resp = api_client.put(
-        reverse("event-detail", args=[event.id]),
+        reverse("event-detail", args=[event.slug]),
         {
             "slug": None,
             "name": event.name,
@@ -165,7 +165,7 @@ def test_delete_valid(api_client, user_factory):
     event.owners.add(user)
 
     # QUANDO a API é chamada para deletar o evento.
-    delete_resp = api_client.delete(reverse("event-detail", args=[event.id]))
+    delete_resp = api_client.delete(reverse("event-detail", args=[event.slug]))
 
     # ENTÃO a deleção deverá ter sucesso.
     assert delete_resp.status_code == status.HTTP_204_NO_CONTENT
@@ -174,7 +174,7 @@ def test_delete_valid(api_client, user_factory):
     assert Event.available_objects.count() == 0
 
     # E QUANDO a API é chamada para obter o evento deletado.
-    retrieve_resp = api_client.get(reverse("event-detail", args=[event.id]))
+    retrieve_resp = api_client.get(reverse("event-detail", args=[event.slug]))
 
     # ENTÃO o evento não será encontrado.
     assert retrieve_resp.status_code == status.HTTP_404_NOT_FOUND
@@ -187,7 +187,7 @@ def test_delete_invalid(api_client, user_factory):
     api_client.force_authenticate(user=user)
 
     # QUANDO a API é chamada para deletar um evento que não existe.
-    resp = api_client.delete(reverse("event-detail", args=[999]))
+    resp = api_client.delete(reverse("event-detail", args=['slug-inexistente']))
 
     # ENTÃO o evento não será encontrado.
     assert resp.status_code == status.HTTP_404_NOT_FOUND
@@ -214,7 +214,7 @@ def test_list_registrations(api_client, user_factory):
     )
 
     # QUANDO a API é chamada para listar as inscrições do evento.
-    resp = api_client.get(reverse("event-list-registrations", args=[event.id]))
+    resp = api_client.get(reverse("event-list-registrations", args=[event.slug]))
 
     # ENTÃO as inscrições serão retornadas
     assert resp.status_code == status.HTTP_200_OK

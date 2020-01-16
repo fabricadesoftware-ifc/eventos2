@@ -14,6 +14,8 @@ from eventos2.core.services import event as event_service
 
 
 class EventViewSet(ViewSet):
+    lookup_url_kwarg = 'slug'
+
     @swagger_auto_schema(
         request_body=EventCreateSerializer,
         responses={201: EventDetailSerializer, 400: "Validation error"},
@@ -29,8 +31,8 @@ class EventViewSet(ViewSet):
         return Response(out_serializer.data, status=status.HTTP_201_CREATED)
 
     @swagger_auto_schema(responses={200: EventDetailSerializer, 404: "Not found"})
-    def retrieve(self, request, pk):
-        event = event_service.get_by_id(pk)
+    def retrieve(self, request, slug):
+        event = event_service.get_by_slug(slug)
         return Response(EventDetailSerializer(event).data)
 
     @swagger_auto_schema(
@@ -42,26 +44,31 @@ class EventViewSet(ViewSet):
             409: "Slug already used",
         },
     )
-    def update(self, request, pk):
+    def update(self, request, slug):
+        event = event_service.get_by_slug(slug)
+
         in_serializer = EventUpdateSerializer(data=request.data)
         in_serializer.is_valid(raise_exception=True)
         data = in_serializer.validated_data
 
-        event = event_service.update(actor=request.user, event_id=pk, **data)
+        event = event_service.update(actor=request.user, event_id=event.id, **data)
 
         out_serializer = EventDetailSerializer(event)
         return Response(out_serializer.data)
 
     @swagger_auto_schema(responses={204: "Success", 404: "Not found"})
-    def destroy(self, request, pk):
-        event_service.delete(actor=request.user, event_id=pk)
+    def destroy(self, request, slug):
+        event = event_service.get_by_slug(slug)
+        event_service.delete(actor=request.user, event_id=event.id)
         return Response(status=status.HTTP_204_NO_CONTENT)
 
     @swagger_auto_schema(responses={200: EventRegistrationDetailSerializer(many=True)})
     @action(detail=True, url_path="registrations", url_name="list-registrations")
-    def list_registrations(self, request, pk):
+    def list_registrations(self, request, slug):
+        event = event_service.get_by_slug(slug)
+
         registrations = event_service.find_registrations(
-            actor=request.user, event_id=pk
+            actor=request.user, event_id=event.id
         )
         out_serializer = EventRegistrationDetailSerializer(registrations, many=True)
         return Response(out_serializer.data)
