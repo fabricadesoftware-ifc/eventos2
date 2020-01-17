@@ -13,6 +13,8 @@ export default {
   plugins: [
     '~/plugins/api.js',
     '~/plugins/axios.js',
+    '~/plugins/dayjs.js',
+    '~/plugins/i18n.js',
     '~/plugins/visibility.js',
     '~/plugins/vee-validate.js'
   ],

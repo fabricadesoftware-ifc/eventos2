@@ -35,7 +35,7 @@
   },
   "pages": {
     "index": {
-      "welcome": "Welcome to Eventos2!"
+      "registerButton": "Register today!"
     },
     "login": {
       "description": "You must authenticate in order to access all of our features.",

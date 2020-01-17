@@ -6,7 +6,7 @@
         class="navbar-item"
         :to="localePath({ name: 'index' })"
       >
-        {{ $t('appName') }}
+        {{ eventName || $t('appName') }}
       </b-navbar-item>
     </template>
     <template v-slot:end>
@@ -47,6 +47,8 @@
 </template>
 
 <script>
+import { mapGetters } from 'vuex'
+
 /**
  * Navbar geral do sistema.
  */
@@ -68,7 +70,8 @@ export default {
     },
     isLoggedin() {
       return this.$auth.loggedIn
-    }
+    },
+    ...mapGetters(['eventName'])
   },
 
   methods: {

@@ -1,3 +1,4 @@
+import { createEventAPIClient } from '~/api/event'
 import { createUserAPIClient } from '~/api/user'
 
 /*
@@ -7,6 +8,7 @@ import { createUserAPIClient } from '~/api/user'
 
 export function createAPIClient($axios) {
   return {
+    event: createEventAPIClient($axios),
     user: createUserAPIClient($axios)
   }
 }

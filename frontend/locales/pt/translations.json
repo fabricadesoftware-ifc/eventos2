@@ -35,7 +35,7 @@
   },
   "pages": {
     "index": {
-      "welcome": "Bem-vindo ao Eventos2!"
+      "registerButton": "Inscreva-se já!"
     },
     "login": {
       "description": "Você precisa se identificar para obter acesso a todas as funcionalidades.",
