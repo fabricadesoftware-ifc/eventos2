@@ -1,7 +1,7 @@
 export class APIError extends Error {
   constructor(cause, message) {
     super(message)
-    this.name = this.constructor.name
+    this.name = 'APIError'
     this.cause = cause
   }
 }
@@ -9,7 +9,7 @@ export class APIError extends Error {
 export class APIValidationError extends APIError {
   constructor(cause, message, fields) {
     super(cause, message)
-    this.name = this.constructor.name
+    this.name = 'APIValidationError'
     this.fields = fields || {}
   }
 }
