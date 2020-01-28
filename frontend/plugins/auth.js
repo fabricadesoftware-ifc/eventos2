@@ -14,8 +14,14 @@ export default function({ app, $auth }) {
   Prepende o código da linguagem atual quando
   redireciona o usuário após login, logout, etc.
   */
-  $auth.onRedirect((to, from) => {
-    const currentLocale = app.i18n.locale
-    return '/' + currentLocale + to
+  $auth.onRedirect((to, _from) => {
+    const resolved = app.router.resolve(to)
+    if (resolved && resolved.route && resolved.route.name) {
+      const basename = app.getRouteBaseName(resolved.route)
+      const out = app.localePath({ name: basename })
+      return out
+    }
+    const out = app.localePath({ path: to })
+    return out
   })
 }

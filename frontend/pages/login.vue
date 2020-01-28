@@ -68,7 +68,7 @@ export default {
       this.loading = true
       this.$auth
         .loginWith('local', { data: this.form })
-        .then(() => this.$router.push(this.localePath({ name: 'index' })))
+        .then(() => this.$auth.redirect('home'))
         .catch(this.handleError)
         .finally(() => (this.loading = false))
     },

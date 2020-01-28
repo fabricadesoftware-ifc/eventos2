@@ -76,7 +76,7 @@ export default {
 
   methods: {
     logout() {
-      this.$auth.logout()
+      this.$auth.logout().then(() => this.$auth.redirect('home'))
     }
   }
 }
