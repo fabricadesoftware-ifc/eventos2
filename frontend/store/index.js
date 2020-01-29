@@ -36,7 +36,10 @@ export const getters = {
     if (state.event === null) {
       return null
     }
-    return state.locale === 'en' ? state.event.name_english : state.event.name
+    if (state.locale === 'en' && state.event.name_english) {
+      return state.event.name_english
+    }
+    return state.event.name
   },
   eventStartDate(state) {
     if (state.event === null) {
