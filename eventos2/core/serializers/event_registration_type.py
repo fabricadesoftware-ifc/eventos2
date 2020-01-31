@@ -20,3 +20,4 @@ class EventRegistrationTypeUpdateSerializer(EventRegistrationTypeBaseSerializer)
 
 class EventRegistrationTypeDetailSerializer(EventRegistrationTypeBaseSerializer):
     id = serializers.IntegerField()
+    event_id = serializers.IntegerField(source="event.id")

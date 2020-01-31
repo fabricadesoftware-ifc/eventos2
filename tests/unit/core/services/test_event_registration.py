@@ -256,3 +256,70 @@ def test_unregister_other_user_unauthorized(mock_get_by_id):
     # ENTÃO o serviço deve gerar sua exceção de falta de permissões
     with pytest.raises(NotAuthorizedError):
         event_registration_service.unregister(actor=actor, event_registration_id=1)
+
+
+@mock.patch("eventos2.core.services.event_registration.EventRegistration")
+def test_find_by_user_valid(mock_registration):
+    # DADO um usuário comum
+    actor = Mock()
+
+    # E DADO que o banco retorna uma registration
+    expected_registrations = Mock()
+    mock_registration.objects.filter.return_value = expected_registrations
+
+    # QUANDO o usuário listar seus registrations
+    registrations = event_registration_service.find_by_user(actor=actor, user=actor)
+
+    # ENTÃO as registrations devem ser retornadas
+    assert registrations is expected_registrations
+
+
+@mock.patch("eventos2.core.services.event_registration.EventRegistration")
+def test_find_by_user_unauthorized(mock_registration):
+    # DADO um usuário comum
+    actor = Mock()
+    # E DADO um outro usuário alvo
+    target = Mock()
+
+    # QUANDO o ator listar as registrations do usuário alvo
+    # ENTÃO o serviço deverá gerar sua exceção de falta de permissões
+    with pytest.raises(NotAuthorizedError):
+        event_registration_service.find_by_user(actor=actor, user=target)
+
+
+@mock.patch("eventos2.core.services.event_registration.EventRegistration")
+def test_find_by_user_and_event_valid(mock_registration):
+    # DADO um usuário comum
+    actor = Mock()
+
+    # E DADO que o banco retorna uma registration
+    expected_registrations = Mock()
+    mock_registration.objects.filter.return_value = expected_registrations
+
+    # E DADO um evento
+    event = Mock()
+
+    # QUANDO o usuário listar seus registrations
+    registrations = event_registration_service.find_by_user_and_event(
+        actor=actor, user=actor, event=event
+    )
+
+    # ENTÃO as registrations devem ser retornadas
+    assert registrations is expected_registrations
+
+
+@mock.patch("eventos2.core.services.event_registration.EventRegistration")
+def test_find_by_user_and_event_unauthorized(mock_registration):
+    # DADO um usuário comum
+    actor = Mock()
+    # E DADO um outro usuário alvo
+    target = Mock()
+    # E DADO um evento
+    event = Mock()
+
+    # QUANDO o ator listar as registrations do usuário alvo
+    # ENTÃO o serviço deverá gerar sua exceção de falta de permissões
+    with pytest.raises(NotAuthorizedError):
+        event_registration_service.find_by_user_and_event(
+            actor=actor, user=target, event=event
+        )

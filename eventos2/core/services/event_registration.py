@@ -1,4 +1,4 @@
-from eventos2.core.models import EventRegistration, EventRegistrationType, User
+from eventos2.core.models import Event, EventRegistration, EventRegistrationType, User
 from eventos2.utils.exceptions import ConflictError, NotAuthorizedError, NotFoundError
 
 
@@ -59,3 +59,21 @@ def unregister(*, actor: User, event_registration_id: int) -> None:
         raise NotAuthorizedError("You're not authorized remove this registration.")
 
     registration.delete()
+
+
+def find_by_user(*, actor: User, user: User):
+    if actor != user:
+        raise NotAuthorizedError(
+            "You're not authorized to view these event registrations."
+        )
+
+    return EventRegistration.objects.filter(user=user)
+
+
+def find_by_user_and_event(*, actor: User, user: User, event: Event):
+    if actor != user:
+        raise NotAuthorizedError(
+            "You're not authorized to view these event registrations."
+        )
+
+    return EventRegistration.objects.filter(user=user, registration_type__event=event)
