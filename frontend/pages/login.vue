@@ -68,7 +68,10 @@ export default {
       this.loading = true
       this.$auth
         .loginWith('local', { data: this.form })
-        .then(() => this.$auth.redirect('home'))
+        .then(() => {
+          this.error = null
+          this.$auth.redirect('home')
+        })
         .catch(this.handleError)
         .finally(() => (this.loading = false))
     },

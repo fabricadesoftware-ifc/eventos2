@@ -75,8 +75,10 @@ export default {
   },
 
   methods: {
-    logout() {
-      this.$auth.logout().then(() => this.$auth.redirect('home'))
+    async logout() {
+      await this.$auth.logout()
+      await this.$store.dispatch('fetchEventRegistration')
+      this.$auth.redirect('home')
     }
   }
 }

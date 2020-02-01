@@ -9,9 +9,19 @@
             &ndash;
             {{ eventEndDate.format('LLL') }}
           </p>
-          <b-button type="is-primary">
+          <b-button
+            v-if="!eventUserRegistration"
+            type="is-primary"
+            tag="nuxt-link"
+            :to="localePath({ name: 'register' })"
+          >
             {{ $t('pages.index.registerButton') }}
           </b-button>
+          <div v-else>
+            You have registered to this event as "{{
+              eventUserRegistration.registration_type.name
+            }}".
+          </div>
         </main>
       </div>
     </div>
@@ -27,7 +37,12 @@ import { mapGetters } from 'vuex'
 export default {
   auth: false,
   computed: {
-    ...mapGetters(['eventName', 'eventStartDate', 'eventEndDate'])
+    ...mapGetters([
+      'eventName',
+      'eventStartDate',
+      'eventEndDate',
+      'eventUserRegistration'
+    ])
   }
 }
 </script>

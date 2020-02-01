@@ -42,6 +42,12 @@
       "submitButton": "Log in",
       "title": "Log in"
     },
+    "register": {
+      "description": "Choose a registration type.",
+      "registrationTypeError": "Please choose a registration type.",
+      "submitButton": "Register",
+      "title": "Registration"
+    },
     "signup": {
       "description": "Please enter your data to create an account.",
       "submitButton": "Sign up",

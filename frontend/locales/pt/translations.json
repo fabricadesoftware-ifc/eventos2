@@ -42,6 +42,12 @@
       "submitButton": "Fazer login",
       "title": "Log in"
     },
+    "register": {
+      "description": "Escolha um tipo de inscrição.",
+      "registrationTypeError": "Por favor, escolha um tipo de inscrição.",
+      "submitButton": "Inscrever",
+      "title": "Inscrição"
+    },
     "signup": {
       "description": "Por favor, infome seus dados para criar uma conta.",
       "submitButton": "Criar conta",
