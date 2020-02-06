@@ -10,11 +10,9 @@ def get_by_id(event_registration_id: int) -> EventRegistration:
     return registration
 
 
-def exists_by_registration_type_and_user(
-    registration_type: EventRegistrationType, user: User
-) -> bool:
+def exists_by_event_and_user(event: Event, user: User) -> bool:
     return EventRegistration.objects.filter(
-        registration_type=registration_type, user=user
+        registration_type__event=event, user=user
     ).exists()
 
 
@@ -38,7 +36,7 @@ def register(
             "You're not authorized to register an user into this event."
         )
 
-    if exists_by_registration_type_and_user(registration_type, user):
+    if exists_by_event_and_user(registration_type.event, user):
         raise ConflictError("This registration already exists.")
 
     registration = EventRegistration.objects.create(

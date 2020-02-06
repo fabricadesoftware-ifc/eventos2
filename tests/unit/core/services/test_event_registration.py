@@ -35,7 +35,7 @@ def test_get_by_id_invalid(mock_registration):
 
 
 @mock.patch("eventos2.core.services.event_registration.EventRegistration")
-def test_exists_by_registration_type_and_user_valid(mock_registration):
+def test_exists_by_event_and_user_valid(mock_registration):
     # DADO que o banco afirma que a toda consulta tem resultados
     mock_registration.objects.filter.return_value = mock_registration.objects
     mock_registration.objects.exists.return_value = True
@@ -46,15 +46,13 @@ def test_exists_by_registration_type_and_user_valid(mock_registration):
     # QUANDO verificar se existe um registration para um type e usuário qualquer
     # ENTÃO o serviço deve afirmar que sim
     assert (
-        event_registration_service.exists_by_registration_type_and_user(
-            registration_type, user
-        )
+        event_registration_service.exists_by_event_and_user(registration_type, user)
         is True
     )
 
 
 @mock.patch("eventos2.core.services.event_registration.EventRegistration")
-def test_exists_by_registration_type_and_user_invalid(mock_registration):
+def test_exists_by_event_and_user_invalid(mock_registration):
     # DADO que o banco afirma que a toda consulta não tem resultados
     mock_registration.objects.filter.return_value = mock_registration.objects
     mock_registration.objects.exists.return_value = False
@@ -65,26 +63,20 @@ def test_exists_by_registration_type_and_user_invalid(mock_registration):
     # QUANDO verificar se existe um registration para um type e usuário qualquer
     # ENTÃO o serviço deve afirmar que não
     assert (
-        event_registration_service.exists_by_registration_type_and_user(
-            registration_type, user
-        )
+        event_registration_service.exists_by_event_and_user(registration_type, user)
         is False
     )
 
 
 @mock.patch("eventos2.core.services.event_registration.EventRegistration")
-@mock.patch(
-    "eventos2.core.services.event_registration.exists_by_registration_type_and_user"
-)
-def test_register_self_valid(
-    mock_exists_by_registration_type_and_user, mock_registration
-):
+@mock.patch("eventos2.core.services.event_registration.exists_by_event_and_user")
+def test_register_self_valid(mock_exists_by_event_and_user, mock_registration):
     # DADO que o banco aceita criar qualquer registration, e o retorna
     expected_registration = Mock()
     mock_registration.objects.create.return_value = expected_registration
 
     # E DADO que não existem registrations
-    mock_exists_by_registration_type_and_user.return_value = False
+    mock_exists_by_event_and_user.return_value = False
 
     # E DADO um usuário que tem permissões
     actor = Mock()
@@ -106,15 +98,11 @@ def test_register_self_valid(
 
 
 @mock.patch("eventos2.core.services.event_registration.EventRegistration")
-@mock.patch(
-    "eventos2.core.services.event_registration.exists_by_registration_type_and_user"
-)
-def test_register_self_duplicate(
-    mock_exists_by_registration_type_and_user, mock_registration
-):
+@mock.patch("eventos2.core.services.event_registration.exists_by_event_and_user")
+def test_register_self_duplicate(mock_exists_by_event_and_user, mock_registration):
     # DADO que haverá uma colisão
     # (registration já existe)
-    mock_exists_by_registration_type_and_user.return_value = True
+    mock_exists_by_event_and_user.return_value = True
 
     # E DADO um usuário que tem permissões
     actor = Mock()
@@ -132,18 +120,14 @@ def test_register_self_duplicate(
 
 
 @mock.patch("eventos2.core.services.event_registration.EventRegistration")
-@mock.patch(
-    "eventos2.core.services.event_registration.exists_by_registration_type_and_user"
-)
-def test_register_other_user_valid(
-    mock_exists_by_registration_type_and_user, mock_registration
-):
+@mock.patch("eventos2.core.services.event_registration.exists_by_event_and_user")
+def test_register_other_user_valid(mock_exists_by_event_and_user, mock_registration):
     # DADO que o banco aceita criar qualquer registration, e o retorna
     expected_registration = Mock()
     mock_registration.objects.create.return_value = expected_registration
 
     # E DADO que não existem registrations
-    mock_exists_by_registration_type_and_user.return_value = False
+    mock_exists_by_event_and_user.return_value = False
 
     # E DADO um usuário que tem permissões
     actor = Mock()

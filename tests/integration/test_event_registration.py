@@ -39,20 +39,24 @@ def test_register_self_duplicate(api_client, user_factory):
     user = user_factory(name="user", permissions=[])
     api_client.force_authenticate(user=user)
 
-    # E DADO um evento com registration type existente,
-    # no qual o usuário já está registrado.
+    # E DADO um evento com dois registration type existentes,
+    # no qual o usuário já está registrado no registration type A.
     event = Event.objects.create(
         slug="event-a", name="Event A", starts_on=timezone.now(), ends_on=timezone.now()
     )
-    registration_type = EventRegistrationType.objects.create(
+    registration_type_a = EventRegistrationType.objects.create(
         name="Registration type A", event=event
     )
-    EventRegistration.objects.create(registration_type=registration_type, user=user)
+    registration_type_b = EventRegistrationType.objects.create(
+        name="Registration type B", event=event
+    )
+    EventRegistration.objects.create(registration_type=registration_type_a, user=user)
 
-    # QUANDO a API é chamada para registrar o usuário no evento novamente.
+    # QUANDO a API é chamada para registrar o usuário no evento novamente,
+    # com o registration type B.
     resp = api_client.post(
         reverse("event-registration-list"),
-        {"registration_type": registration_type.id, "user": user.id},
+        {"registration_type": registration_type_b.id, "user": user.id},
     )
 
     # ENTÃO a reposta deve ser de falha
