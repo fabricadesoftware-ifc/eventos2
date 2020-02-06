@@ -3,7 +3,7 @@ import { parseEventSlug } from '~/utils/url'
 
 export const state = () => ({
   event: null,
-  userEventRegistration: null,
+  eventRegistration: null,
   locale: null
 })
 
@@ -14,8 +14,8 @@ export const mutations = {
   setLocale(state, locale) {
     state.locale = locale
   },
-  setUserEventRegistration(state, registration) {
-    state.userEventRegistration = registration
+  setEventRegistration(state, registration) {
+    state.eventRegistration = registration
   }
 }
 
@@ -38,23 +38,40 @@ export const actions = {
     } catch {}
     commit('setEvent', event)
   },
+  fetchUser({ dispatch }) {
+    return this.$auth.fetchUser().then(() => dispatch('fetchEventRegistration'))
+  },
+  loginUser({ dispatch }, { email, password }) {
+    return this.$auth
+      .loginWith('local', { data: { email, password } })
+      .then(() => dispatch('fetchEventRegistration'))
+  },
+  logoutUser({ dispatch }) {
+    return this.$auth.logout().then(() => dispatch('fetchEventRegistration'))
+  },
   async fetchEventRegistration({ commit, state }) {
-    let eventRegistration = null
+    let eventRegistrations = []
     if (state.event && this.$auth.user) {
       try {
-        const eventRegistrations = await this.$api.eventRegistration.listByUserAndEvent(
+        eventRegistrations = await this.$api.eventRegistration.listByUserAndEvent(
           {
             userId: this.$auth.user.id,
             eventId: state.event.id
           }
         )
-        if (eventRegistrations.length > 0) {
-          eventRegistration = eventRegistrations[0]
-        }
       } catch {}
     }
-
-    commit('setUserEventRegistration', eventRegistration)
+    commit('setEventRegistration', eventRegistrations[0] || null)
+  },
+  createEventRegistration({ commit }, registrationTypeId) {
+    return this.$api.eventRegistration
+      .register({
+        userId: this.$auth.user.id,
+        registrationTypeId
+      })
+      .then(data => {
+        commit('setEventRegistration', data)
+      })
   }
 }
 
@@ -96,10 +113,10 @@ export const getters = {
     })
   },
   eventUserRegistration(state) {
-    if (state.userEventRegistration === null) {
+    if (state.eventRegistration === null) {
       return null
     }
-    const registration = state.userEventRegistration
+    const registration = state.eventRegistration
     let localizedName = registration.registration_type.name
     if (state.locale === 'en' && registration.registration_type.name_english) {
       localizedName = registration.registration_type.name_english

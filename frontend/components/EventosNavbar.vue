@@ -76,8 +76,7 @@ export default {
 
   methods: {
     async logout() {
-      await this.$auth.logout()
-      await this.$store.dispatch('fetchEventRegistration')
+      await this.$store.dispatch('logoutUser')
       this.$auth.redirect('home')
     }
   }

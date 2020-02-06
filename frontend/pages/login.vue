@@ -66,8 +66,8 @@ export default {
   methods: {
     onSubmit() {
       this.loading = true
-      this.$auth
-        .loginWith('local', { data: this.form })
+      this.$store
+        .dispatch('loginUser', this.form)
         .then(() => {
           this.error = null
           this.$auth.redirect('home')

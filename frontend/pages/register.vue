@@ -73,13 +73,9 @@ export default {
         return
       }
       this.loading = true
-      this.$api.eventRegistration
-        .register({
-          registrationTypeId: this.form.registrationType.id,
-          userId: this.$auth.user.id
-        })
+      this.$store
+        .dispatch('createEventRegistration', this.form.registrationType.id)
         .then(() => {
-          this.$store.dispatch('fetchEventRegistration')
           this.$router.push(this.localePath({ name: 'index' }))
         })
         .catch(this.handleError)
