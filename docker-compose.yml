@@ -10,5 +10,10 @@ services:
       POSTGRES_USER: eventos2
       POSTGRES_PASSWORD: eventos2
       POSTGRES_DB: eventos2
+    volumes:
+      - db:/var/lib/postgresql/data
     ports:
       - '8254:5432'
+
+volumes:
+  db:
