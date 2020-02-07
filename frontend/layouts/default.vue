@@ -1,8 +1,8 @@
 <template>
-  <div class="wrapper">
+  <div class="outer-wrapper">
     <eventos-navbar />
 
-    <div class="content">
+    <div class="inner-wrapper">
       <nuxt />
     </div>
 
@@ -27,12 +27,12 @@ export default {
 
 <style lang="scss" scoped>
 // Sticky footer
-.wrapper {
+.outer-wrapper {
   display: flex;
   min-height: 100vh;
   flex-direction: column;
 }
-.content {
+.inner-wrapper {
   flex: 1;
 }
 </style>
