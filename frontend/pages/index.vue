@@ -18,9 +18,13 @@
             {{ $t('pages.index.registerButton') }}
           </b-button>
           <div v-else>
-            You have registered to this event as "{{
-              eventUserRegistration.registration_type.name
-            }}".
+            <b-button
+              type="is-primary"
+              tag="nuxt-link"
+              :to="localePath({ name: 'userEventRegistration' })"
+            >
+              {{ $t('pages.index.manageRegistrationButton') }}
+            </b-button>
           </div>
         </main>
       </div>

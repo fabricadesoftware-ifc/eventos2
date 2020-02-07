@@ -35,6 +35,7 @@
   },
   "pages": {
     "index": {
+      "manageRegistrationButton": "Gerenciar inscrição",
       "registerButton": "Inscreva-se já!"
     },
     "login": {
@@ -52,6 +53,10 @@
       "description": "Por favor, infome seus dados para criar uma conta.",
       "submitButton": "Criar conta",
       "title": "Criar conta"
+    },
+    "userEventRegistration": {
+      "noRegistration": "Você não se inscreveu nesse evento.",
+      "title": "Gerenciar inscrição"
     },
     "userSettings": {
       "submitButton": "Salvar",
