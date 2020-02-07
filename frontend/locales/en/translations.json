@@ -54,11 +54,11 @@
       "submitButton": "Sign up",
       "title": "Sign up"
     },
-    "userEventRegistration": {
+    "user-registration": {
       "noRegistration": "You have not registered to this event.",
       "title": "Manage registration"
     },
-    "userSettings": {
+    "user-settings": {
       "submitButton": "Save",
       "title": "Your settings"
     }

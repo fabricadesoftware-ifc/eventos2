@@ -18,7 +18,7 @@
         <b-navbar-item
           tag="nuxt-link"
           exact-active-class="is-active"
-          :to="localePath({ name: 'userSettings' })"
+          :to="localePath({ name: 'user-settings' })"
         >
           <b-icon icon="wrench"></b-icon>
           {{ $t('components.navbar.userMenu.settings') }}

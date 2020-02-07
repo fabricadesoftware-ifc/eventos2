@@ -3,7 +3,7 @@
     <div class="columns is-centered">
       <div class="column is-8">
         <main class="section">
-          <h1 class="title">{{ $t('pages.userEventRegistration.title') }}</h1>
+          <h1 class="title">{{ $t('pages.user-registration.title') }}</h1>
 
           <div v-if="eventUserRegistration" class="card">
             <div class="card-content">
@@ -11,7 +11,7 @@
             </div>
           </div>
           <div v-else>
-            {{ $t('pages.userEventRegistration.noRegistration') }}
+            {{ $t('pages.user-registration.noRegistration') }}
           </div>
         </main>
       </div>

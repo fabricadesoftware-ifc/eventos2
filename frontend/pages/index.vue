@@ -21,7 +21,7 @@
             <b-button
               type="is-primary"
               tag="nuxt-link"
-              :to="localePath({ name: 'userEventRegistration' })"
+              :to="localePath({ name: 'user-registration' })"
             >
               {{ $t('pages.index.manageRegistrationButton') }}
             </b-button>

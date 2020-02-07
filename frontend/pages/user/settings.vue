@@ -3,7 +3,7 @@
     <div class="columns is-centered">
       <div class="column is-8">
         <main class="section">
-          <h1 class="title">{{ $t('pages.userSettings.title') }}</h1>
+          <h1 class="title">{{ $t('pages.user-settings.title') }}</h1>
           <ValidationObserver ref="form" v-slot="{ handleSubmit }">
             <form @submit.prevent="handleSubmit(onSubmit)">
               <e-input
@@ -29,7 +29,7 @@
                       native-type="submit"
                       icon-left="wrench"
                       :loading="loading"
-                      >{{ $t('pages.userSettings.submitButton') }}</b-button
+                      >{{ $t('pages.user-settings.submitButton') }}</b-button
                     >
                   </div>
                 </div>

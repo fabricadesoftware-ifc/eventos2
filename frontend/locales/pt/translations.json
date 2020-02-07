@@ -54,11 +54,11 @@
       "submitButton": "Criar conta",
       "title": "Criar conta"
     },
-    "userEventRegistration": {
+    "user-registration": {
       "noRegistration": "Você não se inscreveu nesse evento.",
       "title": "Gerenciar inscrição"
     },
-    "userSettings": {
+    "user-settings": {
       "submitButton": "Salvar",
       "title": "Suas preferências"
     }
