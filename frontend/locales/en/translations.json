@@ -1,4 +1,9 @@
 {
+  "adminMenu": {
+    "configuration": "Configuration",
+    "overview": "Overview",
+    "title": "Administration area"
+  },
   "appName": "Eventos2",
   "components": {
     "footer": {
@@ -19,6 +24,13 @@
   "forms": {
     "labels": {
       "email": "Email",
+      "eventEndDate": "End date",
+      "eventName": "Name",
+      "eventNameInEnglish": "Name in english",
+      "eventRegistrationTypeName": "Name",
+      "eventRegistrationTypeNameInEnglish": "Name in english",
+      "eventSlug": "Slug",
+      "eventStartDate": "Start date",
       "firstName": "First name",
       "lastName": "Last name",
       "password": "Password"
@@ -34,6 +46,39 @@
     "network": "Sorry, we couldn't reach our servers. Please check your internet connection and try again."
   },
   "pages": {
+    "admin": {
+      "title": "Dashboard"
+    },
+    "admin-eventDetails": {
+      "description": "Describe your event.",
+      "submitButton": "Save",
+      "title": "Event details"
+    },
+    "admin-registrationTypes": {
+      "addButton": "Add",
+      "deleteButton": "Delete",
+      "description": "Manage your registration types.",
+      "editButton": "Edit",
+      "labels": {
+        "actions": "Actions",
+        "name": "Name",
+        "nameInEnglish": "Name in english"
+      },
+      "title": "Registration types"
+    },
+    "admin-registrationTypes-id": {
+      "description": "Edit this registration type.",
+      "submitButton": "Save",
+      "title": "Registration type: {registrationTypeNameInEnglish}"
+    },
+    "admin-registrations": {
+      "labels": {
+        "email": "Email",
+        "name": "Name",
+        "type": "Type"
+      },
+      "title": "Registrations"
+    },
     "index": {
       "manageRegistrationButton": "Manage registration",
       "registerButton": "Register today!"

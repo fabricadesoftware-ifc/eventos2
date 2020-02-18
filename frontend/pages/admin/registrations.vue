@@ -1,0 +1,62 @@
+<template>
+  <div class="container">
+    <div class="columns is-10">
+      <div class="column">
+        <main class="section">
+          <h1 class="title">{{ $t('pages.admin-registrations.title') }}</h1>
+          <b-table
+            :data="registrations"
+            :columns="registrationColumns"
+            default-sort="user.fullName"
+          />
+        </main>
+      </div>
+    </div>
+  </div>
+</template>
+
+<script>
+export default {
+  layout: 'admin',
+  fetch({ store }) {
+    return store.dispatch('admin/fetchRegistrations')
+  },
+  computed: {
+    registrationColumns() {
+      return [
+        {
+          field: 'user.fullName',
+          label: this.$t('pages.admin-registrations.labels.name'),
+          sortable: true
+        },
+        {
+          field: 'user.email',
+          label: this.$t('pages.admin-registrations.labels.email'),
+          sortable: true
+        },
+        {
+          field: 'type.name',
+          label: this.$t('pages.admin-registrations.labels.type'),
+          sortable: true
+        }
+      ]
+    },
+    registrations() {
+      return this.$store.getters['admin/registrations'].map(registration => ({
+        user: {
+          fullName:
+            registration.user.first_name + ' ' + registration.user.last_name,
+          ...registration.user
+        },
+        type: {
+          name:
+            this.$i18n.locale === 'en' &&
+            registration.registration_type.name_english
+              ? registration.registration_type.name_english
+              : registration.registration_type.name
+        }
+      }))
+    }
+  }
+}
+</script>

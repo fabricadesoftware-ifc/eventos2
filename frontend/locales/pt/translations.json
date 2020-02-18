@@ -1,4 +1,9 @@
 {
+  "adminMenu": {
+    "configuration": "Configuração",
+    "overview": "Visão geral",
+    "title": "Área de administração"
+  },
   "appName": "Eventos2",
   "components": {
     "footer": {
@@ -19,6 +24,13 @@
   "forms": {
     "labels": {
       "email": "E-mail",
+      "eventEndDate": "Data de término",
+      "eventName": "Nome",
+      "eventNameInEnglish": "Nome em inglês",
+      "eventRegistrationTypeName": "Nome",
+      "eventRegistrationTypeNameInEnglish": "Nome em inglês",
+      "eventSlug": "Slug",
+      "eventStartDate": "Data de início",
       "firstName": "Nome",
       "lastName": "Sobrenome",
       "password": "Senha"
@@ -34,6 +46,39 @@
     "network": "Ops, não conseguimos conectar aos nossos servidores. Por favor, verifique sua conexão de internet e tente novamente."
   },
   "pages": {
+    "admin": {
+      "title": "Painel"
+    },
+    "admin-eventDetails": {
+      "description": "Descreva o seu evento.",
+      "submitButton": "Salvar",
+      "title": "Dados do evento"
+    },
+    "admin-registrationTypes": {
+      "addButton": "Adicionar",
+      "deleteButton": "Remover",
+      "description": "Gerencie os seus tipos de inscrição.",
+      "editButton": "Editar",
+      "labels": {
+        "actions": "Ações",
+        "name": "Nome",
+        "nameInEnglish": "Nome em inglês"
+      },
+      "title": "Tipos de inscrição"
+    },
+    "admin-registrationTypes-id": {
+      "description": "Altere este tipo de inscrição.",
+      "submitButton": "Salvar",
+      "title": "Tipo de inscrição: {registrationTypeName}"
+    },
+    "admin-registrations": {
+      "labels": {
+        "email": "E-mail",
+        "name": "Nome",
+        "type": "Tipo"
+      },
+      "title": "Inscrições"
+    },
     "index": {
       "manageRegistrationButton": "Gerenciar inscrição",
       "registerButton": "Inscreva-se já!"
