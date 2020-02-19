@@ -14,7 +14,7 @@ from eventos2.core.services import event as event_service
 
 
 class EventViewSet(ViewSet):
-    lookup_url_kwarg = 'slug'
+    lookup_url_kwarg = "slug"
 
     @swagger_auto_schema(
         request_body=EventCreateSerializer,

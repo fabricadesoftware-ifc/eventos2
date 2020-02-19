@@ -80,7 +80,7 @@ def test_retrieve_invalid(api_client, user_factory):
     # DADO nenhum evento no banco.
 
     # QUANDO a API é chamada para obter um evento inexistente.
-    resp = api_client.get(reverse("event-detail", args=['slug-inexistente']))
+    resp = api_client.get(reverse("event-detail", args=["slug-inexistente"]))
 
     # ENTÃO a resposta deve ser de falha
     assert resp.status_code == status.HTTP_404_NOT_FOUND
@@ -187,7 +187,7 @@ def test_delete_invalid(api_client, user_factory):
     api_client.force_authenticate(user=user)
 
     # QUANDO a API é chamada para deletar um evento que não existe.
-    resp = api_client.delete(reverse("event-detail", args=['slug-inexistente']))
+    resp = api_client.delete(reverse("event-detail", args=["slug-inexistente"]))
 
     # ENTÃO o evento não será encontrado.
     assert resp.status_code == status.HTTP_404_NOT_FOUND
