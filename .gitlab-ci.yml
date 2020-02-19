@@ -79,7 +79,7 @@ deploy_test:
     - ssh -p 1022 eventos2@eventos2.fabricadesoftware.ifc.edu.br "mkdir \"/srv/eventos2/$TEST_DEPLOY/\""
     - rsync -rtz -e 'ssh -p 1022' ./ "eventos2@eventos2.fabricadesoftware.ifc.edu.br:/srv/eventos2/$TEST_DEPLOY/"
     - ssh -p 1022 eventos2@eventos2.fabricadesoftware.ifc.edu.br "cd \"/srv/eventos2/$TEST_DEPLOY/\" && virtualenv -p python3 venv && ./venv/bin/pip install -r requirements.txt"
-    - ssh -p 1022 eventos2@eventos2.fabricadesoftware.ifc.edu.br "cd \"/srv/eventos2/$TEST_DEPLOY/\" && PYTHONPATH='.' ../venv/bin/python manage.py migrate"
+    - ssh -p 1022 eventos2@eventos2.fabricadesoftware.ifc.edu.br "cd \"/srv/eventos2/$TEST_DEPLOY/\" && PYTHONPATH='.' ./venv/bin/python manage.py migrate"
     - ssh -p 1022 eventos2@eventos2.fabricadesoftware.ifc.edu.br "cd \"/srv/eventos2/$TEST_DEPLOY/frontend\" && npm install && npm run build"
     - ssh -p 1022 eventos2@eventos2.fabricadesoftware.ifc.edu.br "ln -s /srv/eventos2/media \"/srv/eventos2/$TEST_DEPLOY/media\""
     - ssh -p 1022 eventos2@eventos2.fabricadesoftware.ifc.edu.br "ln -snf \"/srv/eventos2/$TEST_DEPLOY\" /srv/eventos2/current"
