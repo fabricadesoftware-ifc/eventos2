@@ -122,7 +122,8 @@ export default {
   },
 
   axios: {
-    proxy: true
+    proxy: process.env.NODE_ENV === 'production',
+    browserBaseURL: '/'
   },
   proxy: {
     '/api/': 'http://localhost:8000/'

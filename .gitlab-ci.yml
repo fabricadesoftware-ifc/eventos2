@@ -60,7 +60,7 @@ deploy_test:
       SECRET_KEY=$TEST_SECRET_KEY
       DATABASE_URL=postgres://eventos2@/eventos2
       SENTRY_URL=$TEST_SENTRY_URL
-      ALLOWED_HOSTS=eventos2.fabricadesoftware.ifc.edu.br
+      ALLOWED_HOSTS=.eventos2.fabricadesoftware.ifc.edu.br,127.0.0.1
       DEBUG=True
       EOF
     - poetry run python manage.py collectstatic
