@@ -5,13 +5,18 @@ services:
 
 variables:
   PIP_CACHE_DIR: "$CI_PROJECT_DIR/.cache/pip"
-  POSTGRES_DB: test_eventos2
+  POETRY_VIRTUALENVS_PATH: "$CI_PROJECT_DIR/.cache/venvs"
+  POSTGRES_DB: eventos2
   POSTGRES_USER: eventos2
   POSTGRES_PASSWORD: unsafe-password-for-testing
+  DATABASE_URL: postgres://$POSTGRES_USER:$POSTGRES_PASSWORD@postgres/$POSTGRES_DB
+  SECRET_KEY: unsafe-key-for-testing
+  TEST_HOST: eventos2@eventos2.fabricadesoftware.ifc.edu.br
+  TEST_ROOT_DIR: /srv/eventos2
+
 
 stages:
-  - lint
-  - test
+  - testing
   - deploy
 
 cache:
@@ -22,14 +27,11 @@ cache:
 
 default:
   before_script:
-    - pip install poetry==1.0.0
-    - mkdir -p ~/.config/pypoetry
-    - touch ~/.config/pypoetry/config.toml
-    - poetry config virtualenvs.path $CI_PROJECT_DIR/.cache/venvs
+    - pip install poetry==1.0.5
     - poetry install
 
 lint:
-  stage: lint
+  stage: testing
   script:
     - poetry run black --check eventos2 tests
     - poetry run isort -rc eventos2 tests
@@ -41,18 +43,15 @@ lint:
     - cd ..
 
 test:
-  stage: test
+  stage: testing
   coverage: '/TOTAL.*\s+(\d+%)$/'
   script:
-    - DATABASE_URL=postgres://eventos2:unsafe-password-for-testing@postgres/eventos2
-      SECRET_KEY=unsafe-key-for-testing
-      poetry run pytest --cov=eventos2
+    - poetry run pytest --cov=eventos2
 
 deploy_test:
   stage: deploy
   only:
     - master
-    - test
   script:
     - poetry export -f requirements.txt > requirements.txt
     - |
@@ -75,16 +74,16 @@ deploy_test:
     - echo "[eventos2.fabricadesoftware.ifc.edu.br]:1022 ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIAQHt8NDADsuuX0yyLocmnA+L4MLEyrQZvSV7M0KRz9m" >> ~/.ssh/known_hosts
     - eval $(ssh-agent -s)
     - echo "$TEST_SSH_PRIVATE_KEY" | tr -d '\r' | ssh-add -
-    - export TEST_DEPLOY=$(date +%Y%m%d%H%M%S)
-    - ssh -p 1022 eventos2@eventos2.fabricadesoftware.ifc.edu.br "mkdir \"/srv/eventos2/$TEST_DEPLOY/\""
-    - rsync -rtz -e 'ssh -p 1022' ./ "eventos2@eventos2.fabricadesoftware.ifc.edu.br:/srv/eventos2/$TEST_DEPLOY/"
-    - ssh -p 1022 eventos2@eventos2.fabricadesoftware.ifc.edu.br "cd \"/srv/eventos2/$TEST_DEPLOY/\" && virtualenv -p python3 venv && ./venv/bin/pip install -r requirements.txt"
-    - ssh -p 1022 eventos2@eventos2.fabricadesoftware.ifc.edu.br "cd \"/srv/eventos2/$TEST_DEPLOY/\" && PYTHONPATH='.' ./venv/bin/python manage.py migrate"
-    - ssh -p 1022 eventos2@eventos2.fabricadesoftware.ifc.edu.br "cd \"/srv/eventos2/$TEST_DEPLOY/frontend\" && npm install && npm run build"
-    - ssh -p 1022 eventos2@eventos2.fabricadesoftware.ifc.edu.br "ln -s /srv/eventos2/media \"/srv/eventos2/$TEST_DEPLOY/media\""
-    - ssh -p 1022 eventos2@eventos2.fabricadesoftware.ifc.edu.br "ln -snf \"/srv/eventos2/$TEST_DEPLOY\" /srv/eventos2/current"
-    - ssh -p 1022 eventos2@eventos2.fabricadesoftware.ifc.edu.br "sudo systemctl restart projeto-eventos2-eventos2-gunicorn.service"
-    - ssh -p 1022 eventos2@eventos2.fabricadesoftware.ifc.edu.br "sudo systemctl restart projeto-eventos2-eventos2-nuxt.service"
+    - export TEST_DEPLOY_DIR="$TEST_ROOT_DIR/$(date +%Y%m%d%H%M%S)"
+    - ssh -p 1022 $TEST_HOST "mkdir \"$TEST_DEPLOY_DIR/\""
+    - rsync -rtz -e 'ssh -p 1022' ./ "$TEST_HOST:$TEST_DEPLOY_DIR/"
+    - ssh -p 1022 $TEST_HOST "cd \"$TEST_DEPLOY_DIR/\" && virtualenv -p python3 venv && ./venv/bin/pip install -r requirements.txt"
+    - ssh -p 1022 $TEST_HOST "cd \"$TEST_DEPLOY_DIR/\" && PYTHONPATH='.' ./venv/bin/python manage.py migrate"
+    - ssh -p 1022 $TEST_HOST "cd \"$TEST_DEPLOY_DIR/frontend\" && npm install && npm run build"
+    - ssh -p 1022 $TEST_HOST "ln -s $TEST_ROOT_DIR/media \"$TEST_DEPLOY_DIR/media\""
+    - ssh -p 1022 $TEST_HOST "ln -snf \"$TEST_DEPLOY_DIR\" $TEST_ROOT_DIR/current"
+    - ssh -p 1022 $TEST_HOST "sudo systemctl restart projeto-eventos2-eventos2-gunicorn.service"
+    - ssh -p 1022 $TEST_HOST "sudo systemctl restart projeto-eventos2-eventos2-nuxt.service"
   artifacts:
     when: always
     name: ${CI_COMMIT_REF_SLUG}
