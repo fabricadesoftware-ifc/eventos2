@@ -40,6 +40,8 @@ export default {
     }
   },
 
+  buildModules: ['@nuxtjs/dotenv'],
+
   router: {
     middleware: [
       // Needed for redirection to the login page when not authenticated
@@ -126,5 +128,9 @@ export default {
   },
   proxy: {
     '/api/': 'http://localhost:8000/'
+  },
+
+  dotenv: {
+    path: '..'
   }
 }
