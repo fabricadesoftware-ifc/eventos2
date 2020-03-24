@@ -4,7 +4,7 @@ import { handleAPIError } from '~/api/utils'
   Esse plugin precisa ser carregado pelo módulo auth,
   e não diretamente pelo nuxt (ou seja, em `auth.plugins` e não `plugins`).
 */
-export default function({ app, $auth }) {
+export default function ({ app, $auth }) {
   // Tratamento igual a funcões da API
   $auth.onError(handleAPIError)
 
