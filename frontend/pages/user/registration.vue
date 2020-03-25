@@ -1,6 +1,6 @@
 <template>
   <div class="container">
-    <div class="columns is-centered">
+    <div class="columns is-gapless is-centered">
       <div class="column is-8">
         <main class="section">
           <h1 class="title">{{ $t('pages.user-registration.title') }}</h1>

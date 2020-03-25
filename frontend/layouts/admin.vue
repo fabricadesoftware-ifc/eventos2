@@ -2,7 +2,7 @@
   <div>
     <eventos-navbar />
 
-    <div class="columns">
+    <div class="columns is-gapless">
       <div class="column is-narrow">
         <eventos-admin-menu />
       </div>

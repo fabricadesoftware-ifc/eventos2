@@ -1,6 +1,6 @@
 <template>
   <div class="container">
-    <div class="columns is-centered">
+    <div class="columns is-gapless is-centered">
       <div class="column is-5">
         <main class="section">
           <h1 class="title">{{ $t('pages.register.title') }}</h1>

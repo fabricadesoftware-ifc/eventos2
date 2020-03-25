@@ -1,6 +1,6 @@
 <template>
   <div class="container">
-    <div class="columns is-10">
+    <div class="columns is-gapless is-10">
       <div class="column">
         <main class="section">
           <h1 class="title">

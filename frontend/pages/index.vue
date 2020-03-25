@@ -1,6 +1,6 @@
 <template>
   <div class="container">
-    <div class="columns">
+    <div class="columns is-gapless">
       <div class="column is-10">
         <main class="section">
           <h1 class="title">{{ eventName }}</h1>
