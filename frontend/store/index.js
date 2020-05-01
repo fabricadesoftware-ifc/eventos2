@@ -74,7 +74,6 @@ export const actions = {
   createEventRegistration({ commit, state }) {
     return this.$api.eventRegistration
       .register({
-        userId: this.$auth.user.id,
         eventId: state.event.id
       })
       .then(data => {

@@ -28,27 +28,18 @@ class EventRegistrationViewSet(ViewSet):
         data = in_serializer.validated_data
 
         event = data["event"]
-        target = data["user"]
 
-        is_self_registering = request.user == target
-        cannot_self_register = not request.user.has_perm(
-            "core.register_self_into_event", event
-        )
-        cannot_register_anyone = not request.user.has_perm("core.change_event", event)
-
-        if is_self_registering and cannot_self_register and cannot_register_anyone:
+        if not request.user.has_perm("core.register_self_into_event"):
             raise PermissionDenied(
                 "You're not authorized to self register into this event."
             )
-        elif not is_self_registering and cannot_register_anyone:
-            raise PermissionDenied(
-                "You're not authorized to register an user into this event."
-            )
 
-        if EventRegistration.objects.filter(event=event, user=target).exists():
+        if EventRegistration.objects.filter(event=event, user=request.user).exists():
             raise ValidationError("This registration already exists.")
 
-        event_registration = EventRegistration.objects.create(event=event, user=target)
+        event_registration = EventRegistration.objects.create(
+            event=event, user=request.user
+        )
 
         out_serializer = EventRegistrationDetailSerializer(event_registration)
         return Response(out_serializer.data, status=status.HTTP_201_CREATED)
@@ -58,11 +49,7 @@ class EventRegistrationViewSet(ViewSet):
         registration = get_object_or_404(EventRegistration, pk=pk)
 
         is_self_unregistering = request.user == registration.user
-        can_unregister_anyone = request.user.has_perm(
-            "core.change_event", registration.event
-        )
-
-        if not (is_self_unregistering or can_unregister_anyone):
+        if not is_self_unregistering:
             raise PermissionDenied("You're not authorized remove this registration.")
 
         registration.delete()
