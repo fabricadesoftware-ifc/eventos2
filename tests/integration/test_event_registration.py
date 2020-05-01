@@ -48,7 +48,7 @@ def test_register_self_duplicate(api_client, user_factory):
     )
 
     # ENTÃO a reposta deve ser de falha
-    assert resp.status_code == status.HTTP_409_CONFLICT
+    assert resp.status_code == status.HTTP_400_BAD_REQUEST
 
     # E ENTÃO a registration não deve ser duplicada.
     assert EventRegistration.objects.count() == 1

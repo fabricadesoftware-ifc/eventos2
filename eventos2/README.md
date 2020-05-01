@@ -51,28 +51,15 @@ A função dos serializers é traduzir objetos JSON enviados pelo cliente para u
 Não é função dos serializers:
 
 * Criar/alterar dados no banco.
-* Implementar regras de negócio. Por exemplo: não permitir usuários com e-mail duplicado, utilizando um UniqueValidator. Isso deve ser implementado apenas em services.
+* Implementar regras de negócio. Por exemplo: não permitir usuários com e-mail duplicado, utilizando um UniqueValidator.
 
 ### Views
 
-A função das views é tratar as requisições dos clientes, retornando uma resposta adequada. Sua principal preocupação é lidar com os métodos e códigos de status do HTTP. Para tal: utiliza os serializers para interpretar os dados de entrada; faz chamadas à algum service caso necessário; e utiliza serializers novamente para gerar uma resposta.
+A função das views é tratar as requisições dos clientes, retornando uma resposta adequada. Sua principal preocupação é lidar com os métodos e códigos de status do HTTP. Para tal: utiliza os serializers para interpretar os dados de entrada; faz alterações ao banco caso necessário; e utiliza serializers novamente para gerar uma resposta.
 
-Evitamos as views genéricas, pois causam a realização de consultas ao banco diretamente nas views, causando acoplação. 
-
-Não é função das views:
-
-* Interagir com modelos. Isso deve ser feito apenas em services.
-* Implementar regras de negócio. Isso deve ser feito apenas em services.
+As exceções geradas podem ser tratadas na view, ou simplesmente ignoradas, pois o Django Rest Framework sabe como tratá-las. A `NotFoundError`, por exemplo, retornará uma resposta `404 Not Found` automaticamente, caso não for tratada manualmente.
 
 Utilizamos viewsets para agrupar as operações que podem ser feitas sobre cada recurso, abstraindo os métodos HTTP (GET, POST, PUT, DELETE) com actions (retrieve, create, update, destroy).
-
-### Services
-
-A função dos services é implementar as regras de negócio (business logic). Para tal, utilizam os modelos para realizar consultas de leitura e escrita ao banco.
-
-Um service é composto por funções bem definidas, com anotações de tipo nos argumentos e no retorno. A maioria das funções deve receber um usuário no argumento `actor`, que informa quem está realizando a operação. Assim, o serviço pode verificar as permissões e gerar exceções em caso de falta.
-
-As exceções geradas pelo serviço podem ser tratadas na view, ou simplesmente ignoradas, pois o Django Rest Framework sabe como tratá-las. A `NotFoundError`, por exemplo, retornará uma resposta `404 Not Found` automaticamente, caso não for tratada manualmente.
 
 ### URLs / rotas
 
