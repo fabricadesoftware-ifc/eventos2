@@ -104,4 +104,4 @@ def find_registrations(*, actor: User, event_id: int) -> Any:
     if not actor.has_perm("core.view_registrations_for_event", event):
         raise NotAuthorizedError("Not authorized to view registrations for this event")
 
-    return EventRegistration.objects.filter(registration_type__event=event)
+    return EventRegistration.objects.filter(event=event)

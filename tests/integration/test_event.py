@@ -3,7 +3,7 @@ from django.urls import reverse
 from django.utils import timezone
 from rest_framework import status
 
-from eventos2.core.models import Event, EventRegistration, EventRegistrationType
+from eventos2.core.models import Event, EventRegistration
 
 
 @pytest.mark.django_db
@@ -206,12 +206,7 @@ def test_list_registrations(api_client, user_factory):
     event.owners.add(user)
 
     # E DADO inscrições no evento.
-    registration_type = EventRegistrationType.objects.create(
-        name="Regular", event=event
-    )
-    registration_a = EventRegistration.objects.create(
-        registration_type=registration_type, user=user
-    )
+    registration_a = EventRegistration.objects.create(event=event, user=user)
 
     # QUANDO a API é chamada para listar as inscrições do evento.
     resp = api_client.get(reverse("event-list-registrations", args=[event.slug]))

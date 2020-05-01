@@ -9,9 +9,4 @@ router.register(
     views.EventRegistrationViewSet,
     basename="event-registration",
 )
-router.register(
-    r"event_registration_types",
-    views.EventRegistrationTypeViewSet,
-    basename="event-registration-type",
-)
 router.register(r"users", views.UserViewSet, basename="user")

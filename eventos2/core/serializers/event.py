@@ -1,8 +1,5 @@
 from rest_framework import serializers
 
-from eventos2.core.serializers.event_registration_type import (
-    EventRegistrationTypeDetailSerializer,
-)
 from eventos2.images.models import Image
 from eventos2.images.serializers import ImageSerializer
 
@@ -45,4 +42,3 @@ class EventUpdateSerializer(EventBaseSerializer):
 class EventDetailSerializer(EventBaseSerializer):
     id = serializers.IntegerField()
     logo = ImageSerializer(required=False)
-    registration_types = EventRegistrationTypeDetailSerializer(many=True)

@@ -37,22 +37,6 @@ class EventOwnership(models.Model):
     )
 
 
-class EventRegistrationType(models.Model):
-    name = models.CharField(max_length=255)
-    name_english = models.CharField(max_length=255, blank=True)
-    event = models.ForeignKey(
-        Event, on_delete=models.PROTECT, related_name="registration_types"
-    )
-    registrations = models.ManyToManyField(
-        User, through="EventRegistration", related_name="event_registrations"
-    )
-
-    def __str__(self):
-        return self.name
-
-
 class EventRegistration(models.Model):
-    registration_type = models.ForeignKey(
-        EventRegistrationType, on_delete=models.PROTECT
-    )
+    event = models.ForeignKey(Event, on_delete=models.PROTECT)
     user = models.ForeignKey(User, on_delete=models.PROTECT)

@@ -3,7 +3,7 @@ from django.urls import reverse
 from django.utils import timezone
 from rest_framework import status
 
-from eventos2.core.models import Event, EventRegistration, EventRegistrationType
+from eventos2.core.models import Event, EventRegistration
 
 
 @pytest.mark.django_db
@@ -12,18 +12,14 @@ def test_register_self_valid(api_client, user_factory):
     user = user_factory(name="user", permissions=[])
     api_client.force_authenticate(user=user)
 
-    # E DADO um evento com registration type existente.
+    # E DADO um evento.
     event = Event.objects.create(
         slug="event-a", name="Event A", starts_on=timezone.now(), ends_on=timezone.now()
-    )
-    registration_type = EventRegistrationType.objects.create(
-        name="Registration type A", event=event
     )
 
     # QUANDO a API é chamada para registrar o usuário no evento.
     resp = api_client.post(
-        reverse("event-registration-list"),
-        {"registration_type": registration_type.id, "user": user.id},
+        reverse("event-registration-list"), {"event": event.id, "user": user.id},
     )
 
     # ENTÃO a reposta deve ser de sucesso
@@ -40,23 +36,15 @@ def test_register_self_duplicate(api_client, user_factory):
     api_client.force_authenticate(user=user)
 
     # E DADO um evento com dois registration type existentes,
-    # no qual o usuário já está registrado no registration type A.
+    # no qual o usuário já está registrado.
     event = Event.objects.create(
         slug="event-a", name="Event A", starts_on=timezone.now(), ends_on=timezone.now()
     )
-    registration_type_a = EventRegistrationType.objects.create(
-        name="Registration type A", event=event
-    )
-    registration_type_b = EventRegistrationType.objects.create(
-        name="Registration type B", event=event
-    )
-    EventRegistration.objects.create(registration_type=registration_type_a, user=user)
+    EventRegistration.objects.create(event=event, user=user)
 
-    # QUANDO a API é chamada para registrar o usuário no evento novamente,
-    # com o registration type B.
+    # QUANDO a API é chamada para registrar o usuário no evento novamente.
     resp = api_client.post(
-        reverse("event-registration-list"),
-        {"registration_type": registration_type_b.id, "user": user.id},
+        reverse("event-registration-list"), {"event": event.id, "user": user.id},
     )
 
     # ENTÃO a reposta deve ser de falha
@@ -75,18 +63,14 @@ def test_register_other_user_unauthorized(api_client, user_factory):
     # E DADO um outro usuário alvo
     target_user = user_factory(name="target", permissions=[])
 
-    # E DADO um evento com registration type existente.
+    # E DADO um evento.
     event = Event.objects.create(
         slug="event-a", name="Event A", starts_on=timezone.now(), ends_on=timezone.now()
-    )
-    registration_type = EventRegistrationType.objects.create(
-        name="Registration type A", event=event
     )
 
     # QUANDO a API é chamada para registrar o usuário alvo no evento.
     resp = api_client.post(
-        reverse("event-registration-list"),
-        {"registration_type": registration_type.id, "user": target_user.id},
+        reverse("event-registration-list"), {"event": event.id, "user": target_user.id},
     )
 
     # ENTÃO a reposta deve ser de falta de permissões.
@@ -102,17 +86,11 @@ def test_unregister_self_valid(api_client, user_factory):
     user = user_factory(name="user", permissions=[])
     api_client.force_authenticate(user=user)
 
-    # E DADO um evento com registration type existente,
-    # no qual o usuário já está registrado.
+    # E DADO um evento no qual o usuário já está registrado.
     event = Event.objects.create(
         slug="event-a", name="Event A", starts_on=timezone.now(), ends_on=timezone.now()
     )
-    registration_type = EventRegistrationType.objects.create(
-        name="Registration type A", event=event
-    )
-    registration = EventRegistration.objects.create(
-        registration_type=registration_type, user=user
-    )
+    registration = EventRegistration.objects.create(event=event, user=user)
 
     # QUANDO a API é chamada para remover o registro do usuário no evento.
     resp = api_client.delete(
@@ -135,17 +113,11 @@ def test_unregister_other_user_unauthorized(api_client, user_factory):
     # E DADO um outro usuário alvo
     target_user = user_factory(name="target", permissions=[])
 
-    # E DADO um evento com registration type existente,
-    # no qual o usuário alvo já está registrado.
+    # E DADO um evento no qual o usuário alvo já está registrado.
     event = Event.objects.create(
         slug="event-a", name="Event A", starts_on=timezone.now(), ends_on=timezone.now()
     )
-    registration_type = EventRegistrationType.objects.create(
-        name="Registration type A", event=event
-    )
-    registration = EventRegistration.objects.create(
-        registration_type=registration_type, user=target_user
-    )
+    registration = EventRegistration.objects.create(event=event, user=target_user)
 
     # QUANDO a API é chamada para remover o registro do usuário alvo no evento.
     resp = api_client.delete(

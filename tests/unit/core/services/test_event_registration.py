@@ -40,13 +40,13 @@ def test_exists_by_event_and_user_valid(mock_registration):
     mock_registration.objects.filter.return_value = mock_registration.objects
     mock_registration.objects.exists.return_value = True
 
-    registration_type = Mock()
+    event = Mock()
     user = Mock()
 
     # QUANDO verificar se existe um registration para um type e usuário qualquer
     # ENTÃO o serviço deve afirmar que sim
     assert (
-        event_registration_service.exists_by_event_and_user(registration_type, user)
+        event_registration_service.exists_by_event_and_user(event, user)
         is True
     )
 
@@ -57,13 +57,13 @@ def test_exists_by_event_and_user_invalid(mock_registration):
     mock_registration.objects.filter.return_value = mock_registration.objects
     mock_registration.objects.exists.return_value = False
 
-    registration_type = Mock()
+    event = Mock()
     user = Mock()
 
     # QUANDO verificar se existe um registration para um type e usuário qualquer
     # ENTÃO o serviço deve afirmar que não
     assert (
-        event_registration_service.exists_by_event_and_user(registration_type, user)
+        event_registration_service.exists_by_event_and_user(event, user)
         is False
     )
 
@@ -82,12 +82,12 @@ def test_register_self_valid(mock_exists_by_event_and_user, mock_registration):
     actor = Mock()
     actor.has_perm.return_value = True
 
-    # E DADO um registration type
-    registration_type = Mock()
+    # E DADO um event
+    event = Mock()
 
     # QUANDO se registrar
     registration = event_registration_service.register(
-        actor=actor, registration_type=registration_type, user=actor
+        actor=actor, event=event, user=actor
     )
 
     # ENTÃO o ORM deve ser chamado para criar o registration
@@ -108,14 +108,14 @@ def test_register_self_duplicate(mock_exists_by_event_and_user, mock_registratio
     actor = Mock()
     actor.has_perm.return_value = True
 
-    # E DADO um registration type
-    registration_type = Mock()
+    # E DADO um event
+    event = Mock()
 
     # QUANDO tentar se registrar novamente
     # ENTÃO o serviço deve gerar sua exceção de colisão
     with pytest.raises(ConflictError):
         event_registration_service.register(
-            actor=actor, registration_type=registration_type, user=actor
+            actor=actor, event=event, user=actor
         )
 
 
@@ -136,12 +136,12 @@ def test_register_other_user_valid(mock_exists_by_event_and_user, mock_registrat
     # E DADO outro usuário alvo
     target = Mock()
 
-    # E DADO um registration type
-    registration_type = Mock()
+    # E DADO um event
+    event = Mock()
 
     # QUANDO o actor tentar registrar o usuário alvo
     registration = event_registration_service.register(
-        actor=actor, registration_type=registration_type, user=target
+        actor=actor, event=event, user=target
     )
 
     # ENTÃO o ORM deve ser chamado para criar o registration
@@ -160,14 +160,14 @@ def test_register_other_user_unauthorized(mock_registration):
     # E DADO outro usuário alvo
     target = Mock()
 
-    # E DADO um registration type
-    registration_type = Mock()
+    # E DADO um event
+    event = Mock()
 
     # QUANDO o actor tentar registrar o usuário alvo
     # ENTÃO o serviço deverá gerar sua exeção de falta de permissões
     with pytest.raises(NotAuthorizedError):
         event_registration_service.register(
-            actor=actor, registration_type=registration_type, user=target
+            actor=actor, event=event, user=target
         )
 
 
@@ -177,12 +177,12 @@ def test_unregister_self_valid(mock_get_by_id):
     actor = Mock()
     actor.has_perm.return_value = False
 
-    # E DADO um registration type
-    registration_type = Mock()
+    # E DADO um event
+    event = Mock()
 
     # E DADO que existe uma registration do usuário nesse type
     registration = Mock()
-    registration.registration_type = registration_type
+    registration.event = event
     registration.user = actor
     mock_get_by_id.return_value = registration
 
@@ -202,12 +202,12 @@ def test_unregister_other_user_valid(mock_get_by_id):
     # E DADO outro usuário alvo
     target = Mock()
 
-    # E DADO um registration type
-    registration_type = Mock()
+    # E DADO um event
+    event = Mock()
 
     # E DADO que existe uma registration do usuário alvo nesse type
     registration = Mock()
-    registration.registration_type = registration_type
+    registration.event = event
     registration.user = target
     mock_get_by_id.return_value = registration
 
@@ -227,12 +227,12 @@ def test_unregister_other_user_unauthorized(mock_get_by_id):
     # E DADO um usuário alvo
     target = Mock()
 
-    # E DADO um registration type
-    registration_type = Mock()
+    # E DADO um event
+    event = Mock()
 
     # E DADO que existe uma registration do usuário alvo nesse type
     registration = Mock()
-    registration.registration_type = registration_type
+    registration.event = event
     registration.user = target
     mock_get_by_id.return_value = registration
 
