@@ -8,6 +8,7 @@
   "components": {
     "footer": {
       "menuItems": {
+        "admin-dashboard": "Dashboard de admin",
         "home": "Início",
         "login": "Login",
         "signup": "Criar conta"

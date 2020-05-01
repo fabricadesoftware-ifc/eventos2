@@ -44,6 +44,11 @@ export default {
           title: this.$t('components.footer.menuItems.signup'),
           icon: 'account-plus',
           to: { name: 'signup' }
+        },
+        {
+          title: this.$t('components.footer.menuItems.admin-dashboard'),
+          icon: 'tools',
+          to: { name: 'admin' }
         }
       ]
     }
