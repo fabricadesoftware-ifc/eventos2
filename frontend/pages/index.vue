@@ -55,6 +55,10 @@ export default {
   },
   methods: {
     onRegister() {
+      if (this.$auth.user === null) {
+        this.$router.push(this.localePath({ name: 'login' }))
+        return
+      }
       this.loading = true
       this.$store
         .dispatch('createEventRegistration')
