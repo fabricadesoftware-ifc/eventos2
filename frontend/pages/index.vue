@@ -12,8 +12,8 @@
           <b-button
             v-if="!eventUserRegistration"
             type="is-primary"
-            tag="nuxt-link"
-            :to="localePath({ name: 'register' })"
+            :loading="loading"
+            @click="onRegister"
           >
             {{ $t('pages.index.registerButton') }}
           </b-button>
@@ -40,6 +40,11 @@ import { mapGetters } from 'vuex'
  */
 export default {
   auth: false,
+  asyncData() {
+    return {
+      loading: false
+    }
+  },
   computed: {
     ...mapGetters([
       'eventName',
@@ -47,6 +52,17 @@ export default {
       'eventEndDate',
       'eventUserRegistration'
     ])
+  },
+  methods: {
+    onRegister() {
+      this.loading = true
+      this.$store
+        .dispatch('createEventRegistration')
+        .then(() =>
+          this.$router.push(this.localePath({ name: 'user-registration' }))
+        )
+        .finally(() => (this.loading = false))
+    }
   }
 }
 </script>

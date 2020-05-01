@@ -27,8 +27,6 @@
       "eventEndDate": "Data de término",
       "eventName": "Nome",
       "eventNameInEnglish": "Nome em inglês",
-      "eventRegistrationTypeName": "Nome",
-      "eventRegistrationTypeNameInEnglish": "Nome em inglês",
       "eventSlug": "Slug",
       "eventStartDate": "Data de início",
       "firstName": "Nome",
@@ -54,28 +52,10 @@
       "submitButton": "Salvar",
       "title": "Dados do evento"
     },
-    "admin-registrationTypes": {
-      "addButton": "Adicionar",
-      "deleteButton": "Remover",
-      "description": "Gerencie os seus tipos de inscrição.",
-      "editButton": "Editar",
-      "labels": {
-        "actions": "Ações",
-        "name": "Nome",
-        "nameInEnglish": "Nome em inglês"
-      },
-      "title": "Tipos de inscrição"
-    },
-    "admin-registrationTypes-id": {
-      "description": "Altere este tipo de inscrição.",
-      "submitButton": "Salvar",
-      "title": "Tipo de inscrição: {registrationTypeName}"
-    },
     "admin-registrations": {
       "labels": {
         "email": "E-mail",
-        "name": "Nome",
-        "type": "Tipo"
+        "name": "Nome"
       },
       "title": "Inscrições"
     },
@@ -88,19 +68,14 @@
       "submitButton": "Fazer login",
       "title": "Log in"
     },
-    "register": {
-      "description": "Escolha um tipo de inscrição.",
-      "registrationTypeError": "Por favor, escolha um tipo de inscrição.",
-      "submitButton": "Inscrever",
-      "title": "Inscrição"
-    },
     "signup": {
       "description": "Por favor, infome seus dados para criar uma conta.",
       "submitButton": "Criar conta",
       "title": "Criar conta"
     },
     "user-registration": {
-      "noRegistration": "Você não se inscreveu nesse evento.",
+      "hasNoRegistration": "Você não se inscreveu nesse evento.",
+      "hasRegistration": "Você se inscreveu nesse evento.",
       "title": "Gerenciar inscrição"
     },
     "user-settings": {

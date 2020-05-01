@@ -14,21 +14,6 @@ export const actions = {
       .update(rootState.event.slug, data)
       .then(() => dispatch('fetchEvent', rootState.event.slug, { root: true }))
   },
-  addEventRegistrationType({ dispatch, rootState }, { name, nameInEnglish }) {
-    return this.$api.eventRegistrationType
-      .create({ eventId: rootState.event.id, name, nameInEnglish })
-      .then(() => dispatch('fetchEvent', rootState.event.slug, { root: true }))
-  },
-  updateEventRegistrationType({ dispatch, rootState }, data) {
-    return this.$api.eventRegistrationType
-      .update(data)
-      .then(() => dispatch('fetchEvent', rootState.event.slug, { root: true }))
-  },
-  deleteEventRegistrationType({ dispatch, rootState }, registrationTypeId) {
-    return this.$api.eventRegistrationType
-      .destroy(registrationTypeId)
-      .then(() => dispatch('fetchEvent', rootState.event.slug, { root: true }))
-  },
   async fetchRegistrations({ commit, rootState }) {
     if (rootState.event === null) {
       return

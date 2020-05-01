@@ -27,8 +27,6 @@
       "eventEndDate": "End date",
       "eventName": "Name",
       "eventNameInEnglish": "Name in english",
-      "eventRegistrationTypeName": "Name",
-      "eventRegistrationTypeNameInEnglish": "Name in english",
       "eventSlug": "Slug",
       "eventStartDate": "Start date",
       "firstName": "First name",
@@ -54,28 +52,10 @@
       "submitButton": "Save",
       "title": "Event details"
     },
-    "admin-registrationTypes": {
-      "addButton": "Add",
-      "deleteButton": "Delete",
-      "description": "Manage your registration types.",
-      "editButton": "Edit",
-      "labels": {
-        "actions": "Actions",
-        "name": "Name",
-        "nameInEnglish": "Name in english"
-      },
-      "title": "Registration types"
-    },
-    "admin-registrationTypes-id": {
-      "description": "Edit this registration type.",
-      "submitButton": "Save",
-      "title": "Registration type: {registrationTypeNameInEnglish}"
-    },
     "admin-registrations": {
       "labels": {
         "email": "Email",
-        "name": "Name",
-        "type": "Type"
+        "name": "Name"
       },
       "title": "Registrations"
     },
@@ -88,19 +68,14 @@
       "submitButton": "Log in",
       "title": "Log in"
     },
-    "register": {
-      "description": "Choose a registration type.",
-      "registrationTypeError": "Please choose a registration type.",
-      "submitButton": "Register",
-      "title": "Registration"
-    },
     "signup": {
       "description": "Please enter your data to create an account.",
       "submitButton": "Sign up",
       "title": "Sign up"
     },
     "user-registration": {
-      "noRegistration": "You have not registered to this event.",
+      "hasNoRegistration": "You have not registered to this event.",
+      "hasRegistration": "You have registered to this event.",
       "title": "Manage registration"
     },
     "user-settings": {

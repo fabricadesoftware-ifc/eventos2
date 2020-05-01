@@ -33,11 +33,6 @@ export default {
           field: 'user.email',
           label: this.$t('pages.admin-registrations.labels.email'),
           sortable: true
-        },
-        {
-          field: 'type.name',
-          label: this.$t('pages.admin-registrations.labels.type'),
-          sortable: true
         }
       ]
     },
@@ -47,13 +42,6 @@ export default {
           fullName:
             registration.user.first_name + ' ' + registration.user.last_name,
           ...registration.user
-        },
-        type: {
-          name:
-            this.$i18n.locale === 'en' &&
-            registration.registration_type.name_english
-              ? registration.registration_type.name_english
-              : registration.registration_type.name
         }
       }))
     }

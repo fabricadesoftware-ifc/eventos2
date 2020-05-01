@@ -5,13 +5,11 @@
         <main class="section">
           <h1 class="title">{{ $t('pages.user-registration.title') }}</h1>
 
-          <div v-if="eventUserRegistration" class="card">
-            <div class="card-content">
-              {{ eventUserRegistration.registration_type.name }}
-            </div>
+          <div v-if="eventUserRegistration">
+            {{ $t('pages.user-registration.hasRegistration') }}
           </div>
           <div v-else>
-            {{ $t('pages.user-registration.noRegistration') }}
+            {{ $t('pages.user-registration.hasNoRegistration') }}
           </div>
         </main>
       </div>

@@ -23,12 +23,6 @@
           :to="localePath({ name: 'admin-eventDetails' })"
           active-class="is-active"
         />
-        <b-menu-item
-          :label="$t('pages.admin-registrationTypes.title')"
-          tag="nuxt-link"
-          :to="localePath({ name: 'admin-registrationTypes' })"
-          active-class="is-active"
-        />
       </b-menu-list>
     </b-menu>
   </section>

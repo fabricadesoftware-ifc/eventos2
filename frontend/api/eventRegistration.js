@@ -8,9 +8,9 @@ export function createEventRegistrationAPIClient($axios) {
         }
       })
     },
-    register({ registrationTypeId, userId }) {
+    register({ eventId, userId }) {
       return $axios.$post(`api/v1/event_registrations/`, {
-        registration_type: registrationTypeId,
+        event: eventId,
         user: userId
       })
     }

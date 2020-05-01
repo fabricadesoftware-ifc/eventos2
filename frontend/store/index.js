@@ -71,11 +71,11 @@ export const actions = {
     }
     commit('setEventRegistration', eventRegistrations[0] || null)
   },
-  createEventRegistration({ commit }, registrationTypeId) {
+  createEventRegistration({ commit, state }) {
     return this.$api.eventRegistration
       .register({
         userId: this.$auth.user.id,
-        registrationTypeId
+        eventId: state.event.id
       })
       .then(data => {
         commit('setEventRegistration', data)
@@ -105,35 +105,7 @@ export const getters = {
     }
     return dayjs(state.event.ends_on).locale(state.locale)
   },
-  eventRegistrationTypes(state) {
-    if (state.event === null) {
-      return null
-    }
-    return state.event.registration_types.map(registrationType => {
-      let localizedName = registrationType.name
-      if (state.locale === 'en' && registrationType.name_english) {
-        localizedName = registrationType.name_english
-      }
-      return {
-        id: registrationType.id,
-        name: localizedName
-      }
-    })
-  },
   eventUserRegistration(state) {
-    if (state.eventRegistration === null) {
-      return null
-    }
-    const registration = state.eventRegistration
-    let localizedName = registration.registration_type.name
-    if (state.locale === 'en' && registration.registration_type.name_english) {
-      localizedName = registration.registration_type.name_english
-    }
-    return {
-      registration_type: {
-        id: registration.registration_type.id,
-        name: localizedName
-      }
-    }
+    return state.eventRegistration
   }
 }
