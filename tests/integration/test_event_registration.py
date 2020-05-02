@@ -100,3 +100,31 @@ def test_unregister_other_user_unauthorized(api_client, user_factory):
 
     # E ENTÃO a registration deve permanecer inalterada no banco.
     assert EventRegistration.objects.count() == 1
+
+
+@pytest.mark.django_db
+def test_list_registrations_for_user(api_client, user_factory):
+    # DADO um usuário autenticado.
+    user = user_factory(name="user", permissions=[])
+    api_client.force_authenticate(user=user)
+
+    # E DADO um evento existente no banco, pertencente ao usuário.
+    event = Event.objects.create(
+        slug="event-a", name="Event A", starts_on=timezone.now(), ends_on=timezone.now()
+    )
+    event.owners.add(user)
+
+    # E DADO inscrições no evento.
+    registration_a = EventRegistration.objects.create(event=event, user=user)
+
+    # QUANDO a API é chamada para listar as inscrições do usuário.
+    resp = api_client.get(
+        "{}?user_id={}".format(reverse("event-registration-list"), user.id)
+    )
+
+    # ENTÃO as inscrições do usuário serão retornadas
+    assert resp.status_code == status.HTTP_200_OK
+
+    assert len(resp.data) == 1
+    assert resp.data[0]["event"]["id"] == registration_a.event.id
+    assert resp.data[0]["user"]["email"] == registration_a.user.email
