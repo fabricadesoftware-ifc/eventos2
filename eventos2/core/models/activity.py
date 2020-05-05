@@ -1,11 +1,14 @@
 from django.db import models
 
-from eventos2.core.models.event import EventRegistration
+from eventos2.core.models.event import Event, EventRegistration
 from eventos2.core.models.soft_deletion import SoftDeletableModel
 from eventos2.core.models.user import User
 
 
 class Activity(SoftDeletableModel):
+    event = models.ForeignKey(
+        Event, on_delete=models.PROTECT, related_name="activities"
+    )
     slug = models.CharField(
         max_length=255, unique=True, help_text="A unique, readable identifier"
     )

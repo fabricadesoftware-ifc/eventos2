@@ -8,6 +8,7 @@ from rest_framework.viewsets import ViewSet
 
 from eventos2.core.models import Event, EventRegistration
 from eventos2.core.serializers import (
+    ActivityDetailSerializer,
     EventCreateSerializer,
     EventDetailSerializer,
     EventRegistrationDetailSerializer,
@@ -110,4 +111,15 @@ class EventViewSet(ViewSet):
         registrations = EventRegistration.objects.filter(event=event)
 
         out_serializer = EventRegistrationDetailSerializer(registrations, many=True)
+        return Response(out_serializer.data)
+
+    @swagger_auto_schema(responses={200: ActivityDetailSerializer(many=True)})
+    @action(detail=True, url_path="activities", url_name="list-activities")
+    def list_activities(self, request, slug):
+        event = get_object_or_404(Event.available_objects, slug=slug)
+
+        if not request.user.has_perm("core.view_activities_for_event", event):
+            raise PermissionDenied("Not authorized to view activities for this event")
+
+        out_serializer = ActivityDetailSerializer(event.activities, many=True)
         return Response(out_serializer.data)

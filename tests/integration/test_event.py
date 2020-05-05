@@ -3,7 +3,7 @@ from django.urls import reverse
 from django.utils import timezone
 from rest_framework import status
 
-from eventos2.core.models import Event, EventRegistration
+from eventos2.core.models import Activity, Event, EventRegistration
 
 
 @pytest.mark.django_db
@@ -216,3 +216,34 @@ def test_list_registrations(api_client, user_factory):
 
     assert len(resp.data) == 1
     assert resp.data[0]["user"]["email"] == registration_a.user.email
+
+
+@pytest.mark.django_db
+def test_list_activities(api_client, user_factory):
+    # DADO um usuário autenticado.
+    user = user_factory(name="user", permissions=[])
+    api_client.force_authenticate(user=user)
+
+    # E DADO um evento existente no banco, pertencente ao usuário.
+    event = Event.objects.create(
+        slug="event-a", name="Event A", starts_on=timezone.now(), ends_on=timezone.now()
+    )
+    event.owners.add(user)
+
+    # E DADO uma atividade associada ao evento.
+    activity_a = Activity.objects.create(
+        event=event,
+        slug="activity-a",
+        name="Activity A",
+        starts_on=timezone.now(),
+        ends_on=timezone.now(),
+    )
+
+    # QUANDO a API é chamada para listar as inscrições do evento.
+    resp = api_client.get(reverse("event-list-activities", args=[event.slug]))
+
+    # ENTÃO as inscrições serão retornadas
+    assert resp.status_code == status.HTTP_200_OK
+
+    assert len(resp.data) == 1
+    assert resp.data[0]["name"] == activity_a.name
