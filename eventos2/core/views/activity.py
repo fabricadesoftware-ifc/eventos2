@@ -29,6 +29,9 @@ class ActivityViewSet(ViewSet):
         if not request.user.has_perm("core.change_event", event):
             raise PermissionDenied("Not authorized to add an activity to this event.")
 
+        if Activity.objects.filter(slug=data["slug"]).exists():
+            raise ValidationError({"slug": ["Slug already used."]})
+
         activity = Activity.objects.create(
             event=event,
             slug=data["slug"],
