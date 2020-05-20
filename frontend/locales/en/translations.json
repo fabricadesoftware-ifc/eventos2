@@ -1,5 +1,6 @@
 {
   "adminMenu": {
+    "activities": "Activities",
     "configuration": "Configuration",
     "overview": "Overview",
     "title": "Administration area"
@@ -24,6 +25,11 @@
   },
   "forms": {
     "labels": {
+      "activityEndDate": "End date",
+      "activityName": "Name",
+      "activityNameInEnglish": "Name in english",
+      "activitySlug": "Slug",
+      "activityStartDate": "Start date",
       "email": "Email",
       "eventEndDate": "End date",
       "eventName": "Name",
@@ -45,8 +51,30 @@
     "network": "Sorry, we couldn't reach our servers. Please check your internet connection and try again."
   },
   "pages": {
+    "activities": {
+      "title": "Activities"
+    },
     "admin": {
       "title": "Dashboard"
+    },
+    "admin-activities": {
+      "addButton": "New activity",
+      "editButton": "Edit",
+      "labels": {
+        "actions": "Actions",
+        "name": "Name"
+      },
+      "title": "Manage activities"
+    },
+    "admin-activities-id": {
+      "description": "Describe your activity.",
+      "submitButton": "Save",
+      "title": "Edit activity"
+    },
+    "admin-activities-new": {
+      "description": "Describe your activity.",
+      "submitButton": "Add",
+      "title": "New activity"
     },
     "admin-eventDetails": {
       "description": "Describe your event.",
@@ -61,6 +89,7 @@
       "title": "Registrations"
     },
     "index": {
+      "manageActivitiesButton": "Manage activities",
       "manageRegistrationButton": "Manage registration",
       "registerButton": "Register today!"
     },

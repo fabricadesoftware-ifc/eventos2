@@ -17,6 +17,9 @@ export function createEventAPIClient($axios) {
         starts_on,
         ends_on
       })
+    },
+    listActivities(slug) {
+      return $axios.$get(`api/v1/events/${slug}/activities`)
     }
   }
 }

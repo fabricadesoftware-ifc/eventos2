@@ -1,5 +1,6 @@
 {
   "adminMenu": {
+    "activities": "Atividades",
     "configuration": "Configuração",
     "overview": "Visão geral",
     "title": "Área de administração"
@@ -24,6 +25,11 @@
   },
   "forms": {
     "labels": {
+      "activityEndDate": "Data de término",
+      "activityName": "Nome",
+      "activityNameInEnglish": "Nome em inglês",
+      "activitySlug": "Slug",
+      "activityStartDate": "Data de início",
       "email": "E-mail",
       "eventEndDate": "Data de término",
       "eventName": "Nome",
@@ -45,8 +51,30 @@
     "network": "Ops, não conseguimos conectar aos nossos servidores. Por favor, verifique sua conexão de internet e tente novamente."
   },
   "pages": {
+    "activities": {
+      "title": "Atividades"
+    },
     "admin": {
       "title": "Painel"
+    },
+    "admin-activities": {
+      "addButton": "Nova atividade",
+      "editButton": "Editar",
+      "labels": {
+        "actions": "Ações",
+        "name": "Nome"
+      },
+      "title": "Gerenciar atividades"
+    },
+    "admin-activities-id": {
+      "description": "Descreva a sua atividade.",
+      "submitButton": "Salvar",
+      "title": "Editar atividade"
+    },
+    "admin-activities-new": {
+      "description": "Descreva a sua atividade.",
+      "submitButton": "Adicionar",
+      "title": "Nova atividade"
     },
     "admin-eventDetails": {
       "description": "Descreva o seu evento.",
@@ -61,6 +89,7 @@
       "title": "Inscrições"
     },
     "index": {
+      "manageActivitiesButton": "Gerenciar atividades",
       "manageRegistrationButton": "Gerenciar inscrição",
       "registerButton": "Inscreva-se já!"
     },

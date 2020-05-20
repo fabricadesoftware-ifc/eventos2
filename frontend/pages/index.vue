@@ -9,6 +9,7 @@
             &ndash;
             {{ eventEndDate.format('LLL') }}
           </p>
+
           <b-button
             v-if="!eventUserRegistration"
             type="is-primary"
@@ -24,6 +25,13 @@
               :to="localePath({ name: 'user-registration' })"
             >
               {{ $t('pages.index.manageRegistrationButton') }}
+            </b-button>
+            <b-button
+              type="is-secondary"
+              tag="nuxt-link"
+              :to="localePath({ name: 'activities' })"
+            >
+              {{ $t('pages.index.manageActivitiesButton') }}
             </b-button>
           </div>
         </main>

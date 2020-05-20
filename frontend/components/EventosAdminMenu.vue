@@ -24,6 +24,14 @@
           active-class="is-active"
         />
       </b-menu-list>
+      <b-menu-list :label="$t('adminMenu.activities')">
+        <b-menu-item
+          :label="$t('pages.admin-activities.title')"
+          tag="nuxt-link"
+          :to="localePath({ name: 'admin-activities' })"
+          active-class="is-active"
+        />
+      </b-menu-list>
     </b-menu>
   </section>
 </template>
