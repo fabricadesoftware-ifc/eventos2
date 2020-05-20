@@ -24,7 +24,7 @@ class UserViewSet(ViewSet):
         data = in_serializer.validated_data
 
         if User.objects.filter(email=data["email"]).exists():
-            raise ValidationError("Email already used.")
+            raise ValidationError({"email": ["Email already used."]})
 
         user = User.objects.create(
             email=data["email"],

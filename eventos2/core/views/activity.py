@@ -76,7 +76,7 @@ class ActivityViewSet(ViewSet):
         new_slug_exists = Activity.available_objects.filter(slug=data["slug"]).exists()
 
         if is_new_slug and new_slug_exists:
-            raise ValidationError("Slug already used.")
+            raise ValidationError({"slug": ["Slug already used."]})
 
         activity.slug = data["slug"]
         activity.name = data["name"]

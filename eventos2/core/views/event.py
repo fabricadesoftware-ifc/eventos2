@@ -32,7 +32,7 @@ class EventViewSet(ViewSet):
             raise PermissionDenied("Not authorized to create an event.")
 
         if Event.available_objects.filter(slug=data["slug"]).exists():
-            raise ValidationError("Slug already used.")
+            raise ValidationError({"slug": ["Slug already used."]})
 
         event = Event.objects.create(
             slug=data["slug"],
@@ -75,7 +75,7 @@ class EventViewSet(ViewSet):
         new_slug_exists = Event.available_objects.filter(slug=data["slug"]).exists()
 
         if is_new_slug and new_slug_exists:
-            raise ValidationError("Slug already used.")
+            raise ValidationError({"slug": ["Slug already used."]})
 
         event.slug = data["slug"]
         event.name = data["name"]
