@@ -54,7 +54,7 @@ urlpatterns = [
 ]
 
 # Habilitar a interface de administração apenas em modo debug.
-if settings.DEBUG:
+if settings.DEBUG:  # pragma: no cover - debugging
     urlpatterns.append(path("api/admin/", admin.site.urls))
 
 # Servir arquivos de media. Só será efetivo quando rodando no modo debug.

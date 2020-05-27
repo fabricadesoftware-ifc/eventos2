@@ -44,7 +44,7 @@ INSTALLED_APPS = [
 ]
 
 # Habilitar a interface de administração apenas em modo debug.
-if DEBUG:
+if DEBUG:  # pragma: no cover - debugging
     INSTALLED_APPS.append("django.contrib.admin")
 
 MIDDLEWARE = [
@@ -147,7 +147,7 @@ REST_FRAMEWORK = {
 # https://docs.sentry.io/platforms/python/django/
 
 SENTRY_URL = env.url("SENTRY_URL", default=None)
-if SENTRY_URL:
+if SENTRY_URL:  # pragma: no cover - debugging
     sentry_sdk.init(dsn=SENTRY_URL.geturl(), integrations=[DjangoIntegration()])
 
 
