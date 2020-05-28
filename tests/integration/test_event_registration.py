@@ -151,9 +151,7 @@ def test_list_registrations_for_user_and_event(api_client, user_factory):
     # E QUANDO a API é chamada para listar as inscrições do usuário no evento B.
     resp = api_client.get(
         "{}?user_id={}&event_id={}".format(
-            reverse("event-registration-list"),
-            user.id,
-            event_b.id
+            reverse("event-registration-list"), user.id, event_b.id
         )
     )
 
