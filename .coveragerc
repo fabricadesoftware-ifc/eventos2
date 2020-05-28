@@ -1,4 +1,5 @@
 [run]
 omit =
+    eventos2/*/admin.py
     eventos2/*/migrations/*
     eventos2/wsgi.py
