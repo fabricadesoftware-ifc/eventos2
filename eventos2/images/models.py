@@ -6,8 +6,11 @@ from django.db import models
 
 def image_file_path(image, _):
     extension = mimetypes.guess_extension(image.file.file.content_type)
-    if extension == ".jpe":
-        extension = ".jpeg"
+    # workaround for https://bugs.python.org/issue4963
+    # it has been fixed in new python versions,
+    # we should remove this sometime.
+    if extension == ".jpe":  # pragma: no cover
+        extension = ".jpg"
     return "images/{}{}".format(image.public_id, extension)
 
 
