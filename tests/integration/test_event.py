@@ -35,26 +35,54 @@ def test_create_valid(api_client, user_factory):
 
 
 @pytest.mark.django_db
-def test_create_invalid(api_client, user_factory):
+def test_create_duplicate_slug(api_client, user_factory):
     # DADO um usuário autenticado com as permissões adequadas.
     user = user_factory(name="user", permissions=["core.add_event"])
     api_client.force_authenticate(user=user)
 
-    # E DADO dados de evento inválidos (valor de slug é nulo).
-    # QUANDO a API é chamada.
+    # E DADO um evento existente
+    existing_event = Event.objects.create(
+        slug="event-a", name="Event A", starts_on=timezone.now(), ends_on=timezone.now()
+    )
+
+    # QUANDO a API é chamada para criar um evento com o mesmo slug.
     resp = api_client.post(
         reverse("event-list"),
         {
-            "slug": None,
+            "slug": existing_event.slug,
+            "name": "Event B",
+            "starts_on": timezone.now(),
+            "ends_on": timezone.now(),
+        },
+    )
+
+    # ENTÃO a resposta de falha deve conter o erro no campo slug.
+    assert resp.status_code == status.HTTP_400_BAD_REQUEST
+    assert len(resp.data["slug"]) != 0
+
+    # E ENTÃO o evento não deve ser criado no banco.
+    assert Event.objects.count() == 1
+
+
+@pytest.mark.django_db
+def test_create_unauthorized(api_client, user_factory):
+    # DADO um usuário sem as permissões adequadas.
+    user = user_factory(name="user", permissions=[])
+    api_client.force_authenticate(user=user)
+
+    # QUANDO a API é chamada para criar um evento.
+    resp = api_client.post(
+        reverse("event-list"),
+        {
+            "slug": "event-a",
             "name": "Event A",
             "starts_on": timezone.now(),
             "ends_on": timezone.now(),
         },
     )
 
-    # ENTÃO a resposta de falha deve conter os erros de cada campo.
-    assert resp.status_code == status.HTTP_400_BAD_REQUEST
-    assert len(resp.data["slug"]) != 0
+    # ENTÃO a resposta deve ser de falta de permissão.
+    assert resp.status_code == status.HTTP_403_FORBIDDEN
 
     # E ENTÃO o evento não deve ser criado no banco.
     assert Event.objects.count() == 0
@@ -73,17 +101,6 @@ def test_retrieve_valid(api_client, user_factory):
     # ENTÃO a resposta de sucesso deve conter os dados do evento.
     assert resp.status_code == status.HTTP_200_OK
     assert resp.data["slug"] == event.slug
-
-
-@pytest.mark.django_db
-def test_retrieve_invalid(api_client, user_factory):
-    # DADO nenhum evento no banco.
-
-    # QUANDO a API é chamada para obter um evento inexistente.
-    resp = api_client.get(reverse("event-detail", args=["slug-inexistente"]))
-
-    # ENTÃO a resposta deve ser de falha
-    assert resp.status_code == status.HTTP_404_NOT_FOUND
 
 
 @pytest.mark.django_db
@@ -121,35 +138,69 @@ def test_update_valid(api_client, user_factory):
 
 
 @pytest.mark.django_db
-def test_update_invalid(api_client, user_factory):
+def test_update_duplicate_slug(api_client, user_factory):
     # DADO um usuário autenticado.
     user = user_factory(name="user", permissions=[])
     api_client.force_authenticate(user=user)
 
-    # E DADO um evento existente no banco, pertencente ao usuário.
+    # E DADO um evento A existente no banco.
+    event_a = Event.objects.create(
+        slug="event-a", name="Event A", starts_on=timezone.now(), ends_on=timezone.now()
+    )
+
+    # E DADO um evento B existente no banco, pertencente ao usuário.
+    event_b = Event.objects.create(
+        slug="event-b", name="Event B", starts_on=timezone.now(), ends_on=timezone.now()
+    )
+    event_b.owners.add(user)
+
+    # E DADO dados de evento inválidos (valor de slug utilizado por outro evento).
+    # QUANDO a API é chamada.
+    resp = api_client.put(
+        reverse("event-detail", args=[event_b.slug]),
+        {
+            "slug": event_a.slug,
+            "name": event_b.name,
+            "starts_on": event_b.starts_on,
+            "ends_on": event_b.ends_on,
+        },
+    )
+
+    # ENTÃO a resposta de falha deve conter o erro no campo slug.
+    assert resp.status_code == status.HTTP_400_BAD_REQUEST
+    assert len(resp.data["slug"]) != 0
+
+    # E ENTÃO o evento não deve ser modificado no banco.
+    assert Event.objects.get(pk=event_b.id).slug == event_b.slug
+
+
+@pytest.mark.django_db
+def test_update_unauthorized(api_client, user_factory):
+    # DADO um usuário autenticado.
+    user = user_factory(name="user", permissions=[])
+    api_client.force_authenticate(user=user)
+
+    # E DADO um evento existente no banco, não pertencente ao usuário.
     event = Event.objects.create(
         slug="event-a", name="Event A", starts_on=timezone.now(), ends_on=timezone.now()
     )
-    event.owners.add(user)
 
-    # E DADO dados de evento inválidos (valor de slug é nulo).
     # QUANDO a API é chamada.
     resp = api_client.put(
         reverse("event-detail", args=[event.slug]),
         {
-            "slug": None,
-            "name": event.name,
+            "slug": event.slug,
+            "name": event.name + " modified",
             "starts_on": event.starts_on,
             "ends_on": event.ends_on,
         },
     )
 
-    # ENTÃO a resposta de falha deve conter os erros de cada campo.
-    assert resp.status_code == status.HTTP_400_BAD_REQUEST
-    assert len(resp.data["slug"]) != 0
+    # ENTÃO a resposta deve ser de falta de permissão.
+    assert resp.status_code == status.HTTP_403_FORBIDDEN
 
     # E ENTÃO o evento não deve ser modificado no banco.
-    assert Event.objects.get(pk=event.id).slug == event.slug
+    assert Event.objects.get(pk=event.id).name == event.name
 
 
 @pytest.mark.django_db
@@ -181,16 +232,24 @@ def test_delete_valid(api_client, user_factory):
 
 
 @pytest.mark.django_db
-def test_delete_invalid(api_client, user_factory):
+def test_delete_unauthorized(api_client, user_factory):
     # DADO um usuário autenticado.
     user = user_factory(name="user", permissions=[])
     api_client.force_authenticate(user=user)
 
-    # QUANDO a API é chamada para deletar um evento que não existe.
-    resp = api_client.delete(reverse("event-detail", args=["slug-inexistente"]))
+    # E DADO um evento existente no banco, não pertencente ao usuário.
+    event = Event.objects.create(
+        slug="event-a", name="Event A", starts_on=timezone.now(), ends_on=timezone.now()
+    )
 
-    # ENTÃO o evento não será encontrado.
-    assert resp.status_code == status.HTTP_404_NOT_FOUND
+    # QUANDO a API é chamada para deletar o evento.
+    resp = api_client.delete(reverse("event-detail", args=[event.slug]))
+
+    # ENTÃO a resposta deve ser de falta de permissão.
+    assert resp.status_code == status.HTTP_403_FORBIDDEN
+
+    # E ENTÃO o evento não será deletado.
+    assert Event.available_objects.count() == 1
 
 
 @pytest.mark.django_db
@@ -199,23 +258,46 @@ def test_list_registrations(api_client, user_factory):
     user = user_factory(name="user", permissions=[])
     api_client.force_authenticate(user=user)
 
-    # E DADO um evento existente no banco, pertencente ao usuário.
-    event = Event.objects.create(
+    # E DADO dois eventos, um pertencente ao usuário.
+    event_a = Event.objects.create(
         slug="event-a", name="Event A", starts_on=timezone.now(), ends_on=timezone.now()
     )
-    event.owners.add(user)
 
-    # E DADO inscrições no evento.
-    registration_a = EventRegistration.objects.create(event=event, user=user)
+    event_b = Event.objects.create(
+        slug="event-b", name="Event B", starts_on=timezone.now(), ends_on=timezone.now()
+    )
+    event_b.owners.add(user)
 
-    # QUANDO a API é chamada para listar as inscrições do evento.
-    resp = api_client.get(reverse("event-list-registrations", args=[event.slug]))
+    # E DADO uma inscrição em cada evento.
+    registration_a = EventRegistration.objects.create(event=event_a, user=user)
+    EventRegistration.objects.create(event=event_b, user=user)
 
-    # ENTÃO as inscrições serão retornadas
+    # QUANDO a API é chamada para listar as inscrições do evento pertencente ao usuário.
+    resp = api_client.get(reverse("event-list-registrations", args=[event_b.slug]))
+
+    # ENTÃO apenas as inscrições do evento A serão retornadas
     assert resp.status_code == status.HTTP_200_OK
 
     assert len(resp.data) == 1
     assert resp.data[0]["user"]["email"] == registration_a.user.email
+
+
+@pytest.mark.django_db
+def test_list_registrations_unauthorized(api_client, user_factory):
+    # DADO um usuário autenticado.
+    user = user_factory(name="user", permissions=[])
+    api_client.force_authenticate(user=user)
+
+    # E DADO um evento, não pertencente ao usuário.
+    event = Event.objects.create(
+        slug="event-a", name="Event A", starts_on=timezone.now(), ends_on=timezone.now()
+    )
+
+    # QUANDO a API é chamada para listar as inscrições do evento.
+    resp = api_client.get(reverse("event-list-registrations", args=[event.slug]))
+
+    # ENTÃO a resposta deve ser de falta de permissão.
+    assert resp.status_code == status.HTTP_403_FORBIDDEN
 
 
 @pytest.mark.django_db
@@ -247,3 +329,19 @@ def test_list_activities(api_client, user_factory):
 
     assert len(resp.data) == 1
     assert resp.data[0]["name"] == activity_a.name
+
+
+@pytest.mark.django_db
+def test_list_activities_unauthorized(api_client):
+    # DADO nenhum usuário autenticado.
+
+    # E DADO um evento.
+    event = Event.objects.create(
+        slug="event-a", name="Event A", starts_on=timezone.now(), ends_on=timezone.now()
+    )
+
+    # QUANDO a API é chamada para listar as atividades do evento.
+    resp = api_client.get(reverse("event-list-activities", args=[event.slug]))
+
+    # ENTÃO a resposta deve ser de falta de permissão.
+    assert resp.status_code == status.HTTP_403_FORBIDDEN

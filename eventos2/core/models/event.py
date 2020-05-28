@@ -24,7 +24,7 @@ class Event(SoftDeletableModel):
         User, through="EventOwnership", related_name="events_owned"
     )
 
-    def __str__(self):
+    def __str__(self):  # pragma: no cover - internal use
         return self.name
 
 

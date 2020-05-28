@@ -52,6 +52,25 @@ def test_register_self_duplicate(api_client, user_factory):
 
 
 @pytest.mark.django_db
+def test_register_self_unauthorized(api_client):
+    # DADO nenhum usuário autenticado.
+
+    # E DADO um evento.
+    event = Event.objects.create(
+        slug="event-a", name="Event A", starts_on=timezone.now(), ends_on=timezone.now()
+    )
+
+    # QUANDO a API é chamada para registrar o usuário no evento.
+    resp = api_client.post(reverse("event-registration-list"), {"event": event.id},)
+
+    # ENTÃO a reposta deve ser de falta de permissões
+    assert resp.status_code == status.HTTP_403_FORBIDDEN
+
+    # E ENTÃO a registration não deve ser criada.
+    assert EventRegistration.objects.count() == 0
+
+
+@pytest.mark.django_db
 def test_unregister_self_valid(api_client, user_factory):
     # DADO um usuário autenticado.
     user = user_factory(name="user", permissions=[])
@@ -103,19 +122,22 @@ def test_unregister_other_user_unauthorized(api_client, user_factory):
 
 
 @pytest.mark.django_db
-def test_list_registrations_for_user(api_client, user_factory):
+def test_list_registrations_for_user_and_event(api_client, user_factory):
     # DADO um usuário autenticado.
     user = user_factory(name="user", permissions=[])
     api_client.force_authenticate(user=user)
 
-    # E DADO um evento existente no banco, pertencente ao usuário.
-    event = Event.objects.create(
+    # E DADO dois eventos existentes no banco.
+    event_a = Event.objects.create(
         slug="event-a", name="Event A", starts_on=timezone.now(), ends_on=timezone.now()
     )
-    event.owners.add(user)
+    event_b = Event.objects.create(
+        slug="event-b", name="Event B", starts_on=timezone.now(), ends_on=timezone.now()
+    )
 
-    # E DADO inscrições no evento.
-    registration_a = EventRegistration.objects.create(event=event, user=user)
+    # E DADO duas inscrições do usuário, uma em cada evento.
+    EventRegistration.objects.create(event=event_a, user=user)
+    EventRegistration.objects.create(event=event_b, user=user)
 
     # QUANDO a API é chamada para listar as inscrições do usuário.
     resp = api_client.get(
@@ -124,7 +146,17 @@ def test_list_registrations_for_user(api_client, user_factory):
 
     # ENTÃO as inscrições do usuário serão retornadas
     assert resp.status_code == status.HTTP_200_OK
+    assert len(resp.data) == 2
 
+    # E QUANDO a API é chamada para listar as inscrições do usuário no evento B.
+    resp = api_client.get(
+        "{}?user_id={}&event_id={}".format(
+            reverse("event-registration-list"),
+            user.id,
+            event_b.id
+        )
+    )
+
+    # ENTÃO a inscrição do usuário no evento será retornada.
+    assert resp.status_code == status.HTTP_200_OK
     assert len(resp.data) == 1
-    assert resp.data[0]["event"]["id"] == registration_a.event.id
-    assert resp.data[0]["user"]["email"] == registration_a.user.email

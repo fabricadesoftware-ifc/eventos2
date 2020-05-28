@@ -28,6 +28,30 @@ def test_create_valid(api_client):
 
 
 @pytest.mark.django_db
+def test_create_duplicate_user(api_client, user_factory):
+    # DADO um usuário existente.
+    existing_user = user_factory(name="user_a", permissions=[])
+
+    # QUANDO a API é chamada para criar o user, com o mesmo email.
+    resp = api_client.post(
+        reverse("user-list"),
+        {
+            "email": existing_user.email,
+            "password": "an-example-password",
+            "first_name": "User",
+            "last_name": "Example",
+        },
+    )
+
+    # ENTÃO a resposta de falha deve conter o erro no campo email.
+    assert resp.status_code == status.HTTP_400_BAD_REQUEST
+    assert len(resp.data["email"]) != 0
+
+    # E ENTÃO o usuário não deve ser criado.
+    assert User.objects.count() == 1
+
+
+@pytest.mark.django_db
 def test_retrieve_current_valid(api_client, user_factory):
     # DADO um user autenticado.
     user = user_factory(name="user", permissions=[])

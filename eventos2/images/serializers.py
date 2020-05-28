@@ -17,5 +17,5 @@ class ImageSerializer(serializers.ModelSerializer):
         fields = ["url", "description", "uploaded_on"]
         read_only_fields = ["url", "description", "uploaded_on"]
 
-    def create(self, validated_data):
+    def create(self, validated_data):  # pragma: no cover - only disabling creation
         raise NotImplementedError("Use ImageUploadSerializer to create images.")

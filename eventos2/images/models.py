@@ -34,9 +34,9 @@ class Image(models.Model):
     description = models.CharField(max_length=255, blank=True)
     uploaded_on = models.DateTimeField(auto_now_add=True)
 
-    def __str__(self):
+    def __str__(self):  # pragma: no cover - internal use
         return self.description
 
     @property
-    def url(self):
+    def url(self):  # pragma: no cover - no complexity
         return self.file.url
