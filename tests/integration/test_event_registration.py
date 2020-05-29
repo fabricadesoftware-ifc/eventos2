@@ -7,7 +7,7 @@ from eventos2.core.models import Event, EventRegistration
 
 
 @pytest.mark.django_db
-def test_register_self_valid(api_client, user_factory):
+def test_register_valid(api_client, user_factory):
     # DADO um usuário autenticado.
     user = user_factory(name="user", permissions=[])
     api_client.force_authenticate(user=user)
@@ -18,7 +18,7 @@ def test_register_self_valid(api_client, user_factory):
     )
 
     # QUANDO a API é chamada para registrar o usuário no evento.
-    resp = api_client.post(reverse("event-registration-list"), {"event": event.id},)
+    resp = api_client.post(reverse("event-registration-list"), {"event": event.id})
 
     # ENTÃO a reposta deve ser de sucesso
     assert resp.status_code == status.HTTP_201_CREATED
@@ -29,20 +29,19 @@ def test_register_self_valid(api_client, user_factory):
 
 
 @pytest.mark.django_db
-def test_register_self_duplicate(api_client, user_factory):
+def test_register_duplicate(api_client, user_factory):
     # DADO um usuário autenticado.
     user = user_factory(name="user", permissions=[])
     api_client.force_authenticate(user=user)
 
-    # E DADO um evento com dois registration type existentes,
-    # no qual o usuário já está registrado.
+    # E DADO um evento no qual o usuário já está registrado.
     event = Event.objects.create(
         slug="event-a", name="Event A", starts_on=timezone.now(), ends_on=timezone.now()
     )
     EventRegistration.objects.create(event=event, user=user)
 
     # QUANDO a API é chamada para registrar o usuário no evento novamente.
-    resp = api_client.post(reverse("event-registration-list"), {"event": event.id},)
+    resp = api_client.post(reverse("event-registration-list"), {"event": event.id})
 
     # ENTÃO a reposta deve ser de falha
     assert resp.status_code == status.HTTP_400_BAD_REQUEST
@@ -52,7 +51,7 @@ def test_register_self_duplicate(api_client, user_factory):
 
 
 @pytest.mark.django_db
-def test_register_self_unauthorized(api_client):
+def test_register_unauthorized(api_client):
     # DADO nenhum usuário autenticado.
 
     # E DADO um evento.
@@ -61,7 +60,7 @@ def test_register_self_unauthorized(api_client):
     )
 
     # QUANDO a API é chamada para registrar o usuário no evento.
-    resp = api_client.post(reverse("event-registration-list"), {"event": event.id},)
+    resp = api_client.post(reverse("event-registration-list"), {"event": event.id})
 
     # ENTÃO a reposta deve ser de falta de permissões
     assert resp.status_code == status.HTTP_403_FORBIDDEN
@@ -71,7 +70,7 @@ def test_register_self_unauthorized(api_client):
 
 
 @pytest.mark.django_db
-def test_unregister_self_valid(api_client, user_factory):
+def test_unregister_valid(api_client, user_factory):
     # DADO um usuário autenticado.
     user = user_factory(name="user", permissions=[])
     api_client.force_authenticate(user=user)
