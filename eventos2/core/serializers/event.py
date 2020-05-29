@@ -40,5 +40,4 @@ class EventUpdateSerializer(EventBaseSerializer):
 
 
 class EventDetailSerializer(EventBaseSerializer):
-    id = serializers.IntegerField()
     logo = ImageSerializer(required=False)

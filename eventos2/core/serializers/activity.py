@@ -21,7 +21,9 @@ class ActivityBaseSerializer(serializers.Serializer):
 
 
 class ActivityCreateSerializer(ActivityBaseSerializer):
-    event = serializers.PrimaryKeyRelatedField(queryset=Event.objects.all())
+    event = serializers.SlugRelatedField(
+        slug_field="slug", queryset=Event.objects.all()
+    )
 
 
 class ActivityUpdateSerializer(ActivityBaseSerializer):
@@ -29,4 +31,4 @@ class ActivityUpdateSerializer(ActivityBaseSerializer):
 
 
 class ActivityDetailSerializer(ActivityBaseSerializer):
-    id = serializers.IntegerField()
+    pass

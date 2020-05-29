@@ -27,11 +27,10 @@ def test_create_valid(api_client, user_factory):
     # ENTÃO a resposta de sucesso deve conter os dados do evento,
     # incluindo o ID criado.
     assert resp.status_code == status.HTTP_201_CREATED
-    assert type(resp.data["id"]) is int
     assert resp.data["slug"] == "event-a"
 
     # E ENTÃO o evento deve existir no banco.
-    assert Event.objects.get(pk=resp.data["id"]).slug == "event-a"
+    assert Event.objects.get(slug=resp.data["slug"]).name == "Event A"
 
 
 @pytest.mark.django_db
@@ -129,7 +128,7 @@ def test_update_valid(api_client, user_factory):
 
     # ENTÃO a reposta de sucesso deve conter o evento modificado.
     assert resp.status_code == status.HTTP_200_OK
-    assert resp.data["id"] == event.id
+    assert resp.data["name"] == event.name
     assert resp.data["slug"] == "{} modified!".format(event.slug)
 
     # E ENTÃO o evento deve ser modificado no banco.

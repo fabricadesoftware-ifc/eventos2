@@ -20,7 +20,7 @@ def test_create_valid(api_client, user_factory, event_factory):
     resp = api_client.post(
         reverse("activity-list"),
         {
-            "event": event.id,
+            "event": event.slug,
             "slug": "activity-a",
             "name": "Activity A",
             "starts_on": timezone.now(),
@@ -31,11 +31,10 @@ def test_create_valid(api_client, user_factory, event_factory):
     # ENTÃO a resposta de sucesso deve conter os dados da activity,
     # incluindo o ID criado.
     assert resp.status_code == status.HTTP_201_CREATED
-    assert type(resp.data["id"]) is int
     assert resp.data["slug"] == "activity-a"
 
     # E ENTÃO a activity deve existir no banco.
-    assert Activity.objects.get(pk=resp.data["id"]).slug == "activity-a"
+    assert Activity.objects.get(slug=resp.data["slug"]).name == "Activity A"
 
 
 @pytest.mark.django_db
@@ -51,7 +50,7 @@ def test_create_unauthorized(api_client, user_factory, event_factory):
     resp = api_client.post(
         reverse("activity-list"),
         {
-            "event": event.id,
+            "event": event.slug,
             "slug": "activity-a",
             "name": "Activity A",
             "starts_on": timezone.now(),
@@ -88,7 +87,7 @@ def test_create_duplicate_slug(api_client, user_factory, event_factory):
     resp = api_client.post(
         reverse("activity-list"),
         {
-            "event": event.id,
+            "event": event.slug,
             "slug": existing_activity.slug,
             "name": "Activity A",
             "starts_on": timezone.now(),
@@ -185,7 +184,7 @@ def test_update_valid(api_client, user_factory, event_factory):
 
     # ENTÃO a reposta de sucesso deve conter a activity modificada.
     assert resp.status_code == status.HTTP_200_OK
-    assert resp.data["id"] == activity.id
+    assert resp.data["name"] == activity.name
     assert resp.data["slug"] == "{} modified!".format(activity.slug)
 
     # E ENTÃO a activity deve ser modificada no banco.

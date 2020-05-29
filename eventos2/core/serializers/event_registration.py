@@ -10,7 +10,9 @@ class EventRegistrationBaseSerializer(serializers.Serializer):
 
 
 class EventRegistrationCreateSerializer(EventRegistrationBaseSerializer):
-    event = serializers.PrimaryKeyRelatedField(queryset=Event.objects.all())
+    event = serializers.SlugRelatedField(
+        slug_field="slug", queryset=Event.objects.all()
+    )
 
 
 class EventRegistrationDetailSerializer(EventRegistrationBaseSerializer):

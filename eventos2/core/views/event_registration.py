@@ -60,7 +60,7 @@ class EventRegistrationViewSet(ViewSet):
         manual_parameters=[
             Parameter("user_id", in_=IN_QUERY, type=TYPE_INTEGER, required=True),
             Parameter(
-                "event_id",
+                "event_slug",
                 in_=IN_QUERY,
                 type=TYPE_INTEGER,
                 required=False,
@@ -70,12 +70,12 @@ class EventRegistrationViewSet(ViewSet):
     )
     def list(self, request):
         user_id = request.query_params.get("user_id")
-        event_id = request.query_params.get("event_id")
+        event_slug = request.query_params.get("event_slug")
 
         user = User.objects.filter(pk=user_id).first()
-        event = Event.available_objects.filter(pk=event_id).first()
+        event = Event.available_objects.filter(slug=event_slug).first()
 
-        if event_id is not None:
+        if event_slug is not None:
             registrations = EventRegistration.objects.filter(event=event, user=user)
         else:
             registrations = EventRegistration.objects.filter(user=user)

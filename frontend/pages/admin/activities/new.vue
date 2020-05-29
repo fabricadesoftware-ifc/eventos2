@@ -93,7 +93,7 @@ export default {
     onSubmit() {
       this.loading = true
       this.$api.activity
-        .create({ eventId: this.$store.state.event.id, ...this.form })
+        .create({ eventSlug: this.$store.state.event.slug, ...this.form })
         .then(() =>
           this.$router.push(this.localePath({ name: 'admin-activities' }))
         )

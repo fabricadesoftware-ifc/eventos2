@@ -68,7 +68,6 @@ export default {
     const activitiesLocalized = activities.map(activity => {
       if (store.state.locale === 'en' && activity.name_english) {
         return {
-          id: activity.id,
           name: activity.name_english,
           starts_on: activity.starts_on,
           ends_on: activity.ends_on,

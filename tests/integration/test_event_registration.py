@@ -18,7 +18,7 @@ def test_register_valid(api_client, user_factory):
     )
 
     # QUANDO a API é chamada para registrar o usuário no evento.
-    resp = api_client.post(reverse("event-registration-list"), {"event": event.id})
+    resp = api_client.post(reverse("event-registration-list"), {"event": event.slug})
 
     # ENTÃO a reposta deve ser de sucesso
     assert resp.status_code == status.HTTP_201_CREATED
@@ -41,7 +41,7 @@ def test_register_duplicate(api_client, user_factory):
     EventRegistration.objects.create(event=event, user=user)
 
     # QUANDO a API é chamada para registrar o usuário no evento novamente.
-    resp = api_client.post(reverse("event-registration-list"), {"event": event.id})
+    resp = api_client.post(reverse("event-registration-list"), {"event": event.slug})
 
     # ENTÃO a reposta deve ser de falha
     assert resp.status_code == status.HTTP_400_BAD_REQUEST
@@ -60,7 +60,7 @@ def test_register_unauthorized(api_client):
     )
 
     # QUANDO a API é chamada para registrar o usuário no evento.
-    resp = api_client.post(reverse("event-registration-list"), {"event": event.id})
+    resp = api_client.post(reverse("event-registration-list"), {"event": event.slug})
 
     # ENTÃO a reposta deve ser de falta de permissões
     assert resp.status_code == status.HTTP_403_FORBIDDEN
@@ -149,8 +149,8 @@ def test_list_registrations_for_user_and_event(api_client, user_factory):
 
     # E QUANDO a API é chamada para listar as inscrições do usuário no evento B.
     resp = api_client.get(
-        "{}?user_id={}&event_id={}".format(
-            reverse("event-registration-list"), user.id, event_b.id
+        "{}?user_id={}&event_slug={}".format(
+            reverse("event-registration-list"), user.id, event_b.slug
         )
     )
 

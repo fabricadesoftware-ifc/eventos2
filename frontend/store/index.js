@@ -64,7 +64,7 @@ export const actions = {
         eventRegistrations = await this.$api.eventRegistration.listByUserAndEvent(
           {
             userId: this.$auth.user.id,
-            eventId: state.event.id
+            eventSlug: state.event.slug
           }
         )
       } catch {}
@@ -74,7 +74,7 @@ export const actions = {
   createEventRegistration({ commit, state }) {
     return this.$api.eventRegistration
       .register({
-        eventId: state.event.id
+        eventSlug: state.event.slug
       })
       .then(data => {
         commit('setEventRegistration', data)
