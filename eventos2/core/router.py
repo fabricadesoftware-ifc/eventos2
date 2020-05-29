@@ -4,6 +4,11 @@ from eventos2.core import views
 
 router = SimpleRouter()
 router.register(r"activities", views.ActivityViewSet, basename="activity")
+router.register(
+    r"activity_registrations",
+    views.ActivityRegistrationViewSet,
+    basename="activity-registration",
+)
 router.register(r"events", views.EventViewSet, basename="event")
 router.register(
     r"event_registrations",
