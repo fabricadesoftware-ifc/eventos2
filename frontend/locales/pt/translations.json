@@ -52,6 +52,8 @@
   },
   "pages": {
     "activities": {
+      "cancelRegistrationButton": "Cancelar inscrição",
+      "registerButton": "Inscrever",
       "title": "Atividades"
     },
     "admin": {
