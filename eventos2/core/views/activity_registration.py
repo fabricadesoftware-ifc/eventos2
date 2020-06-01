@@ -1,5 +1,5 @@
 from django.shortcuts import get_object_or_404
-from drf_yasg.openapi import IN_QUERY, TYPE_INTEGER, Parameter
+from drf_yasg.openapi import IN_QUERY, TYPE_INTEGER, TYPE_STRING, Parameter
 from drf_yasg.utils import swagger_auto_schema
 from rest_framework import status
 from rest_framework.exceptions import PermissionDenied, ValidationError
@@ -66,7 +66,7 @@ class ActivityRegistrationViewSet(ViewSet):
         responses={200: "Success", 404: "Not found"},
         manual_parameters=[
             Parameter("user_id", in_=IN_QUERY, type=TYPE_INTEGER, required=True),
-            Parameter("event_slug", in_=IN_QUERY, type=TYPE_INTEGER, required=True),
+            Parameter("event_slug", in_=IN_QUERY, type=TYPE_STRING, required=True),
         ],
     )
     def list(self, request):

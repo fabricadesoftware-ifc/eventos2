@@ -1,5 +1,5 @@
 from django.shortcuts import get_object_or_404
-from drf_yasg.openapi import IN_QUERY, TYPE_INTEGER, Parameter
+from drf_yasg.openapi import IN_QUERY, TYPE_INTEGER, TYPE_STRING, Parameter
 from drf_yasg.utils import swagger_auto_schema
 from rest_framework import status
 from rest_framework.exceptions import PermissionDenied, ValidationError
@@ -62,7 +62,7 @@ class EventRegistrationViewSet(ViewSet):
             Parameter(
                 "event_slug",
                 in_=IN_QUERY,
-                type=TYPE_INTEGER,
+                type=TYPE_STRING,
                 required=False,
                 default=None,
             ),
