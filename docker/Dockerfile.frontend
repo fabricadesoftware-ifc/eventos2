@@ -1,0 +1,12 @@
+FROM node:14-buster-slim
+
+WORKDIR /tmp/frontend
+
+COPY frontend/package.json frontend/package-lock.json ./
+RUN npm install --only=production
+
+COPY frontend/ ./
+RUN npm run build
+
+ENV NUXT_HOST=0.0.0.0 NUXT_PORT=3000
+CMD [ "npm", "run", "start" ]

@@ -162,3 +162,5 @@ SIMPLE_JWT = {
 # https://drf-spectacular.readthedocs.io/en/latest/settings.html
 
 SPECTACULAR_SETTINGS = {"SCHEMA_PATH_PREFIX": "/api/v[0-9]", "TITLE": "eventos2"}
+
+SECURE_PROXY_SSL_HEADER = ("HTTP_X_FORWARDED_PROTO", "https")
