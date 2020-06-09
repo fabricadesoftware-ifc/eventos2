@@ -63,7 +63,10 @@ class ActivityRegistrationViewSet(ViewSet):
         return Response(status=status.HTTP_204_NO_CONTENT)
 
     @swagger_auto_schema(
-        responses={200: "Success", 404: "Not found"},
+        responses={
+            200: ActivityRegistrationDetailSerializer(many=True),
+            404: "Not found",
+        },
         manual_parameters=[
             Parameter("user_id", in_=IN_QUERY, type=TYPE_INTEGER, required=True),
             Parameter("event_slug", in_=IN_QUERY, type=TYPE_STRING, required=True),

@@ -56,7 +56,7 @@ class EventRegistrationViewSet(ViewSet):
         return Response(status=status.HTTP_204_NO_CONTENT)
 
     @swagger_auto_schema(
-        responses={200: "Success"},
+        responses={200: EventRegistrationDetailSerializer(many=True)},
         manual_parameters=[
             Parameter("user_id", in_=IN_QUERY, type=TYPE_INTEGER, required=True),
             Parameter(
