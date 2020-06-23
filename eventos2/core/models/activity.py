@@ -13,10 +13,10 @@ class Activity(SoftDeletableModel):
         max_length=255, unique=True, help_text="A unique, readable identifier"
     )
     name = models.CharField(
-        max_length=255, help_text="The event's name in its native language"
+        max_length=255, help_text="The activity's name in its native language"
     )
     name_english = models.CharField(
-        max_length=255, blank=True, help_text="The event's name in english"
+        max_length=255, blank=True, help_text="The activity's name in english"
     )
     starts_on = models.DateTimeField()
     ends_on = models.DateTimeField()
@@ -27,8 +27,12 @@ class Activity(SoftDeletableModel):
 
 
 class ActivityOwnership(models.Model):
-    activity = models.ForeignKey(Activity, on_delete=models.PROTECT)
-    user = models.ForeignKey(User, on_delete=models.PROTECT)
+    activity = models.ForeignKey(
+        Activity, on_delete=models.PROTECT, related_name="ownerships"
+    )
+    user = models.ForeignKey(
+        User, on_delete=models.PROTECT, related_name="activity_ownerships"
+    )
 
 
 class ActivityRegistration(models.Model):

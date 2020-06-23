@@ -38,5 +38,9 @@ class EventOwnership(models.Model):
 
 
 class EventRegistration(models.Model):
-    event = models.ForeignKey(Event, on_delete=models.PROTECT)
-    user = models.ForeignKey(User, on_delete=models.PROTECT)
+    event = models.ForeignKey(
+        Event, on_delete=models.PROTECT, related_name="registrations"
+    )
+    user = models.ForeignKey(
+        User, on_delete=models.PROTECT, related_name="event_registrations"
+    )
