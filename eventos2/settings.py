@@ -16,7 +16,27 @@ DEBUG = env("DEBUG", bool, False)
 
 ALLOWED_HOSTS = env("ALLOWED_HOSTS", list, ["127.0.0.1", "localhost"])
 
-DATABASES = {"default": env.db()}
+if os.getenv('GAE_APPLICATION', None):
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.mysql',
+            'HOST': '/cloudsql/aula-cloud-ifc:us-central1:dj-db',
+            'USER': 'dj',
+            'PASSWORD': 'wVfl8Q5RAmzxJV3DzrgdsAijfsED0vlf',
+            'NAME': 'dj',
+        }
+    }
+else:
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.mysql',
+            'HOST': '127.0.0.1',
+            'PORT': '3306',
+            'USER': 'dj',
+            'PASSWORD': 'wVfl8Q5RAmzxJV3DzrgdsAijfsED0vlf',
+            'NAME': 'dj',
+        }
+    }
 
 EMAIL_CONFIG = env.email_url("EMAIL_URL", default="memorymail://")
 vars().update(EMAIL_CONFIG)
