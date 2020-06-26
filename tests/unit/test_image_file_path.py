@@ -1,6 +1,6 @@
 from django.core.files.uploadedfile import SimpleUploadedFile
 
-from eventos2.images.models import Image, image_file_path
+from eventos2.media.models import Image, image_file_path
 
 
 def make_image(*, content_type):

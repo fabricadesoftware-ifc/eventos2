@@ -1,7 +1,7 @@
 from rest_framework import serializers
 
-from eventos2.images.models import Image
-from eventos2.images.serializers import ImageSerializer
+from eventos2.media.models import Image
+from eventos2.media.serializers import ImageSerializer
 
 
 class EventBaseSerializer(serializers.Serializer):

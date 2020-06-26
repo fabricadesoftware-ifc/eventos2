@@ -13,7 +13,7 @@ class Migration(migrations.Migration):
 
     dependencies = [
         ("auth", "0011_update_proxy_permissions"),
-        ("images", "0001_initial"),
+        ("media", "0001_initial"),
     ]
 
     operations = [
@@ -60,7 +60,7 @@ class Migration(migrations.Migration):
                         null=True,
                         on_delete=django.db.models.deletion.CASCADE,
                         related_name="+",
-                        to="images.Image",
+                        to="media.Image",
                     ),
                 ),
             ],

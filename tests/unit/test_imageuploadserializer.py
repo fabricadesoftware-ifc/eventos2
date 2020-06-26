@@ -2,7 +2,7 @@ import base64
 
 from django.core.files.uploadedfile import SimpleUploadedFile
 
-from eventos2.images.serializers import ImageUploadSerializer
+from eventos2.media.serializers import ImageUploadSerializer
 
 
 def test_imageuploadserializer_valid():

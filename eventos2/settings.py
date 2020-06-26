@@ -40,7 +40,7 @@ INSTALLED_APPS = [
     "huey.contrib.djhuey",
     "corsheaders",
     "eventos2.core",
-    "eventos2.images",
+    "eventos2.media",
 ]
 
 # Habilitar a interface de administração apenas em modo debug.

@@ -1,6 +1,6 @@
 from rest_framework import serializers
 
-from eventos2.images.models import Image
+from eventos2.media.models import Image
 
 
 class ImageUploadSerializer(serializers.ModelSerializer):
@@ -11,9 +11,6 @@ class ImageUploadSerializer(serializers.ModelSerializer):
         extra_kwargs = {"file": {"write_only": True}}
 
     def validate_file(self, value):
-        """
-        Check that the blog post is about Django.
-        """
         valid_content_types = ["image/jpeg", "image/png"]
         if value.content_type not in valid_content_types:
             raise serializers.ValidationError("Invalid or corrupted image.")

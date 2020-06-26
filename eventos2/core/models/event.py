@@ -2,7 +2,7 @@ from django.db import models
 
 from eventos2.core.models.soft_deletion import SoftDeletableModel
 from eventos2.core.models.user import User
-from eventos2.images.models import Image
+from eventos2.media.models import Image
 
 
 class Event(SoftDeletableModel):

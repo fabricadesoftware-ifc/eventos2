@@ -10,12 +10,12 @@ from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView
 
 from eventos2 import __version__
 from eventos2.core.router import router as core_router
-from eventos2.images.router import router as images_router
+from eventos2.media.router import router as media_router
 
 # Junção das rotas de todos os aplicativos
 global_router = SimpleRouter()
 global_router.registry.extend(core_router.registry)
-global_router.registry.extend(images_router.registry)
+global_router.registry.extend(media_router.registry)
 
 schema_view = get_schema_view(
     openapi.Info(title="Eventos2", default_version=__version__),
