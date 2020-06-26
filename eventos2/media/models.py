@@ -11,7 +11,7 @@ def image_file_path(image, _):
     # we should remove this sometime.
     if extension == ".jpe":  # pragma: no cover
         extension = ".jpg"
-    return "images/{}{}".format(image.public_id, extension)
+    return "images/{}{}".format(image.public_id, extension or "")
 
 
 class Image(models.Model):
