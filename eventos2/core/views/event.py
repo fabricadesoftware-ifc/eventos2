@@ -13,6 +13,7 @@ from eventos2.core.serializers import (
     EventDetailSerializer,
     EventRegistrationDetailSerializer,
     EventUpdateSerializer,
+    TrackDetailSerializer,
 )
 
 
@@ -122,4 +123,17 @@ class EventViewSet(ViewSet):
             raise PermissionDenied("Not authorized to view activities for this event")
 
         out_serializer = ActivityDetailSerializer(event.activities, many=True)
+        return Response(out_serializer.data)
+
+    @swagger_auto_schema(responses={200: TrackDetailSerializer(many=True)})
+    @action(detail=True, url_path="tracks", url_name="list-tracks")
+    def list_tracks(self, request, slug):
+        event = get_object_or_404(Event.available_objects, slug=slug)
+
+        if not request.user.has_perm("core.view_tracks_for_event", event):
+            raise PermissionDenied("Not authorized to view tracks for this event")
+
+        out_serializer = TrackDetailSerializer(
+            event.tracks(manager="available_objects"), many=True
+        )
         return Response(out_serializer.data)

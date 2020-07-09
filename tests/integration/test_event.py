@@ -3,7 +3,7 @@ from django.urls import reverse
 from django.utils import timezone
 from rest_framework import status
 
-from eventos2.core.models import Activity, Event, EventRegistration
+from eventos2.core.models import Activity, Event, EventRegistration, Track
 
 
 @pytest.mark.django_db
@@ -341,6 +341,47 @@ def test_list_activities_unauthorized(api_client):
 
     # QUANDO a API é chamada para listar as atividades do evento.
     resp = api_client.get(reverse("event-list-activities", args=[event.slug]))
+
+    # ENTÃO a resposta deve ser de falta de permissão.
+    assert resp.status_code == status.HTTP_403_FORBIDDEN
+
+
+@pytest.mark.django_db
+def test_list_tracks(api_client, user_factory):
+    # DADO um usuário autenticado.
+    user = user_factory(name="user", permissions=[])
+    api_client.force_authenticate(user=user)
+
+    # E DADO um evento existente no banco, pertencente ao usuário.
+    event = Event.objects.create(
+        slug="event-a", name="Event A", starts_on=timezone.now(), ends_on=timezone.now()
+    )
+    event.owners.add(user)
+
+    # E DADO um track associado ao evento.
+    track_a = Track.objects.create(event=event, slug="track-a", name="Track A",)
+
+    # QUANDO a API é chamada para listar os tracks do evento.
+    resp = api_client.get(reverse("event-list-tracks", args=[event.slug]))
+
+    # ENTÃO os tracks serão retornados
+    assert resp.status_code == status.HTTP_200_OK
+
+    assert len(resp.data) == 1
+    assert resp.data[0]["name"] == track_a.name
+
+
+@pytest.mark.django_db
+def test_list_tracks_unauthorized(api_client):
+    # DADO nenhum usuário autenticado.
+
+    # E DADO um evento.
+    event = Event.objects.create(
+        slug="event-a", name="Event A", starts_on=timezone.now(), ends_on=timezone.now()
+    )
+
+    # QUANDO a API é chamada para listar os tracks do evento.
+    resp = api_client.get(reverse("event-list-tracks", args=[event.slug]))
 
     # ENTÃO a resposta deve ser de falta de permissão.
     assert resp.status_code == status.HTTP_403_FORBIDDEN

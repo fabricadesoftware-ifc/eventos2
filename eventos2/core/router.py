@@ -15,4 +15,5 @@ router.register(
     views.EventRegistrationViewSet,
     basename="event-registration",
 )
+router.register(r"tracks", views.TrackViewSet, basename="track")
 router.register(r"users", views.UserViewSet, basename="user")
