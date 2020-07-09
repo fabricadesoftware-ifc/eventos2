@@ -24,5 +24,5 @@ class UserUpdateSerializer(UserBaseSerializer):
 
 
 class UserDetailSerializer(UserBaseSerializer):
-    id = serializers.IntegerField()
+    public_id = serializers.CharField()
     email = serializers.EmailField(max_length=255)
