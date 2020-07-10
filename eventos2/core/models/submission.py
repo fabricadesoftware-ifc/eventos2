@@ -19,6 +19,10 @@ class Submission(SoftDeletableModel):
         User, through="SubmissionAuthorship", related_name="submissions_authored"
     )
 
+    @property
+    def event(self):  # pragma: no cover - no complexity
+        return self.track.event
+
 
 class SubmissionAuthorship(models.Model):
     submission = models.ForeignKey(

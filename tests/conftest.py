@@ -4,7 +4,7 @@ import pytest
 from django.contrib.auth.models import Permission
 from rest_framework.test import APIClient
 
-from eventos2.core.models import Activity, Event, User
+from eventos2.core.models import Activity, Event, Track, User
 
 
 @pytest.fixture()
@@ -64,5 +64,14 @@ def activity_factory():
         )
         activity.owners.add(*owners)
         return activity
+
+    return _factory
+
+
+@pytest.fixture
+def track_factory():
+    def _factory(*, event, slug):
+        track = Track.objects.create(event=event, slug=slug, name=slug,)
+        return track
 
     return _factory
