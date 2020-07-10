@@ -25,20 +25,14 @@ class ActivityRegistrationViewSet(ViewSet):
 
         activity = data["activity"]
 
-        if not request.user.has_perm("core.register_self_into_activity"):
+        if not request.user.has_perm("core.register_self_into_activity", activity):
             raise PermissionDenied(
                 "You're not authorized to self register into this activity."
             )
 
-        event_registration = EventRegistration.objects.filter(
+        event_registration = EventRegistration.objects.get(
             event=activity.event, user=request.user
-        ).first()
-        if event_registration is None:
-            raise ValidationError(
-                "You must register to the event"
-                " in order to register to one of its activities."
-            )
-
+        )
         if ActivityRegistration.objects.filter(
             activity=activity, event_registration__user=request.user
         ).exists():

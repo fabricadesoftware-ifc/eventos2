@@ -78,28 +78,6 @@ def test_register_not_registered_to_event(
         reverse("activity-registration-list"), {"activity": activity.slug}
     )
 
-    # ENTÃO a reposta deve ser de falha
-    assert resp.status_code == status.HTTP_400_BAD_REQUEST
-
-    # E ENTÃO a registration não deve ser criada.
-    assert ActivityRegistration.objects.count() == 0
-
-
-@pytest.mark.django_db
-def test_register_unauthorized(api_client, activity_factory, event_factory):
-    # DADO nenhum usuário autenticado.
-
-    # E DADO um evento.
-    event = event_factory(slug="event-a", owners=[])
-
-    # E DADO uma activity.
-    activity = activity_factory(event=event, slug="activity-a", owners=[])
-
-    # QUANDO a API é chamada para registrar o usuário na activity.
-    resp = api_client.post(
-        reverse("activity-registration-list"), {"activity": activity.slug}
-    )
-
     # ENTÃO a reposta deve ser de falta de permissões
     assert resp.status_code == status.HTTP_403_FORBIDDEN
 
