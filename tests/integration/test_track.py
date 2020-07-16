@@ -8,7 +8,7 @@ from eventos2.core.models import Track
 @pytest.mark.django_db
 def test_create_valid(api_client, user_factory, event_factory):
     # DADO um usuário autenticado.
-    user = user_factory(name="user", permissions=[])
+    user = user_factory(name="user", permissions=["core.change_event"])
     api_client.force_authenticate(user=user)
 
     # E DADO um evento pertencente ao usuário.
@@ -18,11 +18,11 @@ def test_create_valid(api_client, user_factory, event_factory):
     # QUANDO a API é chamada.
     resp = api_client.post(
         reverse("track-list"),
-        {"event": event.slug, "slug": "track-a", "name": "Track A"},
+        {"event_slug": event.slug, "slug": "track-a", "name": "Track A"},
     )
 
     # ENTÃO a resposta de sucesso deve conter os dados do track.
-    assert resp.status_code == status.HTTP_201_CREATED
+    assert resp.status_code == status.HTTP_200_OK
     assert resp.data["slug"] == "track-a"
 
     # E ENTÃO o track deve existir no banco.
@@ -41,7 +41,7 @@ def test_create_unauthorized(api_client, user_factory, event_factory):
     # QUANDO a API é chamada para criar um track.
     resp = api_client.post(
         reverse("track-list"),
-        {"event": event.slug, "slug": "track-a", "name": "Track A"},
+        {"event_slug": event.slug, "slug": "track-a", "name": "Track A"},
     )
 
     # ENTÃO a resposta deve ser de falta de permissões.
@@ -54,7 +54,7 @@ def test_create_unauthorized(api_client, user_factory, event_factory):
 @pytest.mark.django_db
 def test_create_duplicate_slug(api_client, user_factory, event_factory):
     # DADO um usuário autenticado.
-    user = user_factory(name="user", permissions=[])
+    user = user_factory(name="user", permissions=["core.change_event"])
     api_client.force_authenticate(user=user)
 
     # E DADO um evento pertencente ao usuário.
@@ -66,7 +66,7 @@ def test_create_duplicate_slug(api_client, user_factory, event_factory):
     # QUANDO a API é chamada para criar um track com o mesmo slug.
     resp = api_client.post(
         reverse("track-list"),
-        {"event": event.slug, "slug": existing_track.slug, "name": "Track A"},
+        {"event_slug": event.slug, "slug": existing_track.slug, "name": "Track A"},
     )
 
     # ENTÃO a resposta de falha deve conter o erro no campo slug.
@@ -111,13 +111,13 @@ def test_retrieve_unauthorized(api_client, event_factory):
     resp = api_client.get(reverse("track-detail", args=[track.slug]))
 
     # ENTÃO a resposta deve ser de falta de permissões.
-    assert resp.status_code == status.HTTP_403_FORBIDDEN
+    assert resp.status_code == status.HTTP_401_UNAUTHORIZED
 
 
 @pytest.mark.django_db
 def test_update_valid(api_client, user_factory, event_factory):
     # DADO um usuário autenticado.
-    user = user_factory(name="user", permissions=[])
+    user = user_factory(name="user", permissions=["core.change_event"])
     api_client.force_authenticate(user=user)
 
     # E DADO um evento existente no banco, pertencente ao usuário.
@@ -146,7 +146,7 @@ def test_update_valid(api_client, user_factory, event_factory):
 @pytest.mark.django_db
 def test_update_duplicate_slug(api_client, user_factory, event_factory):
     # DADO um usuário autenticado.
-    user = user_factory(name="user", permissions=[])
+    user = user_factory(name="user", permissions=["core.change_event"])
     api_client.force_authenticate(user=user)
 
     # E DADO um evento existente no banco, pertencente ao usuário.
@@ -174,7 +174,7 @@ def test_update_duplicate_slug(api_client, user_factory, event_factory):
 @pytest.mark.django_db
 def test_update_unauthorized(api_client, user_factory, event_factory):
     # DADO um usuário autenticado.
-    user = user_factory(name="user", permissions=[])
+    user = user_factory(name="user", permissions=["core.change_event"])
     api_client.force_authenticate(user=user)
 
     # E DADO um evento existente no banco, não pertencente ao usuário.
@@ -199,7 +199,7 @@ def test_update_unauthorized(api_client, user_factory, event_factory):
 @pytest.mark.django_db
 def test_delete_valid(api_client, user_factory, event_factory):
     # DADO um usuário autenticado.
-    user = user_factory(name="user", permissions=[])
+    user = user_factory(name="user", permissions=["core.change_event"])
     api_client.force_authenticate(user=user)
 
     # E DADO um evento existente no banco, pertencente ao usuário.
@@ -227,7 +227,7 @@ def test_delete_valid(api_client, user_factory, event_factory):
 @pytest.mark.django_db
 def test_delete_unauthorized(api_client, user_factory, event_factory):
     # DADO um usuário autenticado.
-    user = user_factory(name="user", permissions=[])
+    user = user_factory(name="user", permissions=["core.change_event"])
     api_client.force_authenticate(user=user)
 
     # E DADO um evento existente no banco, não pertencente ao usuário.

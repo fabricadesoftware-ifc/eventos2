@@ -1,25 +1,31 @@
 from django.shortcuts import get_object_or_404
-from drf_yasg.openapi import IN_QUERY, TYPE_INTEGER, TYPE_STRING, Parameter
-from drf_yasg.utils import swagger_auto_schema
+from drf_spectacular.utils import OpenApiParameter, extend_schema
 from rest_framework import status
 from rest_framework.exceptions import PermissionDenied, ValidationError
 from rest_framework.response import Response
-from rest_framework.viewsets import ViewSet
+from rest_framework.viewsets import GenericViewSet
 
 from eventos2.core.models import ActivityRegistration, Event, EventRegistration, User
 from eventos2.core.serializers import (
+    ActivityRegistrationBaseSerializer,
     ActivityRegistrationCreateSerializer,
     ActivityRegistrationDetailSerializer,
 )
 
 
-class ActivityRegistrationViewSet(ViewSet):
-    @swagger_auto_schema(
-        request_body=ActivityRegistrationCreateSerializer,
-        responses={200: ActivityRegistrationDetailSerializer, 400: "Validation error"},
-    )
+class ActivityRegistrationViewSet(GenericViewSet):
+    queryset = ActivityRegistration.objects.all()
+
+    def get_serializer_class(self):
+        return {
+            "create": ActivityRegistrationCreateSerializer,
+            "destroy": ActivityRegistrationBaseSerializer,
+            "list": ActivityRegistrationBaseSerializer,
+        }.get(self.action, None)
+
+    @extend_schema(responses={200: ActivityRegistrationDetailSerializer})
     def create(self, request):
-        in_serializer = ActivityRegistrationCreateSerializer(data=request.data)
+        in_serializer = self.get_serializer(data=request.data)
         in_serializer.is_valid(raise_exception=True)
         data = in_serializer.validated_data
 
@@ -33,9 +39,11 @@ class ActivityRegistrationViewSet(ViewSet):
         event_registration = EventRegistration.objects.get(
             event=activity.event, user=request.user
         )
-        if ActivityRegistration.objects.filter(
-            activity=activity, event_registration__user=request.user
-        ).exists():
+        if (
+            self.get_queryset()
+            .filter(activity=activity, event_registration__user=request.user)
+            .exists()
+        ):
             raise ValidationError("This registration already exists.")
 
         activity_registration = ActivityRegistration.objects.create(
@@ -43,11 +51,10 @@ class ActivityRegistrationViewSet(ViewSet):
         )
 
         out_serializer = ActivityRegistrationDetailSerializer(activity_registration)
-        return Response(out_serializer.data, status=status.HTTP_201_CREATED)
+        return Response(out_serializer.data, status=status.HTTP_200_OK)
 
-    @swagger_auto_schema(responses={204: "Success", 404: "Not found"})
     def destroy(self, request, pk):
-        registration = get_object_or_404(ActivityRegistration, pk=pk)
+        registration = self.get_object()
 
         is_self_unregistering = request.user == registration.event_registration.user
         if not is_self_unregistering:
@@ -56,24 +63,21 @@ class ActivityRegistrationViewSet(ViewSet):
         registration.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
 
-    @swagger_auto_schema(
-        responses={
-            200: ActivityRegistrationDetailSerializer(many=True),
-            404: "Not found",
-        },
-        manual_parameters=[
-            Parameter("user_id", in_=IN_QUERY, type=TYPE_INTEGER, required=True),
-            Parameter("event_slug", in_=IN_QUERY, type=TYPE_STRING, required=True),
+    @extend_schema(
+        responses={200: ActivityRegistrationDetailSerializer(many=True)},
+        parameters=[
+            OpenApiParameter("user_public_id", required=True),
+            OpenApiParameter("event_slug", required=True),
         ],
     )
     def list(self, request):
-        user_id = request.query_params.get("user_id")
+        user_public_id = request.query_params.get("user_public_id")
         event_slug = request.query_params.get("event_slug")
 
-        user = get_object_or_404(User, pk=user_id)
+        user = get_object_or_404(User, public_id=user_public_id)
         event = get_object_or_404(Event.available_objects, slug=event_slug)
 
-        registrations = ActivityRegistration.objects.filter(
+        registrations = self.get_queryset().filter(
             activity__event=event, event_registration__user=user
         )
         out_serializer = ActivityRegistrationDetailSerializer(registrations, many=True)

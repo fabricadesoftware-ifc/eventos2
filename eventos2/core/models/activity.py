@@ -25,6 +25,11 @@ class Activity(SoftDeletableModel):
         User, through="ActivityOwnership", related_name="activities_owned"
     )
 
+    class Meta:
+        permissions = [
+            ("register_self_into_activity", "Can self-register into an activity"),
+        ]
+
 
 class ActivityOwnership(models.Model):
     activity = models.ForeignKey(
@@ -44,3 +49,11 @@ class ActivityRegistration(models.Model):
         on_delete=models.PROTECT,
         related_name="activity_registrations",
     )
+
+    class Meta:
+        constraints = [
+            models.UniqueConstraint(
+                fields=["activity", "event_registration"],
+                name="unique_activity_registration",
+            )
+        ]

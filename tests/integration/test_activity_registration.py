@@ -24,7 +24,7 @@ def test_register_valid(api_client, activity_factory, event_factory, user_factor
     )
 
     # ENTÃO a reposta deve ser de sucesso
-    assert resp.status_code == status.HTTP_201_CREATED
+    assert resp.status_code == status.HTTP_200_OK
 
     # E ENTÃO a registration deve ser criada.
     assert ActivityRegistration.objects.count() == 1
@@ -177,8 +177,8 @@ def test_list_registrations_for_user_and_event(
 
     # QUANDO a API é chamada para listar as inscrições do usuário no evento A.
     resp = api_client.get(
-        "{}?user_id={}&event_slug={}".format(
-            reverse("activity-registration-list"), user.id, event_a.slug
+        "{}?user_public_id={}&event_slug={}".format(
+            reverse("activity-registration-list"), user.public_id, event_a.slug
         )
     )
 

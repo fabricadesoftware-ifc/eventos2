@@ -1,7 +1,7 @@
 from rest_framework import serializers
 
 from eventos2.core.models import Activity
-from eventos2.core.serializers.activity import ActivityDetailSerializer
+from eventos2.core.serializers.activity import ActivitySerializer
 from eventos2.core.serializers.event_registration import (
     EventRegistrationDetailSerializer,
 )
@@ -19,5 +19,5 @@ class ActivityRegistrationCreateSerializer(ActivityRegistrationBaseSerializer):
 
 class ActivityRegistrationDetailSerializer(ActivityRegistrationBaseSerializer):
     id = serializers.IntegerField()
-    activity = ActivityDetailSerializer()
+    activity = ActivitySerializer()
     event_registration = EventRegistrationDetailSerializer()

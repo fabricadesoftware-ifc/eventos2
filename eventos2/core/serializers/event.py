@@ -1,43 +1,28 @@
 from rest_framework import serializers
 
+from eventos2.core.models import Event
 from eventos2.media.models import Image
 from eventos2.media.serializers import ImageSerializer
 
 
-class EventBaseSerializer(serializers.Serializer):
-    slug = serializers.CharField(
-        help_text="A unique, readable identifier", max_length=255
-    )
-    name = serializers.CharField(
-        help_text="The event's name in its native language", max_length=255
-    )
-    name_english = serializers.CharField(
-        allow_blank=True,
-        help_text="The event's name in english",
-        max_length=255,
-        required=False,
-    )
-    starts_on = serializers.DateTimeField()
-    ends_on = serializers.DateTimeField()
-
-
-class EventCreateSerializer(EventBaseSerializer):
+class EventSerializer(serializers.ModelSerializer):
     logo_attachment_key = serializers.SlugRelatedField(
         source="logo",
         queryset=Image.objects.all(),
         slug_field="attachment_key",
         required=False,
+        write_only=True,
     )
+    logo = ImageSerializer(required=False, read_only=True)
 
-
-class EventUpdateSerializer(EventBaseSerializer):
-    logo_attachment_key = serializers.SlugRelatedField(
-        source="logo",
-        queryset=Image.objects.all(),
-        slug_field="attachment_key",
-        required=False,
-    )
-
-
-class EventDetailSerializer(EventBaseSerializer):
-    logo = ImageSerializer(required=False)
+    class Meta:
+        model = Event
+        fields = [
+            "slug",
+            "name",
+            "name_english",
+            "starts_on",
+            "ends_on",
+            "logo",
+            "logo_attachment_key",
+        ]

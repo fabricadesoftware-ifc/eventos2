@@ -1,34 +1,22 @@
 from rest_framework import serializers
 
-from eventos2.core.models.event import Event
+from eventos2.core.models import Activity, Event
 
 
-class ActivityBaseSerializer(serializers.Serializer):
-    slug = serializers.CharField(
-        help_text="A unique, readable identifier", max_length=255
-    )
-    name = serializers.CharField(
-        help_text="The activity's name in its native language", max_length=255
-    )
-    name_english = serializers.CharField(
-        allow_blank=True,
-        help_text="The activity's name in english",
-        max_length=255,
-        required=False,
-    )
-    starts_on = serializers.DateTimeField()
-    ends_on = serializers.DateTimeField()
+class ActivitySerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Activity
+        fields = ["slug", "name", "name_english", "starts_on", "ends_on"]
+
+    def create(self, validated_data):  # pragma: no cover - no complexity
+        raise NotImplementedError("Use ActivityCreateSerializer")
 
 
-class ActivityCreateSerializer(ActivityBaseSerializer):
-    event = serializers.SlugRelatedField(
-        slug_field="slug", queryset=Event.objects.all()
+class ActivityCreateSerializer(serializers.ModelSerializer):
+    event_slug = serializers.SlugRelatedField(
+        source="event", slug_field="slug", queryset=Event.objects.all(), write_only=True
     )
 
-
-class ActivityUpdateSerializer(ActivityBaseSerializer):
-    pass
-
-
-class ActivityDetailSerializer(ActivityBaseSerializer):
-    pass
+    class Meta:
+        model = Activity
+        fields = ["event_slug", "slug", "name", "name_english", "starts_on", "ends_on"]

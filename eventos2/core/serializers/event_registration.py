@@ -1,8 +1,8 @@
 from rest_framework import serializers
 
 from eventos2.core.models import Event
-from eventos2.core.serializers.event import EventDetailSerializer
-from eventos2.core.serializers.user import UserDetailSerializer
+from eventos2.core.serializers.event import EventSerializer
+from eventos2.core.serializers.user import UserSerializer
 
 
 class EventRegistrationBaseSerializer(serializers.Serializer):
@@ -10,12 +10,12 @@ class EventRegistrationBaseSerializer(serializers.Serializer):
 
 
 class EventRegistrationCreateSerializer(EventRegistrationBaseSerializer):
-    event = serializers.SlugRelatedField(
-        slug_field="slug", queryset=Event.objects.all()
+    event_slug = serializers.SlugRelatedField(
+        source="event", slug_field="slug", queryset=Event.objects.all()
     )
 
 
 class EventRegistrationDetailSerializer(EventRegistrationBaseSerializer):
     id = serializers.IntegerField()
-    event = EventDetailSerializer()
-    user = UserDetailSerializer()
+    event = EventSerializer()
+    user = UserSerializer()

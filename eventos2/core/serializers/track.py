@@ -1,32 +1,22 @@
 from rest_framework import serializers
 
-from eventos2.core.models.event import Event
+from eventos2.core.models import Event, Track
 
 
-class TrackBaseSerializer(serializers.Serializer):
-    slug = serializers.CharField(
-        help_text="A unique, readable identifier", max_length=255
-    )
-    name = serializers.CharField(
-        help_text="The track's name in its native language", max_length=255
-    )
-    name_english = serializers.CharField(
-        allow_blank=True,
-        help_text="The track's name in english",
-        max_length=255,
-        required=False,
-    )
+class TrackSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Track
+        fields = ["slug", "name", "name_english"]
+
+    def create(self, validated_data):  # pragma: no cover - no complexity
+        raise NotImplementedError("Use ActivityCreateSerializer")
 
 
-class TrackCreateSerializer(TrackBaseSerializer):
-    event = serializers.SlugRelatedField(
-        slug_field="slug", queryset=Event.objects.all()
+class TrackCreateSerializer(serializers.ModelSerializer):
+    event_slug = serializers.SlugRelatedField(
+        source="event", slug_field="slug", queryset=Event.objects.all(), write_only=True
     )
 
-
-class TrackUpdateSerializer(TrackBaseSerializer):
-    pass
-
-
-class TrackDetailSerializer(TrackBaseSerializer):
-    pass
+    class Meta:
+        model = Track
+        fields = ["event_slug", "slug", "name", "name_english"]

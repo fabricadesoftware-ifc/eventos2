@@ -20,7 +20,7 @@ def test_create_valid(api_client):
     )
 
     # ENTÃO a resposta de sucesso deve conter os dados do usuário.
-    assert resp.status_code == status.HTTP_201_CREATED
+    assert resp.status_code == status.HTTP_200_OK
     assert resp.data["email"] == "user@example.com"
 
     # E ENTÃO o usuário deve existir no banco.
@@ -72,21 +72,24 @@ def test_retrieve_current_invalid(api_client, user_factory):
     resp = api_client.get(reverse("user-current"))
 
     # ENTÃO a resposta deve ser falta de permissão
-    assert resp.status_code == status.HTTP_403_FORBIDDEN
+    assert resp.status_code == status.HTTP_401_UNAUTHORIZED
 
 
 @pytest.mark.django_db
 def test_update_current_valid(api_client, user_factory):
-    # DADO um user autenticado.
+    # DADO um use2r autenticado.
     user = user_factory(name="user", permissions=[])
     api_client.force_authenticate(user=user)
 
     # QUANDO a API é chamada para editar o user atual.
     resp = api_client.put(
         reverse("user-current"),
-        {"first_name": "New first name", "last_name": "New last name"},
+        {
+            "first_name": "New first name",
+            "last_name": "New last name",
+            "email": "user@example.com",
+        },
     )
-
     # ENTÃO a resposta de sucesso deve conter o user modificado.
     assert resp.status_code == status.HTTP_200_OK
     assert resp.data["first_name"] == "New first name"
@@ -106,7 +109,7 @@ def test_update_current_invalid(api_client):
     )
 
     # ENTÃO a resposta deve ser falta de permissão
-    assert resp.status_code == status.HTTP_403_FORBIDDEN
+    assert resp.status_code == status.HTTP_401_UNAUTHORIZED
 
 
 @pytest.mark.django_db
@@ -133,4 +136,4 @@ def test_delete_current_invalid(api_client):
     resp = api_client.delete(reverse("user-current"))
 
     # ENTÃO a resposta deve ser falta de permissão
-    assert resp.status_code == status.HTTP_403_FORBIDDEN
+    assert resp.status_code == status.HTTP_401_UNAUTHORIZED

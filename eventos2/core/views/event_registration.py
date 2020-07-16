@@ -1,29 +1,30 @@
-from django.shortcuts import get_object_or_404
-from drf_yasg.openapi import IN_QUERY, TYPE_INTEGER, TYPE_STRING, Parameter
-from drf_yasg.utils import swagger_auto_schema
+from drf_spectacular.utils import OpenApiParameter, extend_schema
 from rest_framework import status
 from rest_framework.exceptions import PermissionDenied, ValidationError
 from rest_framework.response import Response
-from rest_framework.viewsets import ViewSet
+from rest_framework.viewsets import GenericViewSet
 
 from eventos2.core.models import Event, EventRegistration, User
 from eventos2.core.serializers import (
+    EventRegistrationBaseSerializer,
     EventRegistrationCreateSerializer,
     EventRegistrationDetailSerializer,
 )
 
 
-class EventRegistrationViewSet(ViewSet):
-    @swagger_auto_schema(
-        request_body=EventRegistrationCreateSerializer,
-        responses={
-            200: EventRegistrationDetailSerializer,
-            400: "Validation error",
-            404: "Not found",
-        },
-    )
+class EventRegistrationViewSet(GenericViewSet):
+    queryset = EventRegistration.objects.all()
+
+    def get_serializer_class(self):
+        return {
+            "create": EventRegistrationCreateSerializer,
+            "destroy": EventRegistrationBaseSerializer,
+            "list": EventRegistrationBaseSerializer,
+        }.get(self.action, None)
+
+    @extend_schema(responses={200: EventRegistrationDetailSerializer},)
     def create(self, request):
-        in_serializer = EventRegistrationCreateSerializer(data=request.data)
+        in_serializer = self.get_serializer(data=request.data)
         in_serializer.is_valid(raise_exception=True)
         data = in_serializer.validated_data
 
@@ -34,7 +35,7 @@ class EventRegistrationViewSet(ViewSet):
                 "You're not authorized to self register into this event."
             )
 
-        if EventRegistration.objects.filter(event=event, user=request.user).exists():
+        if self.get_queryset().filter(event=event, user=request.user).exists():
             raise ValidationError("This registration already exists.")
 
         event_registration = EventRegistration.objects.create(
@@ -42,11 +43,10 @@ class EventRegistrationViewSet(ViewSet):
         )
 
         out_serializer = EventRegistrationDetailSerializer(event_registration)
-        return Response(out_serializer.data, status=status.HTTP_201_CREATED)
+        return Response(out_serializer.data, status=status.HTTP_200_OK)
 
-    @swagger_auto_schema(responses={204: "Success", 404: "Not found"})
     def destroy(self, request, pk):
-        registration = get_object_or_404(EventRegistration, pk=pk)
+        registration = self.get_object()
 
         is_self_unregistering = request.user == registration.user
         if not is_self_unregistering:
@@ -55,30 +55,29 @@ class EventRegistrationViewSet(ViewSet):
         registration.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
 
-    @swagger_auto_schema(
+    @extend_schema(
         responses={200: EventRegistrationDetailSerializer(many=True)},
-        manual_parameters=[
-            Parameter("user_id", in_=IN_QUERY, type=TYPE_INTEGER, required=True),
-            Parameter(
-                "event_slug",
-                in_=IN_QUERY,
-                type=TYPE_STRING,
-                required=False,
-                default=None,
-            ),
+        parameters=[
+            OpenApiParameter("user_public_id", required=True),
+            OpenApiParameter("event_slug"),
         ],
     )
     def list(self, request):
-        user_id = request.query_params.get("user_id")
+        user_public_id = request.query_params.get("user_public_id")
         event_slug = request.query_params.get("event_slug")
 
-        user = User.objects.filter(pk=user_id).first()
+        user = User.objects.filter(public_id=user_public_id).first()
         event = Event.available_objects.filter(slug=event_slug).first()
 
+        if request.user != user:
+            raise PermissionDenied(
+                "You're not authorized to view registrations for this user."
+            )
+
         if event_slug is not None:
-            registrations = EventRegistration.objects.filter(event=event, user=user)
+            registrations = self.get_queryset().filter(event=event, user=user)
         else:
-            registrations = EventRegistration.objects.filter(user=user)
+            registrations = self.get_queryset().filter(user=user)
 
         out_serializer = EventRegistrationDetailSerializer(registrations, many=True)
         return Response(out_serializer.data)

@@ -1,4 +1,4 @@
-from drf_yasg.utils import swagger_auto_schema
+from drf_spectacular.utils import extend_schema
 from rest_framework import status
 from rest_framework.exceptions import PermissionDenied
 from rest_framework.response import Response
@@ -12,9 +12,8 @@ from eventos2.core.serializers import (
 
 
 class SubmissionViewSet(ViewSet):
-    @swagger_auto_schema(
-        request_body=SubmissionCreateSerializer,
-        responses={200: SubmissionDetailSerializer, 400: "Validation error"},
+    @extend_schema(
+        request=SubmissionCreateSerializer, responses={200: SubmissionDetailSerializer}
     )
     def create(self, request):
         in_serializer = SubmissionCreateSerializer(data=request.data)

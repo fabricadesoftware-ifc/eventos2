@@ -6,16 +6,10 @@ from django.db import migrations
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('core', '0013_tracks_submissions'),
+        ("core", "0013_tracks_submissions"),
     ]
 
     operations = [
-        migrations.RemoveField(
-            model_name='track',
-            name='ends_on',
-        ),
-        migrations.RemoveField(
-            model_name='track',
-            name='starts_on',
-        ),
+        migrations.RemoveField(model_name="track", name="ends_on",),
+        migrations.RemoveField(model_name="track", name="starts_on",),
     ]

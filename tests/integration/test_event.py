@@ -26,7 +26,7 @@ def test_create_valid(api_client, user_factory):
 
     # ENTÃO a resposta de sucesso deve conter os dados do evento,
     # incluindo o ID criado.
-    assert resp.status_code == status.HTTP_201_CREATED
+    assert resp.status_code == status.HTTP_200_OK
     assert resp.data["slug"] == "event-a"
 
     # E ENTÃO o evento deve existir no banco.
@@ -105,7 +105,7 @@ def test_retrieve_valid(api_client, user_factory):
 @pytest.mark.django_db
 def test_update_valid(api_client, user_factory):
     # DADO um usuário autenticado.
-    user = user_factory(name="user", permissions=[])
+    user = user_factory(name="user", permissions=["core.change_event"])
     api_client.force_authenticate(user=user)
 
     # E DADO um evento existente no banco, pertencente ao usuário.
@@ -139,7 +139,7 @@ def test_update_valid(api_client, user_factory):
 @pytest.mark.django_db
 def test_update_duplicate_slug(api_client, user_factory):
     # DADO um usuário autenticado.
-    user = user_factory(name="user", permissions=[])
+    user = user_factory(name="user", permissions=["core.change_event"])
     api_client.force_authenticate(user=user)
 
     # E DADO um evento A existente no banco.
@@ -176,7 +176,7 @@ def test_update_duplicate_slug(api_client, user_factory):
 @pytest.mark.django_db
 def test_update_unauthorized(api_client, user_factory):
     # DADO um usuário autenticado.
-    user = user_factory(name="user", permissions=[])
+    user = user_factory(name="user", permissions=["core.change_event"])
     api_client.force_authenticate(user=user)
 
     # E DADO um evento existente no banco, não pertencente ao usuário.
@@ -205,7 +205,7 @@ def test_update_unauthorized(api_client, user_factory):
 @pytest.mark.django_db
 def test_delete_valid(api_client, user_factory):
     # DADO um usuário autenticado.
-    user = user_factory(name="user", permissions=[])
+    user = user_factory(name="user", permissions=["core.delete_event"])
     api_client.force_authenticate(user=user)
 
     # E DADO um evento existente no banco, pertencente ao usuário.
@@ -233,7 +233,7 @@ def test_delete_valid(api_client, user_factory):
 @pytest.mark.django_db
 def test_delete_unauthorized(api_client, user_factory):
     # DADO um usuário autenticado.
-    user = user_factory(name="user", permissions=[])
+    user = user_factory(name="user", permissions=["core.delete_event"])
     api_client.force_authenticate(user=user)
 
     # E DADO um evento existente no banco, não pertencente ao usuário.
@@ -254,7 +254,7 @@ def test_delete_unauthorized(api_client, user_factory):
 @pytest.mark.django_db
 def test_list_registrations(api_client, user_factory):
     # DADO um usuário autenticado.
-    user = user_factory(name="user", permissions=[])
+    user = user_factory(name="user", permissions=["core.view_registrations_for_event"])
     api_client.force_authenticate(user=user)
 
     # E DADO dois eventos, um pertencente ao usuário.
@@ -284,7 +284,7 @@ def test_list_registrations(api_client, user_factory):
 @pytest.mark.django_db
 def test_list_registrations_unauthorized(api_client, user_factory):
     # DADO um usuário autenticado.
-    user = user_factory(name="user", permissions=[])
+    user = user_factory(name="user", permissions=["core.view_registrations_for_event"])
     api_client.force_authenticate(user=user)
 
     # E DADO um evento, não pertencente ao usuário.
@@ -302,7 +302,7 @@ def test_list_registrations_unauthorized(api_client, user_factory):
 @pytest.mark.django_db
 def test_list_activities(api_client, user_factory):
     # DADO um usuário autenticado.
-    user = user_factory(name="user", permissions=[])
+    user = user_factory(name="user", permissions=["core.view_activities_for_event"])
     api_client.force_authenticate(user=user)
 
     # E DADO um evento existente no banco, pertencente ao usuário.
@@ -331,25 +331,9 @@ def test_list_activities(api_client, user_factory):
 
 
 @pytest.mark.django_db
-def test_list_activities_unauthorized(api_client):
-    # DADO nenhum usuário autenticado.
-
-    # E DADO um evento.
-    event = Event.objects.create(
-        slug="event-a", name="Event A", starts_on=timezone.now(), ends_on=timezone.now()
-    )
-
-    # QUANDO a API é chamada para listar as atividades do evento.
-    resp = api_client.get(reverse("event-list-activities", args=[event.slug]))
-
-    # ENTÃO a resposta deve ser de falta de permissão.
-    assert resp.status_code == status.HTTP_403_FORBIDDEN
-
-
-@pytest.mark.django_db
 def test_list_tracks(api_client, user_factory):
     # DADO um usuário autenticado.
-    user = user_factory(name="user", permissions=[])
+    user = user_factory(name="user", permissions=["core.view_tracks_for_event"])
     api_client.force_authenticate(user=user)
 
     # E DADO um evento existente no banco, pertencente ao usuário.
@@ -369,19 +353,3 @@ def test_list_tracks(api_client, user_factory):
 
     assert len(resp.data) == 1
     assert resp.data[0]["name"] == track_a.name
-
-
-@pytest.mark.django_db
-def test_list_tracks_unauthorized(api_client):
-    # DADO nenhum usuário autenticado.
-
-    # E DADO um evento.
-    event = Event.objects.create(
-        slug="event-a", name="Event A", starts_on=timezone.now(), ends_on=timezone.now()
-    )
-
-    # QUANDO a API é chamada para listar os tracks do evento.
-    resp = api_client.get(reverse("event-list-tracks", args=[event.slug]))
-
-    # ENTÃO a resposta deve ser de falta de permissão.
-    assert resp.status_code == status.HTTP_403_FORBIDDEN

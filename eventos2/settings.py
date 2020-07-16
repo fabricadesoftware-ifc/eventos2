@@ -35,7 +35,7 @@ INSTALLED_APPS = [
     "django.contrib.messages",
     "django.contrib.staticfiles",
     "rest_framework",
-    "drf_yasg",
+    "drf_spectacular",
     "rules.apps.AutodiscoverRulesConfig",
     "huey.contrib.djhuey",
     "corsheaders",
@@ -139,6 +139,7 @@ REST_FRAMEWORK = {
     ],
     "DEFAULT_METADATA_CLASS": "eventos2.utils.metadata.MinimalMetadata",
     "DEFAULT_RENDERER_CLASSES": ["rest_framework.renderers.JSONRenderer"],
+    "DEFAULT_SCHEMA_CLASS": "drf_spectacular.openapi.AutoSchema",
     "TEST_REQUEST_DEFAULT_FORMAT": "json",
 }
 
@@ -160,11 +161,7 @@ SIMPLE_JWT = {
 }
 
 
-# drf-yasg (Yet another Swagger generator)
-# https://drf-yasg.readthedocs.io
+# drf-spectacular
+# https://drf-spectacular.readthedocs.io/en/latest/settings.html
 
-SWAGGER_SETTINGS = {
-    "SECURITY_DEFINITIONS": {
-        "Bearer": {"type": "apiKey", "name": "Authorization", "in": "header"}
-    }
-}
+SPECTACULAR_SETTINGS = {"SCHEMA_PATH_PREFIX": "/api/v[0-9]", "TITLE": "eventos2"}
