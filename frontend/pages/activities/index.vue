@@ -54,7 +54,7 @@ export default {
     )
     const registrations = await app.$api.activityRegistration.listByUserAndEvent(
       {
-        userId: app.$auth.user.id,
+        userPublicId: app.$auth.user.public_id,
         eventSlug: store.state.event.slug
       }
     )

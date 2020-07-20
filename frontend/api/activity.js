@@ -5,7 +5,7 @@ export function createActivityAPIClient($axios) {
     },
     create({ eventSlug, slug, name, name_english, starts_on, ends_on }) {
       return $axios.$post(`api/v1/activities/`, {
-        event: eventSlug,
+        event_slug: eventSlug,
         slug,
         name,
         name_english,

@@ -63,7 +63,7 @@ export const actions = {
       try {
         eventRegistrations = await this.$api.eventRegistration.listByUserAndEvent(
           {
-            userId: this.$auth.user.id,
+            userPublicId: this.$auth.user.public_id,
             eventSlug: state.event.slug
           }
         )

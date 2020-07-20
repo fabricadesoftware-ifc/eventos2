@@ -1,9 +1,9 @@
 export function createActivityRegistrationAPIClient($axios) {
   return {
-    listByUserAndEvent({ userId, eventSlug }) {
+    listByUserAndEvent({ userPublicId, eventSlug }) {
       return $axios.$get(`api/v1/activity_registrations/`, {
         params: {
-          user_id: userId,
+          user_public_id: userPublicId,
           event_slug: eventSlug
         }
       })
