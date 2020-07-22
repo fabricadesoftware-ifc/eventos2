@@ -1,6 +1,7 @@
 from rest_framework import serializers
 
 from eventos2.core.models import Track, User
+from eventos2.core.serializers.submission_document import SubmissionDocumentSerializer
 from eventos2.core.serializers.track import TrackSerializer
 from eventos2.core.serializers.user import UserSerializer
 
@@ -36,3 +37,4 @@ class SubmissionDetailSerializer(SubmissionBaseSerializer):
     title = serializers.CharField()
     title_english = serializers.CharField(required=False)
     authors = UserSerializer(many=True)
+    documents = SubmissionDocumentSerializer(many=True)

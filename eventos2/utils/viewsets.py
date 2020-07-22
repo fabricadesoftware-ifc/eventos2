@@ -34,6 +34,17 @@ class CViewSet(
     """
 
 
+class CUDViewSet(
+    CreateModelMixin,
+    UpdateModelMixin,
+    mixins.DestroyModelMixin,
+    viewsets.GenericViewSet,
+):
+    """
+    Create, update, and delete.
+    """
+
+
 class CRUDViewSet(
     CreateModelMixin,
     mixins.RetrieveModelMixin,

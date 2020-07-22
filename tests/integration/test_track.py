@@ -1,8 +1,9 @@
 import pytest
 from django.urls import reverse
+from django.utils import timezone
 from rest_framework import status
 
-from eventos2.core.models import Track
+from eventos2.core.models import Submission, Track, TrackSubmissionDocumentSlot
 
 
 @pytest.mark.django_db
@@ -244,3 +245,59 @@ def test_delete_unauthorized(api_client, user_factory, event_factory):
 
     # E ENTÃO o track não deve ser deletado.
     assert Track.objects.count() == 1
+
+
+@pytest.mark.django_db
+def test_list_submissions(api_client, user_factory, event_factory, track_factory):
+    # DADO um usuário autenticado.
+    user = user_factory(name="user", permissions=["core.change_event"])
+    api_client.force_authenticate(user=user)
+
+    # E DADO um evento existente no banco, pertencente ao usuário.
+    event = event_factory(slug="event-a", owners=[user])
+
+    # E DADO um track existente no banco.
+    track = track_factory(event=event, slug="track-a")
+
+    # E DADO uma submission no track.
+    submission_a = Submission.objects.create(track=track, title="Submission A")
+
+    # QUANDO a API é chamada para listar as submissions do track.
+    resp = api_client.get(reverse("track-list-submissions", args=[track.slug]))
+
+    # ENTÃO as submissions serão retornadas
+    assert resp.status_code == status.HTTP_200_OK
+
+    assert len(resp.data) == 1
+    assert resp.data[0]["title"] == submission_a.title
+
+
+@pytest.mark.django_db
+def test_list_submission_document_slots(
+    api_client, user_factory, event_factory, track_factory
+):
+    # DADO um usuário autenticado.
+    user = user_factory(name="user", permissions=["core.change_event"])
+    api_client.force_authenticate(user=user)
+
+    # E DADO um evento existente no banco, pertencente ao usuário.
+    event = event_factory(slug="event-a", owners=[user])
+
+    # E DADO um track existente no banco.
+    track = track_factory(event=event, slug="track-a")
+
+    # E DADO um submission document slot no track.
+    slot_a = TrackSubmissionDocumentSlot.objects.create(
+        track=track, name="Slot A", starts_on=timezone.now(), ends_on=timezone.now()
+    )
+
+    # QUANDO a API é chamada para listar os slots do track.
+    resp = api_client.get(
+        reverse("track-list-submission-document-slots", args=[track.slug])
+    )
+
+    # ENTÃO os slots serão retornados
+    assert resp.status_code == status.HTTP_200_OK
+
+    assert len(resp.data) == 1
+    assert resp.data[0]["name"] == slot_a.name

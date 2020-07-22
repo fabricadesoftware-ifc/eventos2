@@ -1,8 +1,9 @@
 from django.db import models
 
 from eventos2.core.models.soft_deletion import SoftDeletableModel
-from eventos2.core.models.track import Track
+from eventos2.core.models.track import Track, TrackSubmissionDocumentSlot
 from eventos2.core.models.user import User
+from eventos2.media.models import Document
 
 
 class Submission(SoftDeletableModel):
@@ -31,3 +32,22 @@ class SubmissionAuthorship(models.Model):
     user = models.ForeignKey(
         User, on_delete=models.PROTECT, related_name="submission_authorships"
     )
+
+
+class SubmissionDocument(models.Model):
+    slot = models.ForeignKey(
+        TrackSubmissionDocumentSlot, on_delete=models.PROTECT, related_name="documents",
+    )
+    submission = models.ForeignKey(
+        Submission, on_delete=models.PROTECT, related_name="documents"
+    )
+
+    document = models.ForeignKey(Document, on_delete=models.PROTECT, related_name="+")
+    submitted_on = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        constraints = [
+            models.UniqueConstraint(
+                fields=["slot", "submission"], name="unique_submission_document"
+            )
+        ]

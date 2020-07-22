@@ -16,5 +16,15 @@ router.register(
     basename="event-registration",
 )
 router.register(r"submissions", views.SubmissionViewSet, basename="submission")
+router.register(
+    r"submission_documents",
+    views.SubmissionDocumentViewSet,
+    basename="submission-document",
+)
 router.register(r"tracks", views.TrackViewSet, basename="track")
+router.register(
+    r"track_submission_document_slots",
+    views.TrackSubmissionDocumentSlotViewSet,
+    basename="track-submission-document-slot",
+)
 router.register(r"users", views.UserViewSet, basename="user")

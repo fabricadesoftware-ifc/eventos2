@@ -4,7 +4,15 @@ import pytest
 from django.contrib.auth.models import Permission
 from rest_framework.test import APIClient
 
-from eventos2.core.models import Activity, Event, Track, User
+from eventos2.core.models import (
+    Activity,
+    Event,
+    Submission,
+    Track,
+    TrackSubmissionDocumentSlot,
+    User,
+)
+from eventos2.media.models import Document
 
 
 @pytest.fixture()
@@ -69,9 +77,42 @@ def activity_factory():
 
 
 @pytest.fixture
+def submission_factory():
+    def _factory(*, track, title, authors):
+        submission = Submission.objects.create(track=track, title=title,)
+        submission.authors.add(*authors)
+        return submission
+
+    return _factory
+
+
+@pytest.fixture
 def track_factory():
     def _factory(*, event, slug):
         track = Track.objects.create(event=event, slug=slug, name=slug,)
         return track
+
+    return _factory
+
+
+@pytest.fixture
+def track_submission_document_slot_factory():
+    def _factory(*, track, name):
+        slot = TrackSubmissionDocumentSlot.objects.create(
+            track=track,
+            name=name,
+            starts_on=datetime(2020, 4, 10, 9, 0, 0),
+            ends_on=datetime(2020, 4, 12, 18, 30, 0),
+        )
+        return slot
+
+    return _factory
+
+
+@pytest.fixture
+def document_factory():
+    def _factory(*, file_path, content_type):
+        document = Document.objects.create(file=file_path, content_type=content_type,)
+        return document
 
     return _factory
