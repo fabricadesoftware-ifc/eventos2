@@ -200,7 +200,7 @@ description = "Sane and flexible OpenAPI 3 schema generation for Django REST fra
 name = "drf-spectacular"
 optional = false
 python-versions = ">=3.6"
-version = "0.9.11"
+version = "0.9.12"
 
 [package.dependencies]
 Django = ">=2.2"
@@ -887,8 +887,8 @@ djangorestframework-simplejwt = [
     {file = "djangorestframework_simplejwt-4.4.0.tar.gz", hash = "sha256:c315be70aa12a5f5790c0ab9acd426c3a58eebea65a77d0893248c5144a5080c"},
 ]
 drf-spectacular = [
-    {file = "drf-spectacular-0.9.11.tar.gz", hash = "sha256:43617f33367eff9780f8f7011c4aa8a02653724e35ee56e00aaf68862a0e53c0"},
-    {file = "drf_spectacular-0.9.11-py2.py3-none-any.whl", hash = "sha256:e2f3b1e6c81169e5dd46816042e808ca53ad6e562118d181fc3a20698dfbe55c"},
+    {file = "drf-spectacular-0.9.12.tar.gz", hash = "sha256:2c8fc0d170df58e7cebccc15b51c7f1b0cc485fe7b9765abfb91fb769d07ed7a"},
+    {file = "drf_spectacular-0.9.12-py2.py3-none-any.whl", hash = "sha256:c903b024476d0b3600890617d87b2bcf431ef2ceb9e17f9d5fdd4b87c8f0369f"},
 ]
 filelock = [
     {file = "filelock-3.0.12-py3-none-any.whl", hash = "sha256:929b7d63ec5b7d6b71b0fa5ac14e030b3f70b75747cef1b10da9b879fef15836"},
