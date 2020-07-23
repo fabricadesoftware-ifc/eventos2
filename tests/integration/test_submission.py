@@ -6,7 +6,9 @@ from eventos2.core.models import EventRegistration, Submission
 
 
 @pytest.mark.django_db
-def test_submit_valid(api_client, track_factory, event_factory, user_factory):
+def test_submit_valid(
+    api_client, track_factory, event_factory, user_factory,
+):
     # DADO um usuário autenticado.
     user = user_factory(name="user", permissions=[])
     api_client.force_authenticate(user=user)
@@ -60,6 +62,49 @@ def test_submit_not_registered_to_event(
 
     # ENTÃO a reposta deve ser de falta de permissões
     assert resp.status_code == status.HTTP_403_FORBIDDEN
+
+    # E ENTÃO o submission não deve ser criado.
+    assert Submission.objects.count() == 0
+
+
+@pytest.mark.django_db
+def test_submit_out_of_submission_period(
+    api_client,
+    track_factory,
+    event_factory,
+    user_factory,
+    freezer,
+    parse_to_aware_datetime,
+):
+    # DADO um usuário autenticado.
+    user = user_factory(name="user", permissions=[])
+    api_client.force_authenticate(user=user)
+
+    # E DADO um evento no qual o usuário está registrado.
+    event = event_factory(
+        slug="event-a",
+        owners=[],
+        starts_on=parse_to_aware_datetime("2020-01-01"),
+        ends_on=parse_to_aware_datetime("2020-02-02"),
+    )
+    EventRegistration.objects.create(event=event, user=user)
+
+    # E DADO um track.
+    track = track_factory(
+        event=event, slug="track-a", starts_on=event.starts_on, ends_on=event.ends_on
+    )
+
+    # E DADO que já passou o tempo de submissão
+    freezer.move_to(parse_to_aware_datetime("2020-03-03"))
+
+    # QUANDO a API é chamada para submeter no track.
+    resp = api_client.post(
+        reverse("submission-list"), {"track": track.slug, "title": "Title"}
+    )
+
+    # ENTÃO a reposta de falha deve conter o erro no campo track.
+    assert resp.status_code == status.HTTP_400_BAD_REQUEST
+    assert len(resp.data["track"]) != 0
 
     # E ENTÃO o submission não deve ser criado.
     assert Submission.objects.count() == 0

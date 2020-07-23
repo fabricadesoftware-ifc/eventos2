@@ -1,5 +1,6 @@
-from datetime import datetime, timedelta
+from datetime import timedelta
 
+import dateutil
 import pytest
 from django.contrib.auth.models import Permission
 from django.utils import timezone
@@ -131,3 +132,11 @@ def document_factory():
         return document
 
     return _factory
+
+
+@pytest.fixture
+def parse_to_aware_datetime():
+    def _func(s):
+        return timezone.make_aware(dateutil.parser.parse(s))
+
+    return _func

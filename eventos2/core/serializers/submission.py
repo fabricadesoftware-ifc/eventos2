@@ -30,6 +30,13 @@ class SubmissionCreateSerializer(SubmissionBaseSerializer):
         required=False,
     )
 
+    def validate(self, data):
+        if not data["track"].is_open:
+            raise serializers.ValidationError(
+                {"track": "Submissions to this track are closed."}
+            )
+        return data
+
 
 class SubmissionDetailSerializer(SubmissionBaseSerializer):
     id = serializers.IntegerField()
