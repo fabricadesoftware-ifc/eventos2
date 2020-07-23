@@ -48,12 +48,14 @@ def user_factory():
 
 @pytest.fixture
 def event_factory():
-    def _factory(*, slug, owners):
+    def _factory(*, slug, owners, starts_on=None, ends_on=None):
+        default_starts_on = timezone.now()
+        default_ends_on = default_starts_on + timedelta(days=10)
         event = Event.objects.create(
             slug=slug,
             name=slug,
-            starts_on=datetime(2020, 4, 10, 9, 0, 0),
-            ends_on=datetime(2020, 4, 12, 18, 30, 0),
+            starts_on=starts_on or default_starts_on,
+            ends_on=ends_on or default_ends_on,
         )
         event.owners.add(*owners)
         return event
@@ -63,13 +65,15 @@ def event_factory():
 
 @pytest.fixture
 def activity_factory():
-    def _factory(*, event, slug, owners):
+    def _factory(*, event, slug, owners, starts_on=None, ends_on=None):
+        default_starts_on = timezone.now()
+        default_ends_on = default_starts_on + timedelta(days=10)
         activity = Activity.objects.create(
             event=event,
             slug=slug,
             name=slug,
-            starts_on=datetime(2020, 4, 10, 9, 0, 0),
-            ends_on=datetime(2020, 4, 12, 18, 30, 0),
+            starts_on=starts_on or default_starts_on,
+            ends_on=ends_on or default_ends_on,
         )
         activity.owners.add(*owners)
         return activity
@@ -106,12 +110,14 @@ def track_factory():
 
 @pytest.fixture
 def track_submission_document_slot_factory():
-    def _factory(*, track, name):
+    def _factory(*, track, name, starts_on=None, ends_on=None):
+        default_starts_on = timezone.now()
+        default_ends_on = default_starts_on + timedelta(days=10)
         slot = TrackSubmissionDocumentSlot.objects.create(
             track=track,
             name=name,
-            starts_on=datetime(2020, 4, 10, 9, 0, 0),
-            ends_on=datetime(2020, 4, 12, 18, 30, 0),
+            starts_on=starts_on or default_starts_on,
+            ends_on=ends_on or default_ends_on,
         )
         return slot
 
