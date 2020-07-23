@@ -3,7 +3,7 @@ from django.urls import reverse
 from django.utils import timezone
 from rest_framework import status
 
-from eventos2.core.models import Activity, Event, EventRegistration, Track
+from eventos2.core.models import Activity, Event, EventRegistration
 
 
 @pytest.mark.django_db
@@ -331,7 +331,7 @@ def test_list_activities(api_client, user_factory):
 
 
 @pytest.mark.django_db
-def test_list_tracks(api_client, user_factory):
+def test_list_tracks(api_client, user_factory, track_factory):
     # DADO um usuário autenticado.
     user = user_factory(name="user", permissions=["core.view_tracks_for_event"])
     api_client.force_authenticate(user=user)
@@ -343,7 +343,7 @@ def test_list_tracks(api_client, user_factory):
     event.owners.add(user)
 
     # E DADO um track associado ao evento.
-    track_a = Track.objects.create(event=event, slug="track-a", name="Track A",)
+    track_a = track_factory(event=event, slug="track-a")
 
     # QUANDO a API é chamada para listar os tracks do evento.
     resp = api_client.get(reverse("event-list-tracks", args=[event.slug]))

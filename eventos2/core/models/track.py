@@ -1,4 +1,5 @@
 from django.db import models
+from django.utils import timezone
 
 from eventos2.core.models.event import Event
 from eventos2.core.models.soft_deletion import SoftDeletableModel
@@ -15,6 +16,15 @@ class Track(SoftDeletableModel):
     name_english = models.CharField(
         max_length=255, blank=True, help_text="The track's name in english"
     )
+    starts_on = models.DateTimeField()
+    ends_on = models.DateTimeField()
+
+    def is_open_on(self, date):
+        return self.starts_on <= date <= self.ends_on
+
+    @property
+    def is_open(self):
+        return self.is_open_on(timezone.now())
 
     class Meta:
         permissions = [

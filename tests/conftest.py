@@ -1,7 +1,8 @@
-from datetime import datetime
+from datetime import datetime, timedelta
 
 import pytest
 from django.contrib.auth.models import Permission
+from django.utils import timezone
 from rest_framework.test import APIClient
 
 from eventos2.core.models import (
@@ -88,8 +89,16 @@ def submission_factory():
 
 @pytest.fixture
 def track_factory():
-    def _factory(*, event, slug):
-        track = Track.objects.create(event=event, slug=slug, name=slug,)
+    def _factory(*, event, slug, starts_on=None, ends_on=None):
+        default_starts_on = timezone.now()
+        default_ends_on = default_starts_on + timedelta(days=10)
+        track = Track.objects.create(
+            event=event,
+            slug=slug,
+            name=slug,
+            starts_on=starts_on or default_starts_on,
+            ends_on=ends_on or default_ends_on,
+        )
         return track
 
     return _factory
