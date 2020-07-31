@@ -14,6 +14,13 @@ class EventRegistrationCreateSerializer(EventRegistrationBaseSerializer):
         source="event", slug_field="slug", queryset=Event.objects.all()
     )
 
+    def validate(self, data):
+        if not data["event"].is_open:
+            raise serializers.ValidationError(
+                {"event_slug": "Registrations to this event are closed."}
+            )
+        return data
+
 
 class EventRegistrationDetailSerializer(EventRegistrationBaseSerializer):
     id = serializers.IntegerField()

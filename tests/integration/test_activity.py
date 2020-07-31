@@ -194,7 +194,13 @@ def test_update_valid(api_client, user_factory, event_factory, activity_factory)
     event = event_factory(slug="event-a", owners=[user])
 
     # E DADO uma activity existente no evento.
-    activity = activity_factory(event=event, slug="activity-a", owners=[])
+    activity = activity_factory(
+        event=event,
+        slug="activity-a",
+        owners=[],
+        starts_on=event.starts_on,
+        ends_on=event.ends_on,
+    )
 
     # E DADO dados de activity válidos.
     # QUANDO a API é chamada.

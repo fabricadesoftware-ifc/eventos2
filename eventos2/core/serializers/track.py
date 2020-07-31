@@ -3,7 +3,30 @@ from rest_framework import serializers
 from eventos2.core.models import Event, Track
 
 
-class TrackSerializer(serializers.ModelSerializer):
+class TrackBaseSerializer(serializers.Serializer):
+    def validate(self, data):
+        if data["ends_on"] <= data["starts_on"]:
+            raise serializers.ValidationError(
+                {"ends_on": "The track must end after it starts."}
+            )
+
+        # when creating, the event is in the input data
+        event = data.get("event")
+        if event is None:
+            # when updating, the event in the instance data
+            event = self.instance.event
+
+        dates_are_within_event = (
+            event.starts_on <= data["starts_on"] <= data["ends_on"] <= event.ends_on
+        )
+        if not dates_are_within_event:
+            raise serializers.ValidationError(
+                {"ends_on": "The track dates must be within the event's dates."}
+            )
+        return data
+
+
+class TrackSerializer(TrackBaseSerializer, serializers.ModelSerializer):
     class Meta:
         model = Track
         fields = ["slug", "name", "name_english", "starts_on", "ends_on"]
@@ -12,22 +35,10 @@ class TrackSerializer(serializers.ModelSerializer):
         raise NotImplementedError("Use ActivityCreateSerializer")
 
 
-class TrackCreateSerializer(serializers.ModelSerializer):
+class TrackCreateSerializer(TrackBaseSerializer, serializers.ModelSerializer):
     event_slug = serializers.SlugRelatedField(
         source="event", slug_field="slug", queryset=Event.objects.all(), write_only=True
     )
-
-    def validate(self, data):
-        if data["ends_on"] <= data["starts_on"]:
-            raise serializers.ValidationError(
-                {"ends_on": "The track must end after it starts."}
-            )
-        event = data["event"]
-        if not (event.starts_on < data["starts_on"] < data["ends_on"] < event.ends_on):
-            raise serializers.ValidationError(
-                {"ends_on": "The track dates must be within the event's dates."}
-            )
-        return data
 
     class Meta:
         model = Track

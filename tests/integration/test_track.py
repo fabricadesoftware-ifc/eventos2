@@ -182,7 +182,9 @@ def test_update_valid(api_client, user_factory, event_factory, track_factory):
     user = user_factory(name="user", permissions=["core.change_event"])
     api_client.force_authenticate(user=user)
     event = event_factory(slug="event-a", owners=[user])
-    track = track_factory(event=event, slug="track-a")
+    track = track_factory(
+        event=event, slug="track-a", starts_on=event.starts_on, ends_on=event.ends_on
+    )
 
     # E DADO dados de track válidos.
     # QUANDO a API é chamada.
