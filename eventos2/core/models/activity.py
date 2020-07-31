@@ -28,6 +28,10 @@ class Activity(SoftDeletableModel):
     class Meta:
         permissions = [
             ("register_self_into_activity", "Can self-register into an activity"),
+            (
+                "view_registrations_for_activity",
+                "Can view registrations for an activity",
+            ),
         ]
 
 

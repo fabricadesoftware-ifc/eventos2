@@ -5,7 +5,7 @@ from django.urls import reverse
 from django.utils import timezone
 from rest_framework import status
 
-from eventos2.core.models import Activity
+from eventos2.core.models import Activity, ActivityRegistration, EventRegistration
 
 
 @pytest.mark.django_db
@@ -325,3 +325,59 @@ def test_delete_unauthorized(api_client, user_factory, event_factory, activity_f
 
     # E ENTÃO a activity não deve ser deletada.
     assert Activity.objects.count() == 1
+
+
+@pytest.mark.django_db
+def test_list_registrations(api_client, user_factory, event_factory, activity_factory):
+    # DADO um usuário autenticado, um evento não pertencente ao usuário,
+    # e uma activity no evento, pertencendo ao usuário.
+    user = user_factory(
+        name="user", permissions=["core.view_registrations_for_activity"]
+    )
+    api_client.force_authenticate(user=user)
+    event = event_factory(slug="event-a", owners=[])
+    activity = activity_factory(event=event, slug="activity-a", owners=[user])
+    # E DADO uma inscrição de outro usuário na activity.
+    other_user = user_factory(name="other_user", permissions=[])
+    ActivityRegistration.objects.create(
+        activity=activity,
+        event_registration=EventRegistration.objects.create(
+            event=event, user=other_user
+        ),
+    )
+
+    # QUANDO a API é chamada para listar as inscrições da activity.
+    resp = api_client.get(reverse("activity-list-registrations", args=[activity.slug]))
+
+    # ENTÃO as inscrições serão retornadas
+    assert resp.status_code == status.HTTP_200_OK
+    assert len(resp.data) == 1
+    assert resp.data[0]["user"]["email"] == other_user.email
+
+
+@pytest.mark.django_db
+def test_list_registrations_unauthorized(
+    api_client, user_factory, event_factory, activity_factory
+):
+    # DADO um usuário autenticado, um evento não pertencente ao usuário,
+    # e uma activity no evento, também não pertencendo ao usuário.
+    user = user_factory(
+        name="user", permissions=["core.view_registrations_for_activity"]
+    )
+    api_client.force_authenticate(user=user)
+    event = event_factory(slug="event-a", owners=[])
+    activity = activity_factory(event=event, slug="activity-a", owners=[])
+    # E DADO uma inscrição de outro usuário na activity.
+    other_user = user_factory(name="other_user", permissions=[])
+    ActivityRegistration.objects.create(
+        activity=activity,
+        event_registration=EventRegistration.objects.create(
+            event=event, user=other_user
+        ),
+    )
+
+    # QUANDO a API é chamada para listar as inscrições da activity.
+    resp = api_client.get(reverse("activity-list-registrations", args=[activity.slug]))
+
+    # ENTÃO a resposta deve ser de falta de permissões
+    assert resp.status_code == status.HTTP_403_FORBIDDEN

@@ -1,9 +1,15 @@
+from drf_spectacular.utils import extend_schema
 from rest_framework import status
+from rest_framework.decorators import action
 from rest_framework.exceptions import PermissionDenied
 from rest_framework.response import Response
 
 from eventos2.core.models import Activity
-from eventos2.core.serializers import ActivityCreateSerializer, ActivitySerializer
+from eventos2.core.serializers import (
+    ActivityCreateSerializer,
+    ActivityRegistrationUserListSerializer,
+    ActivitySerializer,
+)
 from eventos2.utils.permissions import PerActionPermissions
 from eventos2.utils.viewsets import CRUDViewSet
 
@@ -17,6 +23,7 @@ class ActivityViewSet(CRUDViewSet):
         "retrieve": "core.view_activities_for_event",
         "update": "core.change_event",
         "destroy": "core.change_event",
+        "list_registrations": "core.view_registrations_for_activity",
     }
 
     def get_serializer_class(self):
@@ -36,3 +43,12 @@ class ActivityViewSet(CRUDViewSet):
 
         serializer.save()
         return Response(serializer.data, status=status.HTTP_200_OK)
+
+    @extend_schema(responses={200: ActivityRegistrationUserListSerializer(many=True)})
+    @action(detail=True, url_path="registrations", url_name="list-registrations")
+    def list_registrations(self, request, slug=None):
+        activity = self.get_object()
+        serializer = ActivityRegistrationUserListSerializer(
+            activity.registrations, many=True
+        )
+        return Response(serializer.data)
