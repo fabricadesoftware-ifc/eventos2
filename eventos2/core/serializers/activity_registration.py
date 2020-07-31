@@ -5,6 +5,7 @@ from eventos2.core.serializers.activity import ActivitySerializer
 from eventos2.core.serializers.event_registration import (
     EventRegistrationDetailSerializer,
 )
+from eventos2.core.serializers.user import UserSerializer
 
 
 class ActivityRegistrationBaseSerializer(serializers.Serializer):
@@ -28,3 +29,8 @@ class ActivityRegistrationDetailSerializer(ActivityRegistrationBaseSerializer):
     id = serializers.IntegerField()
     activity = ActivitySerializer()
     event_registration = EventRegistrationDetailSerializer()
+
+
+class ActivityRegistrationUserListSerializer(ActivityRegistrationBaseSerializer):
+    id = serializers.IntegerField()
+    user = UserSerializer(source="event_registration.user")
