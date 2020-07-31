@@ -3,16 +3,14 @@ from django.urls import reverse
 from django.utils import timezone
 from rest_framework import status
 
-from eventos2.core.models import Submission, Track, TrackSubmissionDocumentSlot
+from eventos2.core.models import Track
 
 
 @pytest.mark.django_db
 def test_create_valid(api_client, user_factory, event_factory):
-    # DADO um usuário autenticado.
+    # DADO um usuário autenticado, e um evento pertencente a ele.
     user = user_factory(name="user", permissions=["core.change_event"])
     api_client.force_authenticate(user=user)
-
-    # E DADO um evento pertencente ao usuário.
     event = event_factory(slug="event-a", owners=[user])
 
     # E DADO dados de track válidos.
@@ -31,18 +29,15 @@ def test_create_valid(api_client, user_factory, event_factory):
     # ENTÃO a resposta de sucesso deve conter os dados do track.
     assert resp.status_code == status.HTTP_200_OK
     assert resp.data["slug"] == "track-a"
-
-    # E ENTÃO o track deve existir no banco.
+    # E ENTÃO o track deve existir.
     assert Track.objects.get(slug=resp.data["slug"]).name == "Track A"
 
 
 @pytest.mark.django_db
 def test_create_unauthorized(api_client, user_factory, event_factory):
-    # DADO um usuário.
+    # DADO um usuário, e um evento não pertencente a ele.
     user = user_factory(name="user", permissions=["core.change_event"])
     api_client.force_authenticate(user=user)
-
-    # E DADO um evento não pertencente ao usuário.
     event = event_factory(slug="event-a", owners=[])
 
     # QUANDO a API é chamada para criar um track.
@@ -59,21 +54,16 @@ def test_create_unauthorized(api_client, user_factory, event_factory):
 
     # ENTÃO a resposta deve ser de falta de permissões.
     assert resp.status_code == status.HTTP_403_FORBIDDEN
-
-    # E ENTÃO o track não deve ser criado no banco.
+    # E ENTÃO o track não deve ser criado.
     assert Track.objects.count() == 0
 
 
 @pytest.mark.django_db
 def test_create_duplicate_slug(api_client, user_factory, event_factory, track_factory):
-    # DADO um usuário autenticado.
+    # DADO um usuário autenticado, um evento pertencente a ele, e um track no evento.
     user = user_factory(name="user", permissions=["core.change_event"])
     api_client.force_authenticate(user=user)
-
-    # E DADO um evento pertencente ao usuário.
     event = event_factory(slug="event-a", owners=[user])
-
-    # E DADO um track existente no evento.
     existing_track = track_factory(event=event, slug="track-a")
 
     # QUANDO a API é chamada para criar um track com o mesmo slug.
@@ -91,21 +81,16 @@ def test_create_duplicate_slug(api_client, user_factory, event_factory, track_fa
     # ENTÃO a resposta de falha deve conter o erro no campo slug.
     assert resp.status_code == status.HTTP_400_BAD_REQUEST
     assert len(resp.data["slug"]) != 0
-
-    # E ENTÃO o track não deve ser criado no banco.
+    # E ENTÃO o track não deve ser criado.
     assert Track.objects.count() == 1
 
 
 @pytest.mark.django_db
 def test_retrieve_valid(api_client, user_factory, event_factory, track_factory):
-    # DADO um usuário.
+    # DADO um usuário, um evento, e um track.
     user = user_factory(name="user", permissions=[])
     api_client.force_authenticate(user=user)
-
-    # E DADO um evento.
     event = event_factory(slug="event-a", owners=[])
-
-    # E DADO um track existente no evento.
     track = track_factory(event=event, slug="track-a")
 
     # QUANDO a API é chamada para obter o track.
@@ -119,11 +104,8 @@ def test_retrieve_valid(api_client, user_factory, event_factory, track_factory):
 @pytest.mark.django_db
 def test_retrieve_unauthorized(api_client, event_factory, track_factory):
     # DADO nenhum usuário autenticado.
-
-    # E DADO um evento.
+    # E DADO um evento e um track.
     event = event_factory(slug="event-a", owners=[])
-
-    # E DADO um track existente no evento.
     track = track_factory(event=event, slug="track-a")
 
     # QUANDO a API é chamada para obter o track.
@@ -135,14 +117,10 @@ def test_retrieve_unauthorized(api_client, event_factory, track_factory):
 
 @pytest.mark.django_db
 def test_update_valid(api_client, user_factory, event_factory, track_factory):
-    # DADO um usuário autenticado.
+    # DADO um usuário autenticado, um evento pertencente a ele, e um track no evento.
     user = user_factory(name="user", permissions=["core.change_event"])
     api_client.force_authenticate(user=user)
-
-    # E DADO um evento existente no banco, pertencente ao usuário.
     event = event_factory(slug="event-a", owners=[user])
-
-    # E DADO um track existente no evento.
     track = track_factory(event=event, slug="track-a")
 
     # E DADO dados de track válidos.
@@ -161,22 +139,17 @@ def test_update_valid(api_client, user_factory, event_factory, track_factory):
     assert resp.status_code == status.HTTP_200_OK
     assert resp.data["name"] == track.name
     assert resp.data["slug"] == "{} modified!".format(track.slug)
-
-    # E ENTÃO o track deve ser modificado no banco.
+    # E ENTÃO o track deve ser modificado.
     assert Track.objects.get(pk=track.id).slug == "{} modified!".format(track.slug)
     assert Track.objects.count() == 1
 
 
 @pytest.mark.django_db
 def test_update_duplicate_slug(api_client, user_factory, event_factory, track_factory):
-    # DADO um usuário autenticado.
+    # DADO um usuário autenticado, um evento pertencente a ele, e dois tracks no evento.
     user = user_factory(name="user", permissions=["core.change_event"])
     api_client.force_authenticate(user=user)
-
-    # E DADO um evento existente no banco, pertencente ao usuário.
     event = event_factory(slug="event-a", owners=[user])
-
-    # E DADO dois tracks existentes no evento.
     track_a = track_factory(event=event, slug="track-a")
     track_b = track_factory(event=event, slug="track-b")
 
@@ -190,21 +163,17 @@ def test_update_duplicate_slug(api_client, user_factory, event_factory, track_fa
     # ENTÃO a resposta de falha deve conter o erro no campo slug.
     assert resp.status_code == status.HTTP_400_BAD_REQUEST
     assert len(resp.data["slug"]) != 0
-
-    # E ENTÃO o track não deve ser modificado no banco.
+    # E ENTÃO o track não deve ser modificado.
     assert Track.objects.get(pk=track_b.id).slug == track_b.slug
 
 
 @pytest.mark.django_db
 def test_update_unauthorized(api_client, user_factory, event_factory, track_factory):
-    # DADO um usuário autenticado.
+    # DADO um usuário autenticado, um evento não pertencente a ele,
+    # e um track no evento.
     user = user_factory(name="user", permissions=["core.change_event"])
     api_client.force_authenticate(user=user)
-
-    # E DADO um evento existente no banco, não pertencente ao usuário.
     event = event_factory(slug="event-a", owners=[])
-
-    # E DADO um track existente no evento.
     track = track_factory(event=event, slug="track-a")
 
     # QUANDO a API é chamada para editar o track.
@@ -215,21 +184,16 @@ def test_update_unauthorized(api_client, user_factory, event_factory, track_fact
 
     # ENTÃO a resposta deve ser de falta de permissões.
     assert resp.status_code == status.HTTP_403_FORBIDDEN
-
-    # E ENTÃO o track não deve ser modificado no banco.
+    # E ENTÃO o track não deve ser modificado.
     assert Track.objects.get(pk=track.id).name == track.name
 
 
 @pytest.mark.django_db
 def test_delete_valid(api_client, user_factory, event_factory, track_factory):
-    # DADO um usuário autenticado.
+    # DADO um usuário autenticado, e um evento pertencente a ele, e um track no evento.
     user = user_factory(name="user", permissions=["core.change_event"])
     api_client.force_authenticate(user=user)
-
-    # E DADO um evento existente no banco, pertencente ao usuário.
     event = event_factory(slug="event-a", owners=[user])
-
-    # E DADO um track existente no banco.
     track = track_factory(event=event, slug="track-a")
 
     # QUANDO a API é chamada para deletar o track.
@@ -237,8 +201,7 @@ def test_delete_valid(api_client, user_factory, event_factory, track_factory):
 
     # ENTÃO a deleção deverá ter sucesso.
     assert delete_resp.status_code == status.HTTP_204_NO_CONTENT
-
-    # E ENTÃO o track não existirá no banco.
+    # E ENTÃO o track não existirá.
     assert Track.available_objects.count() == 0
 
     # E QUANDO a API é chamada para obter o track deletado.
@@ -250,14 +213,11 @@ def test_delete_valid(api_client, user_factory, event_factory, track_factory):
 
 @pytest.mark.django_db
 def test_delete_unauthorized(api_client, user_factory, event_factory, track_factory):
-    # DADO um usuário autenticado.
+    # DADO um usuário autenticado, um evento não pertencente a ele,
+    # e um track no evento.
     user = user_factory(name="user", permissions=["core.change_event"])
     api_client.force_authenticate(user=user)
-
-    # E DADO um evento existente no banco, não pertencente ao usuário.
     event = event_factory(slug="event-a", owners=[])
-
-    # E DADO um track existente no evento.
     track = track_factory(event=event, slug="track-a")
 
     # QUANDO a API é chamada para deletar o track.
@@ -265,25 +225,21 @@ def test_delete_unauthorized(api_client, user_factory, event_factory, track_fact
 
     # ENTÃO a resposta deve ser de falta de permissões.
     assert resp.status_code == status.HTTP_403_FORBIDDEN
-
     # E ENTÃO o track não deve ser deletado.
     assert Track.objects.count() == 1
 
 
 @pytest.mark.django_db
-def test_list_submissions(api_client, user_factory, event_factory, track_factory):
-    # DADO um usuário autenticado.
+def test_list_submissions(
+    api_client, user_factory, event_factory, track_factory, submission_factory
+):
+    # DADO um usuário autenticado, um evento pertencente a ele, e um track no evento.
     user = user_factory(name="user", permissions=["core.change_event"])
     api_client.force_authenticate(user=user)
-
-    # E DADO um evento existente no banco, pertencente ao usuário.
     event = event_factory(slug="event-a", owners=[user])
-
-    # E DADO um track existente no banco.
     track = track_factory(event=event, slug="track-a")
-
     # E DADO uma submission no track.
-    submission_a = Submission.objects.create(track=track, title="Submission A")
+    submission_a = submission_factory(track=track, title="Submission A", authors=[])
 
     # QUANDO a API é chamada para listar as submissions do track.
     resp = api_client.get(reverse("track-list-submissions", args=[track.slug]))
@@ -297,22 +253,19 @@ def test_list_submissions(api_client, user_factory, event_factory, track_factory
 
 @pytest.mark.django_db
 def test_list_submission_document_slots(
-    api_client, user_factory, event_factory, track_factory
+    api_client,
+    user_factory,
+    event_factory,
+    track_factory,
+    track_submission_document_slot_factory,
 ):
-    # DADO um usuário autenticado.
+    # DADO um usuário autenticado, um evento pertencente a ele, e um track no evento.
     user = user_factory(name="user", permissions=["core.change_event"])
     api_client.force_authenticate(user=user)
-
-    # E DADO um evento existente no banco, pertencente ao usuário.
     event = event_factory(slug="event-a", owners=[user])
-
-    # E DADO um track existente no banco.
     track = track_factory(event=event, slug="track-a")
-
     # E DADO um submission document slot no track.
-    slot_a = TrackSubmissionDocumentSlot.objects.create(
-        track=track, name="Slot A", starts_on=timezone.now(), ends_on=timezone.now()
-    )
+    slot_a = track_submission_document_slot_factory(track=track, name="Slot A")
 
     # QUANDO a API é chamada para listar os slots do track.
     resp = api_client.get(
@@ -321,6 +274,5 @@ def test_list_submission_document_slots(
 
     # ENTÃO os slots serão retornados
     assert resp.status_code == status.HTTP_200_OK
-
     assert len(resp.data) == 1
     assert resp.data[0]["name"] == slot_a.name

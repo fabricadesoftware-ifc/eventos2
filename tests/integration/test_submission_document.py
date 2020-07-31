@@ -16,18 +16,14 @@ def test_create_valid(
     track_factory,
     track_submission_document_slot_factory,
 ):
-    # DADO um usuário autenticado.
+    # DADO um usuário autenticado, e um evento com track e slot.
     user = user_factory(name="user", permissions=["core.change_submission"])
     api_client.force_authenticate(user=user)
-
-    # E DADO um evento com track e slot.
     event = event_factory(slug="event-a", owners=[])
     track = track_factory(event=event, slug="track-a")
     slot = track_submission_document_slot_factory(track=track, name="Slot A")
-
     # E DADO uma submissão do usuário no track.
     submission = submission_factory(track=track, title="Submission A", authors=[user])
-
     # E DADO um document
     document = document_factory(file_path="fake.pdf", content_type=CONTENT_TYPE_PDF)
 
@@ -45,8 +41,7 @@ def test_create_valid(
     # ENTÃO a resposta de sucesso deve conter a data de submissão.
     assert resp.status_code == status.HTTP_200_OK
     assert resp.data["submitted_on"]
-
-    # E então a submission document deve ser criada no banco.
+    # E então a submission document deve ser criada.
     assert SubmissionDocument.objects.count() == 1
 
 
@@ -60,18 +55,14 @@ def test_create_unauthorized(
     track_factory,
     track_submission_document_slot_factory,
 ):
-    # DADO um usuário autenticado.
+    # DADO um usuário autenticado, e um evento com track e slot.
     user = user_factory(name="user", permissions=["core.change_submission"])
     api_client.force_authenticate(user=user)
-
-    # E DADO um evento com track e slot.
     event = event_factory(slug="event-a", owners=[])
     track = track_factory(event=event, slug="track-a")
     slot = track_submission_document_slot_factory(track=track, name="Slot A")
-
     # E DADO uma submissão não pertencente ao usuário no track.
     submission = submission_factory(track=track, title="Submission A", authors=[])
-
     # E DADO um document
     document = document_factory(file_path="fake.pdf", content_type=CONTENT_TYPE_PDF)
 
@@ -88,6 +79,5 @@ def test_create_unauthorized(
 
     # ENTÃO a resposta deve ser de falta de permissões.
     assert resp.status_code == status.HTTP_403_FORBIDDEN
-
-    # E ENTÃO a submissão não deve ser criada no banco.
+    # E ENTÃO a submissão não deve ser criada.
     assert SubmissionDocument.objects.count() == 0

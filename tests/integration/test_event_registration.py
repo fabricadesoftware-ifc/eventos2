@@ -1,21 +1,16 @@
 import pytest
 from django.urls import reverse
-from django.utils import timezone
 from rest_framework import status
 
-from eventos2.core.models import Event, EventRegistration
+from eventos2.core.models import EventRegistration
 
 
 @pytest.mark.django_db
-def test_register_valid(api_client, user_factory):
-    # DADO um usuário autenticado.
+def test_register_valid(api_client, user_factory, event_factory):
+    # DADO um usuário autenticado, e um evento.
     user = user_factory(name="user", permissions=[])
     api_client.force_authenticate(user=user)
-
-    # E DADO um evento.
-    event = Event.objects.create(
-        slug="event-a", name="Event A", starts_on=timezone.now(), ends_on=timezone.now()
-    )
+    event = event_factory(slug="event-a", owners=[])
 
     # QUANDO a API é chamada para registrar o usuário no evento.
     resp = api_client.post(
@@ -24,22 +19,17 @@ def test_register_valid(api_client, user_factory):
 
     # ENTÃO a reposta deve ser de sucesso
     assert resp.status_code == status.HTTP_200_OK
-
     # E ENTÃO a registration deve ser criado.
     assert EventRegistration.objects.count() == 1
     assert EventRegistration.objects.first().user == user
 
 
 @pytest.mark.django_db
-def test_register_duplicate(api_client, user_factory):
-    # DADO um usuário autenticado.
+def test_register_duplicate(api_client, user_factory, event_factory):
+    # DADO um usuário autenticado, um evento no qual ele está registrado.
     user = user_factory(name="user", permissions=[])
     api_client.force_authenticate(user=user)
-
-    # E DADO um evento no qual o usuário já está registrado.
-    event = Event.objects.create(
-        slug="event-a", name="Event A", starts_on=timezone.now(), ends_on=timezone.now()
-    )
+    event = event_factory(slug="event-a", owners=[])
     EventRegistration.objects.create(event=event, user=user)
 
     # QUANDO a API é chamada para registrar o usuário no evento novamente.
@@ -49,19 +39,15 @@ def test_register_duplicate(api_client, user_factory):
 
     # ENTÃO a reposta deve ser de falha
     assert resp.status_code == status.HTTP_400_BAD_REQUEST
-
     # E ENTÃO a registration não deve ser duplicada.
     assert EventRegistration.objects.count() == 1
 
 
 @pytest.mark.django_db
-def test_register_unauthorized(api_client):
+def test_register_unauthorized(api_client, event_factory):
     # DADO nenhum usuário autenticado.
-
     # E DADO um evento.
-    event = Event.objects.create(
-        slug="event-a", name="Event A", starts_on=timezone.now(), ends_on=timezone.now()
-    )
+    event = event_factory(slug="event-a", owners=[])
 
     # QUANDO a API é chamada para registrar o usuário no evento.
     resp = api_client.post(
@@ -70,21 +56,16 @@ def test_register_unauthorized(api_client):
 
     # ENTÃO a reposta deve ser de falta de permissões
     assert resp.status_code == status.HTTP_403_FORBIDDEN
-
     # E ENTÃO a registration não deve ser criada.
     assert EventRegistration.objects.count() == 0
 
 
 @pytest.mark.django_db
-def test_unregister_valid(api_client, user_factory):
-    # DADO um usuário autenticado.
+def test_unregister_valid(api_client, user_factory, event_factory):
+    # DADO um usuário autenticado, um evento no qual ele está registrado.
     user = user_factory(name="user", permissions=[])
     api_client.force_authenticate(user=user)
-
-    # E DADO um evento no qual o usuário já está registrado.
-    event = Event.objects.create(
-        slug="event-a", name="Event A", starts_on=timezone.now(), ends_on=timezone.now()
-    )
+    event = event_factory(slug="event-a", owners=[])
     registration = EventRegistration.objects.create(event=event, user=user)
 
     # QUANDO a API é chamada para remover o registro do usuário no evento.
@@ -94,24 +75,18 @@ def test_unregister_valid(api_client, user_factory):
 
     # ENTÃO a reposta deve ser de sucesso
     assert resp.status_code == status.HTTP_204_NO_CONTENT
-
     # E ENTÃO a registration deve ser removida.
     assert EventRegistration.objects.count() == 0
 
 
 @pytest.mark.django_db
-def test_unregister_other_user_unauthorized(api_client, user_factory):
+def test_unregister_other_user_unauthorized(api_client, user_factory, event_factory):
     # DADO um usuário autenticado.
     user = user_factory(name="user", permissions=[])
     api_client.force_authenticate(user=user)
-
-    # E DADO um outro usuário alvo
+    # E DADO um outro usuário alvo, e um evento no qual ele está registrado.
     target_user = user_factory(name="target", permissions=[])
-
-    # E DADO um evento no qual o usuário alvo já está registrado.
-    event = Event.objects.create(
-        slug="event-a", name="Event A", starts_on=timezone.now(), ends_on=timezone.now()
-    )
+    event = event_factory(slug="event-a", owners=[])
     registration = EventRegistration.objects.create(event=event, user=target_user)
 
     # QUANDO a API é chamada para remover o registro do usuário alvo no evento.
@@ -121,25 +96,17 @@ def test_unregister_other_user_unauthorized(api_client, user_factory):
 
     # ENTÃO a reposta deve ser de falta de permissões
     assert resp.status_code == status.HTTP_403_FORBIDDEN
-
-    # E ENTÃO a registration deve permanecer inalterada no banco.
+    # E ENTÃO a registration deve permanecer inalterada.
     assert EventRegistration.objects.count() == 1
 
 
 @pytest.mark.django_db
-def test_list_registrations_for_user_and_event(api_client, user_factory):
-    # DADO um usuário autenticado.
+def test_list_registrations_for_user_and_event(api_client, user_factory, event_factory):
+    # DADO um usuário autenticado, e dois eventos.
     user = user_factory(name="user", permissions=[])
     api_client.force_authenticate(user=user)
-
-    # E DADO dois eventos existentes no banco.
-    event_a = Event.objects.create(
-        slug="event-a", name="Event A", starts_on=timezone.now(), ends_on=timezone.now()
-    )
-    event_b = Event.objects.create(
-        slug="event-b", name="Event B", starts_on=timezone.now(), ends_on=timezone.now()
-    )
-
+    event_a = event_factory(slug="event-a", owners=[])
+    event_b = event_factory(slug="event-b", owners=[])
     # E DADO duas inscrições do usuário, uma em cada evento.
     EventRegistration.objects.create(event=event_a, user=user)
     EventRegistration.objects.create(event=event_b, user=user)
@@ -168,18 +135,15 @@ def test_list_registrations_for_user_and_event(api_client, user_factory):
 
 
 @pytest.mark.django_db
-def test_list_registrations_for_user_unauthorized(api_client, user_factory):
+def test_list_registrations_for_user_unauthorized(
+    api_client, user_factory, event_factory
+):
     # DADO um usuário autenticado.
     user = user_factory(name="user", permissions=[])
     api_client.force_authenticate(user=user)
-
-    # E DADO um outro usuário alvo
+    # E DADO um outro usuário alvo, e um evento no qual ele está registrado.
     target_user = user_factory(name="target", permissions=[])
-
-    # E DADO um evento no qual o usuário alvo já está registrado.
-    event = Event.objects.create(
-        slug="event-a", name="Event A", starts_on=timezone.now(), ends_on=timezone.now()
-    )
+    event = event_factory(slug="event-a", owners=[])
     EventRegistration.objects.create(event=event, user=target_user)
 
     # QUANDO a API é chamada para listar as inscrições do usuário alvo.
@@ -188,5 +152,6 @@ def test_list_registrations_for_user_unauthorized(api_client, user_factory):
             reverse("event-registration-list"), target_user.public_id
         )
     )
+
     # ENTÃO a reposta deve ser de falta de permissões
     assert resp.status_code == status.HTTP_403_FORBIDDEN

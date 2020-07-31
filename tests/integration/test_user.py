@@ -23,7 +23,7 @@ def test_create_valid(api_client):
     assert resp.status_code == status.HTTP_200_OK
     assert resp.data["email"] == "user@example.com"
 
-    # E ENTÃO o usuário deve existir no banco.
+    # E ENTÃO o usuário deve existir.
     assert User.objects.count() == 1
 
 
@@ -77,7 +77,7 @@ def test_retrieve_current_invalid(api_client, user_factory):
 
 @pytest.mark.django_db
 def test_update_current_valid(api_client, user_factory):
-    # DADO um use2r autenticado.
+    # DADO um user autenticado.
     user = user_factory(name="user", permissions=[])
     api_client.force_authenticate(user=user)
 
@@ -93,8 +93,7 @@ def test_update_current_valid(api_client, user_factory):
     # ENTÃO a resposta de sucesso deve conter o user modificado.
     assert resp.status_code == status.HTTP_200_OK
     assert resp.data["first_name"] == "New first name"
-
-    # E ENTÃO o user deve ser modificado no banco.
+    # E ENTÃO o user deve ser modificado.
     assert User.objects.get(pk=user.pk).first_name == "New first name"
 
 
@@ -123,8 +122,7 @@ def test_delete_current_valid(api_client, user_factory):
 
     # ENTÃO a resposta deve ser de sucesso.
     assert resp.status_code == status.HTTP_204_NO_CONTENT
-
-    # E ENTÃO o user deve ser removido do banco.
+    # E ENTÃO o user deve ser removido.
     assert User.objects.filter(pk=user.pk).exists() is False
 
 
