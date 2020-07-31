@@ -61,6 +61,33 @@ def test_register_unauthorized(api_client, event_factory):
 
 
 @pytest.mark.django_db
+def test_register_out_of_registration_period(
+    api_client, user_factory, event_factory, freezer, parse_to_aware_datetime
+):
+    # DADO um usuário autenticado, e um evento.
+    user = user_factory(name="user", permissions=[])
+    api_client.force_authenticate(user=user)
+    event = event_factory(
+        slug="event-a",
+        owners=[],
+        starts_on=parse_to_aware_datetime("2020-01-01"),
+        ends_on=parse_to_aware_datetime("2020-02-02"),
+    )
+    # E DADO que já passou o tempo de inscrição.
+    freezer.move_to(parse_to_aware_datetime("2020-03-03"))
+
+    # QUANDO a API é chamada para registrar o usuário no evento.
+    resp = api_client.post(
+        reverse("event-registration-list"), {"event_slug": event.slug}
+    )
+    # ENTÃO a reposta de falha deve conter o erro no campo event.
+    assert resp.status_code == status.HTTP_400_BAD_REQUEST
+    assert len(resp.data["event_slug"]) != 0
+    # E ENTÃO a registration não deve ser criada.
+    assert EventRegistration.objects.count() == 0
+
+
+@pytest.mark.django_db
 def test_unregister_valid(api_client, user_factory, event_factory):
     # DADO um usuário autenticado, um evento no qual ele está registrado.
     user = user_factory(name="user", permissions=[])

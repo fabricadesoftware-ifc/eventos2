@@ -1,3 +1,5 @@
+from datetime import timedelta
+
 import pytest
 from django.urls import reverse
 from django.utils import timezone
@@ -30,6 +32,30 @@ def test_create_valid(api_client, user_factory):
     assert resp.data["slug"] == "event-a"
     # E ENTÃO o evento deve existir.
     assert Event.objects.get(slug=resp.data["slug"]).name == "Event A"
+
+
+@pytest.mark.django_db
+def test_create_invalid_dates(api_client, user_factory, event_factory):
+    # DADO um usuário autenticado com as permissões adequadas.
+    user = user_factory(name="user", permissions=["core.add_event"])
+    api_client.force_authenticate(user=user)
+
+    # E DADO dados de evento inválidos (data de término antes do inicio).
+    # QUANDO a API é chamada.
+    resp = api_client.post(
+        reverse("event-list"),
+        {
+            "slug": "event-a",
+            "name": "Event A",
+            "starts_on": timezone.now(),
+            "ends_on": timezone.now() - timedelta(days=1),
+        },
+    )
+
+    # ENTÃO a resposta deve ser de falha.
+    assert resp.status_code == status.HTTP_400_BAD_REQUEST
+    # E ENTÃO o evento não deve ser criado.
+    assert Event.objects.count() == 0
 
 
 @pytest.mark.django_db

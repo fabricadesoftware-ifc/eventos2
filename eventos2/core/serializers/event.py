@@ -15,6 +15,13 @@ class EventSerializer(serializers.ModelSerializer):
     )
     logo = ImageSerializer(required=False, read_only=True)
 
+    def validate(self, data):
+        if data["ends_on"] <= data["starts_on"]:
+            raise serializers.ValidationError(
+                {"ends_on": "The event must end after it starts."}
+            )
+        return data
+
     class Meta:
         model = Event
         fields = [

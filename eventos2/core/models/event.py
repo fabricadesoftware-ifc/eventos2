@@ -1,4 +1,5 @@
 from django.db import models
+from django.utils import timezone
 
 from eventos2.core.models.soft_deletion import SoftDeletableModel
 from eventos2.core.models.user import User
@@ -23,6 +24,13 @@ class Event(SoftDeletableModel):
     owners = models.ManyToManyField(
         User, through="EventOwnership", related_name="events_owned"
     )
+
+    def is_open_on(self, date):
+        return self.starts_on <= date <= self.ends_on
+
+    @property
+    def is_open(self):
+        return self.is_open_on(timezone.now())
 
     def __str__(self):  # pragma: no cover - internal use
         return self.name

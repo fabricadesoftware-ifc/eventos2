@@ -74,6 +74,48 @@ def test_register_not_registered_to_event(
 
 
 @pytest.mark.django_db
+def test_register_out_of_registration_period(
+    api_client,
+    activity_factory,
+    event_factory,
+    user_factory,
+    freezer,
+    parse_to_aware_datetime,
+):
+    # DADO um usuário autenticado, um evento no qual ele está registrado,
+    # e uma activity no evento.
+    user = user_factory(name="user", permissions=[])
+    api_client.force_authenticate(user=user)
+    event = event_factory(
+        slug="event-a",
+        owners=[],
+        starts_on=parse_to_aware_datetime("2020-01-01"),
+        ends_on=parse_to_aware_datetime("2020-02-02"),
+    )
+    EventRegistration.objects.create(event=event, user=user)
+    activity = activity_factory(
+        event=event,
+        slug="activity-a",
+        owners=[],
+        starts_on=event.starts_on,
+        ends_on=event.ends_on,
+    )
+    # E DADO que já passou o tempo de inscrição.
+    freezer.move_to(parse_to_aware_datetime("2020-03-03"))
+
+    # QUANDO a API é chamada para registrar o usuário na activity.
+    resp = api_client.post(
+        reverse("activity-registration-list"), {"activity": activity.slug}
+    )
+
+    # ENTÃO a reposta de falha deve conter o erro no campo activity.
+    assert resp.status_code == status.HTTP_400_BAD_REQUEST
+    assert len(resp.data["activity_slug"]) != 0
+    # E ENTÃO a registration não deve ser criada.
+    assert ActivityRegistration.objects.count() == 0
+
+
+@pytest.mark.django_db
 def test_unregister_valid(api_client, activity_factory, event_factory, user_factory):
     # DADO um usuário autenticado, e um evento no qual ele está registrado.
     user = user_factory(name="user", permissions=[])
