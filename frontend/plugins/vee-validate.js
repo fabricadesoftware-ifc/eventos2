@@ -3,6 +3,7 @@ import { extend, ValidationObserver, configure } from 'vee-validate'
 import { required, email } from 'vee-validate/dist/rules'
 
 import EInput from '~/components/EInput'
+import EDatetimepicker from '~/components/EDatetimepicker'
 
 /**
  * Registrar rules
@@ -14,6 +15,7 @@ extend('email', email)
  * Registrar componentes globais
  */
 Vue.component('EInput', EInput)
+Vue.component('EDatetimepicker', EDatetimepicker)
 Vue.component('ValidationObserver', ValidationObserver)
 
 export default ({ app }) => {

@@ -96,13 +96,13 @@ export const getters = {
     if (state.event === null) {
       return null
     }
-    return dayjs(state.event.starts_on).locale(state.locale)
+    return dayjs(state.event.starts_on)
   },
   eventEndDate(state) {
     if (state.event === null) {
       return null
     }
-    return dayjs(state.event.ends_on).locale(state.locale)
+    return dayjs(state.event.ends_on)
   },
   eventUserRegistration(state) {
     return state.eventRegistration

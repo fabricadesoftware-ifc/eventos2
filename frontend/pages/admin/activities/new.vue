@@ -34,23 +34,16 @@
                 name="slug"
                 :label="$t('forms.labels.activitySlug')"
               />
-
-              <no-ssr>
-                <b-field :label="$t('forms.labels.activityStartDate')">
-                  <b-datetimepicker
-                    v-model="form.starts_on"
-                    name="starts_on"
-                    :datetime-formatter="dateTimeFormatter"
-                  ></b-datetimepicker>
-                </b-field>
-                <b-field :label="$t('forms.labels.activityEndDate')">
-                  <b-datetimepicker
-                    v-model="form.ends_on"
-                    name="ends_on"
-                    :datetime-formatter="dateTimeFormatter"
-                  ></b-datetimepicker>
-                </b-field>
-              </no-ssr>
+              <e-datetimepicker
+                v-model="form.starts_on"
+                name="starts_on"
+                :label="$t('forms.labels.activityStartDate')"
+              ></e-datetimepicker>
+              <e-datetimepicker
+                v-model="form.ends_on"
+                name="ends_on"
+                :label="$t('forms.labels.activityEndDate')"
+              ></e-datetimepicker>
 
               <div class="field">
                 <div class="control">
@@ -114,18 +107,6 @@ export default {
         default:
           this.error = this.$t('genericErrors.network')
       }
-    },
-    dateTimeFormatter(date) {
-      return date.toLocaleDateString(undefined, {
-        weekday: 'long',
-        year: 'numeric',
-        month: 'long',
-        day: 'numeric',
-        hour: 'numeric',
-        minute: 'numeric',
-        second: 'numeric',
-        timeZoneName: 'long'
-      })
     }
   }
 }
