@@ -66,17 +66,32 @@
         "actions": "Actions",
         "name": "Name"
       },
+      "manageButton": "Manage",
       "title": "Manage activities"
-    },
-    "admin-activities-id": {
-      "description": "Describe your activity.",
-      "submitButton": "Save",
-      "title": "Edit activity"
     },
     "admin-activities-new": {
       "description": "Describe your activity.",
       "submitButton": "Add",
       "title": "New activity"
+    },
+    "admin-activities-slug-edit": {
+      "description": "Describe your activity.",
+      "submitButton": "Save",
+      "title": "Edit activity"
+    },
+    "admin-activities-slug-manage": {
+      "editButton": "Edit this activity",
+      "labels": {
+        "email": "Email",
+        "name": "Name"
+      },
+      "registrationCount": "No registrations yet | 1 registration | {n} registrations",
+      "status": {
+        "isOpen": "Registrations are open until {endDate}.",
+        "wasOpen": "Registrations are closed since {endDate}.",
+        "willOpen": "Registrations will open on {startDate}."
+      },
+      "title": "Manage activity"
     },
     "admin-eventDetails": {
       "description": "Describe your event.",

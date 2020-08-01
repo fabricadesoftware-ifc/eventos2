@@ -41,13 +41,11 @@
                     tag="nuxt-link"
                     :to="
                       localePath({
-                        name: 'admin-activities-slug',
-                        params: {
-                          slug: row.slug
-                        }
+                        name: 'admin-activities-slug-manage',
+                        params: { slug: row.slug }
                       })
                     "
-                    >{{ $t('pages.admin-activities.editButton') }}</b-button
+                    >{{ $t('pages.admin-activities.manageButton') }}</b-button
                   >
                 </b-table-column>
               </template>

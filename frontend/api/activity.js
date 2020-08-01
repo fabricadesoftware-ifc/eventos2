@@ -24,6 +24,9 @@ export function createActivityAPIClient($axios) {
         starts_on,
         ends_on
       })
+    },
+    listRegistrations(slug) {
+      return $axios.$get(`api/v1/activities/${slug}/registrations/`)
     }
   }
 }

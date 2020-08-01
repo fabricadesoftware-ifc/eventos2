@@ -4,7 +4,7 @@
       <div class="column">
         <main class="section">
           <h1 class="title">
-            {{ $t('pages.admin-activities-id.title') }}
+            {{ $t('pages.admin-activities-slug-edit.title') }}
           </h1>
           <ValidationObserver ref="form" v-slot="{ handleSubmit }">
             <form @submit.prevent="handleSubmit(onSubmit)">
@@ -13,7 +13,7 @@
                   {{ error }}
                 </b-message>
                 <b-message v-else type="is-info">
-                  {{ $t('pages.admin-activities-id.description') }}
+                  {{ $t('pages.admin-activities-slug-edit.description') }}
                 </b-message>
               </div>
 
@@ -34,23 +34,16 @@
                 name="slug"
                 :label="$t('forms.labels.activitySlug')"
               />
-
-              <no-ssr>
-                <b-field :label="$t('forms.labels.activityStartDate')">
-                  <b-datetimepicker
-                    v-model="form.starts_on"
-                    name="starts_on"
-                    :datetime-formatter="dateTimeFormatter"
-                  ></b-datetimepicker>
-                </b-field>
-                <b-field :label="$t('forms.labels.activityEndDate')">
-                  <b-datetimepicker
-                    v-model="form.ends_on"
-                    name="ends_on"
-                    :datetime-formatter="dateTimeFormatter"
-                  ></b-datetimepicker>
-                </b-field>
-              </no-ssr>
+              <e-datetimepicker
+                v-model="form.starts_on"
+                name="starts_on"
+                :label="$t('forms.labels.activityStartDate')"
+              />
+              <e-datetimepicker
+                v-model="form.ends_on"
+                name="ends_on"
+                :label="$t('forms.labels.activityEndDate')"
+              />
 
               <div class="field">
                 <div class="control">
@@ -60,7 +53,7 @@
                     icon-left="arrow-right"
                     :loading="loading"
                     >{{
-                      $t('pages.admin-activities-id.submitButton')
+                      $t('pages.admin-activities-slug-edit.submitButton')
                     }}</b-button
                   >
                 </div>
@@ -99,7 +92,7 @@ export default {
         .then(() =>
           this.$router.push(
             this.localePath({
-              name: 'admin-activities-slug',
+              name: 'admin-activities-slug-manage',
               params: { slug: this.form.slug }
             })
           )
@@ -121,18 +114,6 @@ export default {
         default:
           this.error = this.$t('genericErrors.network')
       }
-    },
-    dateTimeFormatter(date) {
-      return date.toLocaleDateString(undefined, {
-        weekday: 'long',
-        year: 'numeric',
-        month: 'long',
-        day: 'numeric',
-        hour: 'numeric',
-        minute: 'numeric',
-        second: 'numeric',
-        timeZoneName: 'long'
-      })
     }
   }
 }
