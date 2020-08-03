@@ -2,8 +2,8 @@ export default {
   mode: 'universal',
 
   modules: [
-    '@nuxtjs/auth',
     '@nuxtjs/axios',
+    '@nuxtjs/auth-next',
     '@nuxtjs/style-resources',
     'nuxt-i18n',
     // Disable CSS import so we can customize some variables
@@ -99,19 +99,33 @@ export default {
     },
     localStorage: false,
     strategies: {
-      local: {
+      refresh: {
+        token: {
+          property: 'access',
+          maxAge: 30
+        },
+        refreshToken: {
+          property: 'refresh',
+          data: 'refresh',
+          maxAge: 120
+        },
+        user: {
+          property: false
+        },
         endpoints: {
           login: {
             url: '/api/v1/token/',
-            method: 'post',
-            propertyName: 'access'
+            method: 'post'
           },
-          logout: false,
+          refresh: {
+            url: '/api/v1/token/refresh/',
+            method: 'post'
+          },
           user: {
             url: '/api/v1/users/current',
-            method: 'get',
-            propertyName: false
-          }
+            method: 'get'
+          },
+          logout: false
         }
       }
     },

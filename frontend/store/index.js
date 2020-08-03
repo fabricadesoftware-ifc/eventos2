@@ -51,7 +51,7 @@ export const actions = {
   },
   loginUser({ dispatch }, { email, password }) {
     return this.$auth
-      .loginWith('local', { data: { email, password } })
+      .loginWith('refresh', { data: { email, password } })
       .then(() => dispatch('fetchEventRegistration'))
   },
   logoutUser({ dispatch }) {
