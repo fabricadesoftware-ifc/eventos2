@@ -94,6 +94,7 @@ export default {
   auth: {
     cookie: {
       options: {
+        maxAge: 172800,
         secure: process.env.NODE_ENV === 'production'
       }
     },
@@ -102,12 +103,12 @@ export default {
       refresh: {
         token: {
           property: 'access',
-          maxAge: 30
+          maxAge: 1800
         },
         refreshToken: {
           property: 'refresh',
           data: 'refresh',
-          maxAge: 120
+          maxAge: 172800
         },
         user: {
           property: false
