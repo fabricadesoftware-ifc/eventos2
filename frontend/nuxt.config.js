@@ -19,8 +19,17 @@ export default {
     '~/plugins/vee-validate.js'
   ],
 
+  publicRuntimeConfig: {
+    axios: {
+      browserBaseURL: process.env.EVENTOS2_FRONTEND_BROWSER_BASE_URL || '/'
+    }
+  },
+
   privateRuntimeConfig: {
-    forceEventSlug: process.env.EVENTOS2_FRONTEND_FORCE_SLUG || null
+    forceEventSlug: process.env.EVENTOS2_FRONTEND_FORCE_SLUG || null,
+    axios: {
+      baseURL: process.env.EVENTOS2_FRONTEND_BASE_URL || '/'
+    }
   },
 
   build: {
@@ -138,12 +147,5 @@ export default {
       home: '/'
     },
     plugins: ['~/plugins/auth.js']
-  },
-
-  axios: {
-    proxy: true
-  },
-  proxy: {
-    '/api/': 'http://localhost:8000/'
   }
 }

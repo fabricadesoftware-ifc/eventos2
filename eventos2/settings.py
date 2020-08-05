@@ -23,10 +23,7 @@ vars().update(EMAIL_CONFIG)
 
 HUEY = {"connection": {"url": env("REDIS_URL", default=None)}}
 
-CORS_ORIGIN_WHITELIST = env(
-    "CORS_ORIGIN_WHITELIST", list, ["http://localhost:3000", "http://127.0.0.1:3000"]
-)
-
+CORS_ORIGIN_WHITELIST = env("CORS_ORIGIN_WHITELIST", list, [])
 
 INSTALLED_APPS = [
     "django.contrib.auth",

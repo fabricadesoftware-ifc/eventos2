@@ -21,9 +21,9 @@ sentry-sdk = "^0.14.3"
 rules = "^2.1"
 pytest-django = "^3.7.0"
 djangorestframework-simplejwt = "^4.4.0"
-django-cors-headers = "^3.2.1"
 python-magic = "^0.4.18"
 drf-spectacular = "^0.9.11"
+django-cors-headers = "^3.4.0"
 
 [tool.poetry.dev-dependencies]
 pytest = "^5.3.2"
