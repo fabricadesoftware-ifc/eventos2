@@ -60,12 +60,18 @@ deploy_test:
       DATABASE_URL=postgres://eventos2@/eventos2
       SENTRY_URL=$TEST_SENTRY_URL
       ALLOWED_HOSTS=.eventos2.fabricadesoftware.ifc.edu.br,127.0.0.1
+      EVENTOS2_FRONTEND_BASE_URL=http://127.0.0.1:8091
+      EVENTOS2_FRONTEND_BROWSER_BASE_URL=/
       DEBUG=True
       EOF
     - poetry run python manage.py collectstatic
     # Allow web server (nginx) to traverse directories and read files,
     # so that it can serve the static files.
     - chmod -R u=rwX,go=rX static/
+    - cd frontend
+    - npm install
+    - npm run build
+    - cd ..
     - rm -rf .cache
     - apt-get update -y
     - apt-get install -yqq openssh-client rsync
@@ -75,11 +81,12 @@ deploy_test:
     - eval $(ssh-agent -s)
     - echo "$TEST_SSH_PRIVATE_KEY" | tr -d '\r' | ssh-add -
     - export TEST_DEPLOY_DIR="$TEST_ROOT_DIR/$(date +%Y%m%d%H%M%S)"
-    - ssh -p 1022 $TEST_HOST "mkdir \"$TEST_DEPLOY_DIR/\""
-    - rsync -rtz -e 'ssh -p 1022' ./ "$TEST_HOST:$TEST_DEPLOY_DIR/"
+    - ssh -p 1022 $TEST_HOST "mkdir -p \"$TEST_DEPLOY_DIR/frontend\""
+    - rsync -rtz -e 'ssh -p 1022' .env requirements.txt manage.py eventos2 "$TEST_HOST:$TEST_DEPLOY_DIR"
+    - rsync -rtz -e 'ssh -p 1022' frontend/.nuxt frontend/nuxt.config.js frontend/package.json frontend/package-lock.json "$TEST_HOST:$TEST_DEPLOY_DIR/frontend"
     - ssh -p 1022 $TEST_HOST "cd \"$TEST_DEPLOY_DIR/\" && virtualenv -p python3 venv && ./venv/bin/pip install -r requirements.txt"
     - ssh -p 1022 $TEST_HOST "cd \"$TEST_DEPLOY_DIR/\" && PYTHONPATH='.' ./venv/bin/python manage.py migrate"
-    - ssh -p 1022 $TEST_HOST "cd \"$TEST_DEPLOY_DIR/frontend\" && npm install && npm run build"
+    - ssh -p 1022 $TEST_HOST "cd \"$TEST_DEPLOY_DIR/frontend\" && npm install --only=production"
     - ssh -p 1022 $TEST_HOST "ln -s $TEST_ROOT_DIR/media \"$TEST_DEPLOY_DIR/media\""
     - ssh -p 1022 $TEST_HOST "ln -snf \"$TEST_DEPLOY_DIR\" $TEST_ROOT_DIR/current"
     - ssh -p 1022 $TEST_HOST "sudo systemctl restart projeto-eventos2-eventos2-gunicorn.service"

@@ -1,15 +1,8 @@
 export default {
   mode: 'universal',
 
-  modules: [
-    '@nuxtjs/axios',
-    '@nuxtjs/auth-next',
-    '@nuxtjs/style-resources',
-    'nuxt-i18n',
-    // Disable CSS import so we can customize some variables
-    // (see ~/assets/vars)
-    ['nuxt-buefy', { css: false, materialDesignIcons: false }]
-  ],
+  modules: [],
+
   plugins: [
     '~/plugins/api.js',
     '~/plugins/axios.js',
@@ -31,6 +24,16 @@ export default {
       baseURL: process.env.EVENTOS2_FRONTEND_BASE_URL || '/'
     }
   },
+
+  buildModules: [
+    '@nuxtjs/axios',
+    '@nuxtjs/auth-next',
+    '@nuxtjs/style-resources',
+    'nuxt-i18n',
+    // Disable CSS import so we can customize some variables
+    // (see ~/assets/vars)
+    ['nuxt-buefy', { css: false, materialDesignIcons: false }]
+  ],
 
   build: {
     transpile: ['vee-validate/dist/rules'],
