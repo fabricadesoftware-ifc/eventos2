@@ -5,12 +5,12 @@
   "description": "Eventos2",
   "author": "yurihs",
   "scripts": {
-    "build": "nuxt build",
-    "dev": "nuxt",
-    "generate": "nuxt generate",
+    "build": "nuxt build --dotenv ../.env",
+    "dev": "nuxt dev --dotenv ../.env",
+    "generate": "nuxt generate --dotenv ../.env",
     "lint": "eslint --ext .js,.vue . && eslint --ext .json ./locales",
     "lintfix": "eslint --fix --ext .js,.vue . && eslint --fix --ext .json ./locales",
-    "start": "nuxt start"
+    "start": "nuxt start --dotenv ../.env"
   },
   "dependencies": {
     "@mdi/font": "^5.3.45",
@@ -25,7 +25,6 @@
     "vee-validate": "^3.3.7"
   },
   "devDependencies": {
-    "@nuxtjs/dotenv": "^1.4.1",
     "@nuxtjs/eslint-config": "^2.0.2",
     "babel-eslint": "^10.1.0",
     "eslint": "^6.8.0",

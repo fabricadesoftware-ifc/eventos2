@@ -20,14 +20,8 @@ export const mutations = {
 }
 
 export const actions = {
-  async nuxtServerInit({ dispatch, state }, { error, req }) {
-    let eventSlug = null
-    const slugFromEnv = process.env.EVENTOS2_FRONTEND_FORCE_SLUG
-    if (process.server && slugFromEnv) {
-      eventSlug = slugFromEnv
-    } else {
-      eventSlug = parseEventSlug(req.headers.host)
-    }
+  async nuxtServerInit({ dispatch, state }, { error, req, $config }) {
+    const eventSlug = $config.forceEventSlug || parseEventSlug(req.headers.host)
     if (eventSlug === null) {
       error({ statusCode: 404, message: 'Event not found' })
       return

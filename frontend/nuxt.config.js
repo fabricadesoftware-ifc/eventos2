@@ -19,6 +19,10 @@ export default {
     '~/plugins/vee-validate.js'
   ],
 
+  privateRuntimeConfig: {
+    forceEventSlug: process.env.EVENTOS2_FRONTEND_FORCE_SLUG || null
+  },
+
   build: {
     transpile: ['vee-validate/dist/rules'],
     extend(config, ctx) {
@@ -39,8 +43,6 @@ export default {
       }
     }
   },
-
-  buildModules: ['@nuxtjs/dotenv'],
 
   router: {
     middleware: [
@@ -143,9 +145,5 @@ export default {
   },
   proxy: {
     '/api/': 'http://localhost:8000/'
-  },
-
-  dotenv: {
-    path: '..'
   }
 }
