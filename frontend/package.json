@@ -13,6 +13,7 @@
     "start": "nuxt-start --dotenv ../.env"
   },
   "dependencies": {
+    "@nuxtjs/proxy": "^2.0.1",
     "nuxt-start": "^2.14.1"
   },
   "devDependencies": {

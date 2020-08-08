@@ -1,102 +1,94 @@
-image: nikolaik/python-nodejs:python3.7-nodejs12
+image: debian:buster-slim
 
-services:
-  - postgres:12
+# services:
+#   - postgres:12
 
 variables:
-  PIP_CACHE_DIR: "$CI_PROJECT_DIR/.cache/pip"
-  POETRY_VIRTUALENVS_PATH: "$CI_PROJECT_DIR/.cache/venvs"
-  POSTGRES_DB: eventos2
-  POSTGRES_USER: eventos2
-  POSTGRES_PASSWORD: unsafe-password-for-testing
-  DATABASE_URL: postgres://$POSTGRES_USER:$POSTGRES_PASSWORD@postgres/$POSTGRES_DB
-  SECRET_KEY: unsafe-key-for-testing
-  TEST_HOST: eventos2@eventos2.fabricadesoftware.ifc.edu.br
-  TEST_ROOT_DIR: /srv/eventos2
+  # PIP_CACHE_DIR: "$CI_PROJECT_DIR/.cache/pip"
+  # POETRY_VIRTUALENVS_PATH: "$CI_PROJECT_DIR/.cache/venvs"
+  # POSTGRES_DB: eventos2
+  # POSTGRES_USER: eventos2
+  # POSTGRES_PASSWORD: unsafe-password-for-testing
+  # DATABASE_URL: postgres://$POSTGRES_USER:$POSTGRES_PASSWORD@postgres/$POSTGRES_DB
+  # SECRET_KEY: unsafe-key-for-testing
+  TEST_SSH_HOST_KEY: "[app1.fabricadesoftware.ifc.edu.br]:1022 ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIE1u+sxf1LVqV/i4RRQ8NT1L+6XOH40qZJYYZcMZlkFn"
+  # TEST_ROOT_DIR: /srv/eventos2
+  CI_REGISTRY_IMAGE_BACKEND: $CI_REGISTRY_IMAGE/backend
+  CI_REGISTRY_IMAGE_BACKEND_CACHE: $CI_REGISTRY_IMAGE/backend/cache
+  CI_REGISTRY_IMAGE_FRONTEND: $CI_REGISTRY_IMAGE/frontend
+  CI_REGISTRY_IMAGE_FRONTEND_CACHE: $CI_REGISTRY_IMAGE/frontend/cache
 
 
 stages:
-  - testing
+  # - testing
+  - build
   - deploy
 
-cache:
-  key: ${CI_COMMIT_REF_SLUG}
-  paths:
-    - .cache/pip/
-    - .cache/venvs/
+# cache:
+#   key: ${CI_COMMIT_REF_SLUG}
+#   paths:
+#     - .cache/pip/
+#     - .cache/venvs/
 
-default:
-  before_script:
-    - pip install poetry==1.0.5
-    - poetry install
+# default:
+#   before_script:
+#     - pip install poetry==1.0.5
+#     - poetry install
 
-lint:
-  stage: testing
+# lint:
+#   stage: testing
+#   script:
+#     - poetry run black --check eventos2 tests
+#     - poetry run isort -rc eventos2 tests
+#     - poetry run flake8 eventos2 tests
+#     - poetry run bandit --quiet --recursive eventos2
+#     - cd frontend
+#     - npm install
+#     - npm run lint
+#     - cd ..
+
+# test:
+#   stage: testing
+#   coverage: '/TOTAL.*\s+(\d+%)$/'
+#   script:
+#     - poetry run pytest --cov=eventos2
+
+build_backend:
+  stage: build
+  image:
+    name: gcr.io/kaniko-project/executor:debug
+    entrypoint: [""]
   script:
-    - poetry run black --check eventos2 tests
-    - poetry run isort -rc eventos2 tests
-    - poetry run flake8 eventos2 tests
-    - poetry run bandit --quiet --recursive eventos2
-    - cd frontend
-    - npm install
-    - npm run lint
-    - cd ..
-
-test:
-  stage: testing
-  coverage: '/TOTAL.*\s+(\d+%)$/'
-  script:
-    - poetry run pytest --cov=eventos2
-
-deploy_test:
-  stage: deploy
+    - echo "{\"auths\":{\"$CI_REGISTRY\":{\"username\":\"$CI_REGISTRY_USER\",\"password\":\"$CI_REGISTRY_PASSWORD\"}}}" > /kaniko/.docker/config.json
+    - /kaniko/executor --context $CI_PROJECT_DIR --dockerfile $CI_PROJECT_DIR/docker/Dockerfile.backend --destination $CI_REGISTRY_IMAGE_BACKEND:$CI_COMMIT_SHORT_SHA --destination $CI_REGISTRY_IMAGE_BACKEND:latest --cache=true --cache-repo=$CI_REGISTRY_IMAGE_BACKEND_CACHE
   only:
-    - master
+    - docker
+
+build_frontend:
+  stage: build
+  image:
+    name: gcr.io/kaniko-project/executor:debug
+    entrypoint: [""]
   script:
-    - poetry export -f requirements.txt > requirements.txt
-    - |
-      cat << EOF >.env
-      SECRET_KEY=$TEST_SECRET_KEY
-      DATABASE_URL=postgres://eventos2@/eventos2
-      SENTRY_URL=$TEST_SENTRY_URL
-      ALLOWED_HOSTS=.eventos2.fabricadesoftware.ifc.edu.br,127.0.0.1
-      EVENTOS2_FRONTEND_BASE_URL=http://127.0.0.1:8091
-      EVENTOS2_FRONTEND_BROWSER_BASE_URL=/
-      DEBUG=True
-      EOF
-    - poetry run python manage.py collectstatic
-    # Allow web server (nginx) to traverse directories and read files,
-    # so that it can serve the static files.
-    - chmod -R u=rwX,go=rX static/
-    - cd frontend
-    - npm install
-    - npm run build
-    - cd ..
-    - rm -rf .cache
-    - apt-get update -y
-    - apt-get install -yqq openssh-client rsync
-    - mkdir -p ~/.ssh
-    - chmod 700 ~/.ssh
-    - echo "[eventos2.fabricadesoftware.ifc.edu.br]:1022 ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIAQHt8NDADsuuX0yyLocmnA+L4MLEyrQZvSV7M0KRz9m" >> ~/.ssh/known_hosts
-    - eval $(ssh-agent -s)
-    - echo "$TEST_SSH_PRIVATE_KEY" | tr -d '\r' | ssh-add -
-    - export TEST_DEPLOY_DIR="$TEST_ROOT_DIR/$(date +%Y%m%d%H%M%S)"
-    - ssh -p 1022 $TEST_HOST "mkdir -p \"$TEST_DEPLOY_DIR/frontend\""
-    - rsync -rtz -e 'ssh -p 1022' .env requirements.txt manage.py eventos2 "$TEST_HOST:$TEST_DEPLOY_DIR"
-    - rsync -rtz -e 'ssh -p 1022' frontend/.nuxt frontend/nuxt.config.js frontend/package.json frontend/package-lock.json "$TEST_HOST:$TEST_DEPLOY_DIR/frontend"
-    - ssh -p 1022 $TEST_HOST "cd \"$TEST_DEPLOY_DIR/\" && virtualenv -p python3 venv && ./venv/bin/pip install -r requirements.txt"
-    - ssh -p 1022 $TEST_HOST "cd \"$TEST_DEPLOY_DIR/\" && PYTHONPATH='.' ./venv/bin/python manage.py migrate"
-    - ssh -p 1022 $TEST_HOST "cd \"$TEST_DEPLOY_DIR/frontend\" && npm install --only=production"
-    - ssh -p 1022 $TEST_HOST "ln -s $TEST_ROOT_DIR/media \"$TEST_DEPLOY_DIR/media\""
-    - ssh -p 1022 $TEST_HOST "ln -snf \"$TEST_DEPLOY_DIR\" $TEST_ROOT_DIR/current"
-    - ssh -p 1022 $TEST_HOST "sudo systemctl restart projeto-eventos2-eventos2-gunicorn.service"
-    - ssh -p 1022 $TEST_HOST "sudo systemctl restart projeto-eventos2-eventos2-nuxt.service"
-  artifacts:
-    when: always
-    name: ${CI_COMMIT_REF_SLUG}
-    expire_in: 1 week
-    paths:
-      - requirements.txt
-  environment:
-    name: test
-    url: https://eventos2.fabricadesoftware.ifc.edu.br
+    - echo "{\"auths\":{\"$CI_REGISTRY\":{\"username\":\"$CI_REGISTRY_USER\",\"password\":\"$CI_REGISTRY_PASSWORD\"}}}" > /kaniko/.docker/config.json
+    - /kaniko/executor --context $CI_PROJECT_DIR --dockerfile $CI_PROJECT_DIR/docker/Dockerfile.frontend --destination $CI_REGISTRY_IMAGE_FRONTEND:$CI_COMMIT_SHORT_SHA --destination $CI_REGISTRY_IMAGE_FRONTEND:latest --cache=true --cache-repo=$CI_REGISTRY_IMAGE_FRONTEND_CACHE
+  only:
+    - docker
+
+deploy_backend:
+  stage: deploy
+  image: yurihs/gitlab-ci-ssh:1
+  script:
+    - . setup-ssh --local-name app1 --host app1.fabricadesoftware.ifc.edu.br --port 1022 --user dokku --private-key "$TEST_SSH_PRIVATE_KEY" --host-key "$TEST_SSH_HOST_KEY"
+    - ssh app1 deploy-from-registry eventos2-backend $CI_COMMIT_SHORT_SHA
+  only:
+    - docker
+
+deploy_frontend:
+  stage: deploy
+  image: yurihs/gitlab-ci-ssh:1
+  script:
+    - . setup-ssh --local-name app1 --host app1.fabricadesoftware.ifc.edu.br --port 1022 --user dokku --private-key "$TEST_SSH_PRIVATE_KEY" --host-key "$TEST_SSH_HOST_KEY"
+    - ssh app1 deploy-from-registry eventos2-frontend $CI_COMMIT_SHORT_SHA
+  only:
+    - docker

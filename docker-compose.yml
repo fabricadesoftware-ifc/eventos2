@@ -30,6 +30,7 @@ services:
       context: .
       dockerfile: ./docker/Dockerfile.backend
     environment:
+      PORT: "8000"
       SECRET_KEY: "${SECRET_KEY}"
       DATABASE_URL: 'postgres://eventos2:eventos2@db:5432/eventos2'
       ALLOWED_HOSTS: backend,localhost
