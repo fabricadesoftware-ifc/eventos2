@@ -4,13 +4,15 @@ services:
   - postgres:12
 
 variables:
+  # Make pip and poetry store their caches in the right paths
+  # so GitLab CI can persist them between runs
   PIP_CACHE_DIR: "$CI_PROJECT_DIR/.cache/pip"
   POETRY_VIRTUALENVS_PATH: "$CI_PROJECT_DIR/.cache/venvs"
+
+  # Configuration for the test database service
   POSTGRES_DB: eventos2
   POSTGRES_USER: eventos2
   POSTGRES_PASSWORD: unsafe-password-for-testing
-  DATABASE_URL: postgres://$POSTGRES_USER:$POSTGRES_PASSWORD@postgres/$POSTGRES_DB
-  SECRET_KEY: unsafe-key-for-testing
   TEST_HOST: eventos2@eventos2.fabricadesoftware.ifc.edu.br
   TEST_ROOT_DIR: /srv/eventos2
 
@@ -25,14 +27,11 @@ cache:
     - .cache/pip/
     - .cache/venvs/
 
-default:
-  before_script:
-    - pip install poetry==1.0.5
-    - poetry install
-
 lint:
   stage: testing
   script:
+    - pip install poetry==1.0.5
+    - poetry install
     - poetry run black --check eventos2 tests
     - poetry run isort -rc eventos2 tests
     - poetry run flake8 eventos2 tests
@@ -45,7 +44,12 @@ lint:
 test:
   stage: testing
   coverage: '/TOTAL.*\s+(\d+%)$/'
+  variables:
+    SECRET_KEY: unsafe-key-for-testing
+    DATABASE_URL: postgres://$POSTGRES_USER:$POSTGRES_PASSWORD@postgres/$POSTGRES_DB
   script:
+    - pip install poetry==1.0.5
+    - poetry install
     - poetry run pytest --cov=eventos2
 
 deploy_test:
