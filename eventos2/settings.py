@@ -25,6 +25,9 @@ HUEY = {"connection": {"url": env("REDIS_URL", default=None)}}
 
 CORS_ORIGIN_WHITELIST = env("CORS_ORIGIN_WHITELIST", list, [])
 
+# Usar cabeçalho setado pelo nginx para determinar se o HTTPS está sendo utilizado
+SECURE_PROXY_SSL_HEADER = ("HTTP_X_FORWARDED_PROTO", "https")
+
 INSTALLED_APPS = [
     "django.contrib.auth",
     "django.contrib.contenttypes",
