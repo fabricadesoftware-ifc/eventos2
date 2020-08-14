@@ -1,7 +1,7 @@
 export default {
   mode: 'universal',
 
-  modules: [],
+  modules: ['@nuxtjs/proxy'],
 
   plugins: [
     '~/plugins/api.js',
@@ -150,5 +150,13 @@ export default {
       home: '/'
     },
     plugins: ['~/plugins/auth.js']
+  },
+
+  axios: {
+    proxy: !!process.env.EVENTOS2_FRONTEND_ENABLE_PROXY
+  },
+
+  proxy: {
+    '/api/': process.env.EVENTOS2_FRONTEND_BASE_URL
   }
 }
