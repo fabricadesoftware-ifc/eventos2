@@ -157,6 +157,10 @@ export default {
   },
 
   proxy: {
-    '/api/': process.env.EVENTOS2_FRONTEND_BASE_URL
+    '/api/': {
+      target: process.env.EVENTOS2_FRONTEND_BASE_URL,
+      // Send X-Forwarded-* headers
+      xfwd: true
+    }
   }
 }
