@@ -1,12 +1,13 @@
 FROM python:3.8-buster
 
 RUN pip install poetry
-RUN poetry config virtualenvs.create false
 
 COPY pyproject.toml poetry.lock manage.py /tmp/
 RUN cd /tmp/ && poetry install --no-dev --no-root
 
 COPY eventos2/ /tmp/eventos2/
+COPY docker/backend.checks /tmp/eventos2/CHECKS
+
 RUN cd /tmp/ && poetry install --no-dev
 RUN cd /tmp/ && SECRET_KEY=static DATABASE_URL=sqlite:///:memory: poetry run python /tmp/manage.py collectstatic && chmod -R u=rwX,g=rX,o=rX /tmp/static
 

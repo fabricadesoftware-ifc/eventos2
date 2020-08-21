@@ -2,6 +2,7 @@ FROM node:14-buster AS builder
 
 WORKDIR /src
 COPY frontend/ .
+COPY docker/frontend.checks CHECKS
 
 RUN NODE_ENV= npm ci
 RUN npm run build

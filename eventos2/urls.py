@@ -1,6 +1,7 @@
 from django.conf import settings
 from django.conf.urls.static import static
 from django.contrib import admin
+from django.http import HttpResponse
 from django.urls import include, path, re_path
 from drf_spectacular.views import SpectacularAPIView, SpectacularSwaggerView
 from rest_framework.routers import SimpleRouter
@@ -25,6 +26,8 @@ urlpatterns = [
                     SpectacularSwaggerView.as_view(url_name="schema"),
                     name="schema-swagger-ui",
                 ),
+                # Simple health check, used during deployment
+                path("health_check", lambda request: HttpResponse("ok")),
                 path("", include(global_router.urls)),
                 path("token/", TokenObtainPairView.as_view(), name="token_obtain_pair"),
                 path(

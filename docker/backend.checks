@@ -1,0 +1,4 @@
+# Note: due to a bug in Dokku, the CHECKS file
+# from the previously deployed image will be used,
+# instead of the one in the current image.
+//eventos2-backend.web/api/v1/health_check ok
