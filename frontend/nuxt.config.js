@@ -7,7 +7,7 @@ export default {
     }
   },
 
-  modules: ['@nuxtjs/proxy'],
+  modules: [],
 
   plugins: [
     '~/plugins/api.js',
@@ -156,17 +156,5 @@ export default {
       home: '/'
     },
     plugins: ['~/plugins/auth.js']
-  },
-
-  axios: {
-    proxy: !!process.env.EVENTOS2_FRONTEND_ENABLE_PROXY
-  },
-
-  proxy: {
-    '/api/': {
-      target: process.env.EVENTOS2_FRONTEND_BASE_URL,
-      // Send X-Forwarded-* headers
-      xfwd: true
-    }
   }
 }

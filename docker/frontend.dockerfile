@@ -4,7 +4,8 @@ ARG EVENTOS2_FRONTEND_DEBUG
 
 WORKDIR /src
 COPY frontend/ .
-COPY docker/frontend.checks CHECKS
+COPY docker/production/frontend.checks CHECKS
+COPY docker/production/frontend.nginx.conf.sigil nginx.conf.sigil
 
 RUN NODE_ENV= npm ci
 RUN npm run build
