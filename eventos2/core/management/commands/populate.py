@@ -17,9 +17,9 @@ class Command(BaseCommand):
     help = "Creates example data"
 
     def handle(self, *args, **options):
-        n_users = 10
-        n_activities = 10
-        n_registered_users = int(n_users * 0.8)
+        n_users = 9
+        n_activities = 9
+        n_registered_users = int(n_users * 0.5)
 
         superuser = User.objects.filter(is_superuser=True).first()
         if not superuser:
@@ -70,13 +70,19 @@ class Command(BaseCommand):
 
     @staticmethod
     def _create_activity(event, n):
+        starts_on = event.starts_on
+        ends_on = event.ends_on
+        if n % 2 == 0:
+            starts_on += timedelta(days=1)
+        elif n % 3 == 0:
+            ends_on = starts_on + timedelta(minutes=5)
         return Activity.objects.create(
             event=event,
             name="Atividade {}".format(n),
             name_english="Activity {}".format(n),
             slug="atividade-{}".format(n),
-            starts_on=event.starts_on,
-            ends_on=event.ends_on,
+            starts_on=starts_on,
+            ends_on=ends_on,
         )
 
     @staticmethod
