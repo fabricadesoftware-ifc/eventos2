@@ -20,6 +20,8 @@ services:
     build:
       context: .
       dockerfile: ./docker/frontend.dockerfile
+      args:
+        EVENTOS2_FRONTEND_DEBUG: "true"
     environment:
       EVENTOS2_FRONTEND_BASE_URL: http://backend:8000/
       EVENTOS2_FRONTEND_BROWSER_BASE_URL: /

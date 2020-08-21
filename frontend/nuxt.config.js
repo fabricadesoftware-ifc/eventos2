@@ -1,6 +1,12 @@
 export default {
   mode: 'universal',
 
+  vue: {
+    config: {
+      devtools: process.env.EVENTOS2_FRONTEND_DEBUG === 'true'
+    }
+  },
+
   modules: ['@nuxtjs/proxy'],
 
   plugins: [

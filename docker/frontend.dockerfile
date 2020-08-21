@@ -1,5 +1,7 @@
 FROM node:14-buster AS builder
 
+ARG EVENTOS2_FRONTEND_DEBUG
+
 WORKDIR /src
 COPY frontend/ .
 COPY docker/frontend.checks CHECKS
