@@ -147,7 +147,7 @@ export default {
             method: 'post'
           },
           user: {
-            url: '/api/v1/users/current',
+            url: '/api/v1/users/current/',
             method: 'get'
           },
           logout: false
