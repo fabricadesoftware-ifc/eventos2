@@ -62,6 +62,10 @@ export default {
     }
   },
 
+  render: {
+    csp: true
+  },
+
   router: {
     middleware: [
       // Needed for redirection to the login page when not authenticated
