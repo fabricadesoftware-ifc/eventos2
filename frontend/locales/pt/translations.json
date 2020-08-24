@@ -53,7 +53,11 @@
   "pages": {
     "activities": {
       "cancelRegistrationButton": "Cancelar inscrição",
+      "cancelRegistrationClosedDialogMessage": "Você tem certeza que deseja cancelar essa inscrição? <b>Essa ação não pode ser desfeita</b>, porque as inscrições estão fechadas para essa atividade.",
+      "cancelRegistrationDialogMessage": "Você tem certeza que deseja cancelar essa inscrição?",
+      "dialogCancelButton": "Voltar",
       "registerButton": "Inscrever",
+      "registrationsClosed": "Inscrições fechadas",
       "title": "Atividades"
     },
     "admin": {
@@ -64,9 +68,12 @@
       "editButton": "Editar",
       "labels": {
         "actions": "Ações",
-        "name": "Nome"
+        "name": "Nome",
+        "registrationCount": "Inscrições",
+        "status": "Status"
       },
       "manageButton": "Gerenciar",
+      "registrationsOpen": "Inscrições abertas",
       "title": "Gerenciar atividades"
     },
     "admin-activities-new": {

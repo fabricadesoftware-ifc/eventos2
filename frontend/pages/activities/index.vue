@@ -17,20 +17,29 @@
                 <div class="card-footer">
                   <div class="card-footer-item is-paddingless">
                     <b-button
-                      v-if="!activity.registration"
-                      type="is-success"
-                      expanded
-                      @click="onRegister(activity)"
-                      >{{ $t('pages.activities.registerButton') }}</b-button
-                    >
-                    <b-button
-                      v-else
+                      v-if="activity.registration"
                       type="is-secondary"
                       expanded
                       @click="onDeregister(activity)"
                       >{{
                         $t('pages.activities.cancelRegistrationButton')
                       }}</b-button
+                    >
+                    <b-button
+                      v-else-if="!activity.is_open"
+                      type="is-secondary"
+                      expanded
+                      disabled
+                      >{{
+                        $t('pages.activities.registrationsClosed')
+                      }}</b-button
+                    >
+                    <b-button
+                      v-else
+                      type="is-success"
+                      expanded
+                      @click="onRegister(activity)"
+                      >{{ $t('pages.activities.registerButton') }}</b-button
                     >
                   </div>
                 </div>
@@ -68,6 +77,7 @@ export default {
         starts_on: activity.starts_on,
         ends_on: activity.ends_on,
         slug: activity.slug,
+        is_open: activity.is_open,
         registration:
           registrations.find(x => x.activity.slug === activity.slug) || null
       }
@@ -83,13 +93,47 @@ export default {
         .then(registration => {
           activity.registration = registration
         })
+        .catch(this.handleError)
     },
     onDeregister(activity) {
-      this.$api.activityRegistration
-        .deregister({ registrationId: activity.registration.id })
-        .then(() => {
-          activity.registration = null
-        })
+      const message = activity.is_open
+        ? 'cancelRegistrationDialogMessage'
+        : 'cancelRegistrationClosedDialogMessage'
+      this.$buefy.dialog.confirm({
+        message: this.$t(`pages.activities.${message}`),
+        confirmText: this.$t('pages.activities.cancelRegistrationButton'),
+        cancelText: this.$t('pages.activities.dialogCancelButton'),
+        focusOn: 'cancel',
+        type: 'is-danger',
+        hasIcon: true,
+        onConfirm: () => {
+          this.$api.activityRegistration
+            .deregister({ registrationId: activity.registration.id })
+            .then(() => {
+              activity.registration = null
+            })
+            .catch(this.handleError)
+        }
+      })
+    },
+    handleError(error) {
+      switch (error.name) {
+        case 'APIValidationError':
+          this.$buefy.toast.open({
+            duration: 5000,
+            message:
+              (error.fields && error.fields.activity_slug.join('\n')) ||
+              error.message,
+            position: 'is-bottom-right',
+            type: 'is-danger'
+          })
+          break
+        case 'APIError':
+          this.error = this.$t('genericErrors.api')
+          break
+        default:
+          this.error = this.$t('genericErrors.network')
+      }
     }
   }
 }

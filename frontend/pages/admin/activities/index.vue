@@ -5,9 +5,7 @@
         <main class="section">
           <div class="columns is-gapless">
             <div class="column">
-              <h1 class="title">
-                {{ $t('pages.admin-activities.title') }}
-              </h1>
+              <h1 class="title">{{ $t('pages.admin-activities.title') }}</h1>
             </div>
             <div class="column is-narrow">
               <b-button
@@ -29,8 +27,26 @@
                   field="name"
                   :label="$t('pages.admin-activities.labels.name')"
                   sortable
+                  >{{ row.name }}</b-table-column
                 >
-                  {{ row.name }}
+                <b-table-column
+                  field="registration_count"
+                  :label="$t('pages.admin-activities.labels.registrationCount')"
+                  width="100"
+                  sortable
+                  numeric
+                >
+                  {{ row.registration_count }}
+                </b-table-column>
+                <b-table-column
+                  field="status"
+                  :label="$t('pages.admin-activities.labels.status')"
+                  width="100"
+                  sortable
+                >
+                  <b-tag v-if="row.is_open" type="is-success">{{
+                    $t('pages.admin-activities.registrationsOpen')
+                  }}</b-tag>
                 </b-table-column>
                 <b-table-column
                   :label="$t('pages.admin-activities.labels.actions')"
@@ -65,13 +81,9 @@ export default {
     activities = await app.$api.event.listActivities(store.state.event.slug)
     const activitiesLocalized = activities.map(activity => {
       if (store.state.locale === 'en' && activity.name_english) {
-        return {
-          name: activity.name_english,
-          starts_on: activity.starts_on,
-          ends_on: activity.ends_on,
-          slug: activity.slug
-        }
+        activity.name = activity.name_english
       }
+      delete activity.name_english
       return activity
     })
     return {

@@ -53,7 +53,11 @@
   "pages": {
     "activities": {
       "cancelRegistrationButton": "Cancel registration",
+      "cancelRegistrationClosedDialogMessage": "Are you sure you want to cancel this registration? <b>This action cannot be undone</b>, as registrations are closed for this activity.",
+      "cancelRegistrationDialogMessage": "Are you sure you want to cancel this registration?",
+      "dialogCancelButton": "Go back",
       "registerButton": "Register",
+      "registrationsClosed": "Registrations closed",
       "title": "Activities"
     },
     "admin": {
@@ -64,9 +68,12 @@
       "editButton": "Edit",
       "labels": {
         "actions": "Actions",
-        "name": "Name"
+        "name": "Name",
+        "registrationCount": "Registrations",
+        "status": "Status"
       },
       "manageButton": "Manage",
+      "registrationsOpen": "Registrations open",
       "title": "Manage activities"
     },
     "admin-activities-new": {
