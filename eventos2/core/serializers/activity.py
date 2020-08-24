@@ -27,9 +27,19 @@ class ActivityBaseSerializer(serializers.Serializer):
 
 
 class ActivitySerializer(ActivityBaseSerializer, serializers.ModelSerializer):
+    registration_count = serializers.ReadOnlyField(source="registrations.count")
+
     class Meta:
         model = Activity
-        fields = ["slug", "name", "name_english", "starts_on", "ends_on", "is_open"]
+        fields = [
+            "slug",
+            "name",
+            "name_english",
+            "starts_on",
+            "ends_on",
+            "is_open",
+            "registration_count",
+        ]
 
     def create(self, validated_data):  # pragma: no cover - no complexity
         raise NotImplementedError("Use ActivityCreateSerializer")
