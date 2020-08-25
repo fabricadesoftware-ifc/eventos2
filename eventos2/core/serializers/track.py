@@ -27,9 +27,19 @@ class TrackBaseSerializer(serializers.Serializer):
 
 
 class TrackSerializer(TrackBaseSerializer, serializers.ModelSerializer):
+    submission_count = serializers.ReadOnlyField(source="submissions.count")
+
     class Meta:
         model = Track
-        fields = ["slug", "name", "name_english", "starts_on", "ends_on"]
+        fields = [
+            "slug",
+            "name",
+            "name_english",
+            "starts_on",
+            "ends_on",
+            "is_open",
+            "submission_count",
+        ]
 
     def create(self, validated_data):  # pragma: no cover - no complexity
         raise NotImplementedError("Use ActivityCreateSerializer")
@@ -42,4 +52,12 @@ class TrackCreateSerializer(TrackBaseSerializer, serializers.ModelSerializer):
 
     class Meta:
         model = Track
-        fields = ["event_slug", "slug", "name", "name_english", "starts_on", "ends_on"]
+        fields = [
+            "event_slug",
+            "slug",
+            "name",
+            "name_english",
+            "starts_on",
+            "ends_on",
+            "is_open",
+        ]

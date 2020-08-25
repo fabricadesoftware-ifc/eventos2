@@ -13,7 +13,12 @@ def test_create_valid(api_client, user_factory, event_factory):
     # DADO um usuário autenticado, e um evento pertencente a ele.
     user = user_factory(name="user", permissions=["core.change_event"])
     api_client.force_authenticate(user=user)
-    event = event_factory(slug="event-a", owners=[user])
+    event = event_factory(
+        slug="event-a",
+        owners=[user],
+        starts_on=timezone.now(),
+        ends_on=timezone.now() + timedelta(days=1),
+    )
 
     # E DADO dados de track válidos.
     # QUANDO a API é chamada.
@@ -23,14 +28,16 @@ def test_create_valid(api_client, user_factory, event_factory):
             "event_slug": event.slug,
             "slug": "track-a",
             "name": "Track A",
-            "starts_on": timezone.now(),
-            "ends_on": timezone.now(),
+            "starts_on": event.starts_on,
+            "ends_on": event.ends_on,
         },
     )
 
     # ENTÃO a resposta de sucesso deve conter os dados do track.
     assert resp.status_code == status.HTTP_200_OK
     assert resp.data["slug"] == "track-a"
+    assert resp.data["is_open"] is True
+
     # E ENTÃO o track deve existir.
     assert Track.objects.get(slug=resp.data["slug"]).name == "Track A"
 
@@ -151,8 +158,15 @@ def test_retrieve_valid(api_client, user_factory, event_factory, track_factory):
     # DADO um usuário, um evento, e um track.
     user = user_factory(name="user", permissions=[])
     api_client.force_authenticate(user=user)
-    event = event_factory(slug="event-a", owners=[])
-    track = track_factory(event=event, slug="track-a")
+    event = event_factory(
+        slug="event-a",
+        owners=[],
+        starts_on=timezone.now() + timedelta(days=-2),
+        ends_on=timezone.now() + timedelta(days=-1),
+    )
+    track = track_factory(
+        event=event, slug="track-a", starts_on=event.starts_on, ends_on=event.ends_on
+    )
 
     # QUANDO a API é chamada para obter o track.
     resp = api_client.get(reverse("track-detail", args=[track.slug]))
@@ -160,6 +174,7 @@ def test_retrieve_valid(api_client, user_factory, event_factory, track_factory):
     # ENTÃO a resposta de sucesso deve conter os dados do track.
     assert resp.status_code == status.HTTP_200_OK
     assert resp.data["slug"] == track.slug
+    assert resp.data["is_open"] is False
 
 
 @pytest.mark.django_db
