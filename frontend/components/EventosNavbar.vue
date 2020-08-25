@@ -6,7 +6,7 @@
         class="navbar-item"
         :to="localePath({ name: 'index' })"
       >
-        {{ eventName || $t('appName') }}
+        {{ eventName }}
       </b-navbar-item>
     </template>
     <template v-slot:end>

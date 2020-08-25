@@ -47,6 +47,7 @@
   },
   "genericErrors": {
     "api": "Ops, tivemos um problema interno. Por favor, tente novamente.",
+    "eventNotFound": "O evento não foi encontrado.",
     "formValidation": "Ops, alguns dos valores informados são inválidos. Por favor, arrume os erros informados e tente novamente.",
     "network": "Ops, não conseguimos conectar aos nossos servidores. Por favor, verifique sua conexão de internet e tente novamente."
   },
@@ -111,6 +112,12 @@
         "name": "Nome"
       },
       "title": "Inscrições"
+    },
+    "error": {
+      "adviceEventNotFound": "Por favor, verifique se há erros de digitação no endereço da página.",
+      "goHomeButton": "Voltar ao início",
+      "header": "Ops, falha nossa!",
+      "headerEventNotFound": "Ops, ocorreu um erro!"
     },
     "index": {
       "manageActivitiesButton": "Gerenciar atividades",

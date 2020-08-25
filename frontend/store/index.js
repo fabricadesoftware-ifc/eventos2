@@ -20,25 +20,40 @@ export const mutations = {
 }
 
 export const actions = {
-  async nuxtServerInit({ dispatch, state }, { error, req, $config }) {
+  async nuxtServerInit({ dispatch, state }, { app, error, req, $config }) {
     const eventSlug = $config.forceEventSlug || parseEventSlug(req.headers.host)
     if (eventSlug === null) {
-      error({ statusCode: 404, message: 'Event not found' })
+      error({
+        statusCode: 404,
+        message: app.i18n.t('genericErrors.eventNotFound')
+      })
       return
     }
-    await dispatch('fetchEvent', eventSlug)
-    if (state.event === null) {
-      error({ statusCode: 404, message: 'Event not found' })
+    try {
+      await dispatch('fetchEvent', eventSlug)
+    } catch (err) {
+      if (err.name === 'APIValidationError' || err.name === 'APIError') {
+        error({
+          statusCode: 404,
+          message: app.i18n.t('genericErrors.eventNotFound')
+        })
+      } else {
+        error({
+          statusCode: (err.response && err.response.status) || err.code || null,
+          message:
+            (err.response && err.response.data) ||
+            err.message ||
+            app.i18n.t('genericErrors.network')
+        })
+      }
       return
     }
     await dispatch('fetchEventRegistration')
   },
-  async fetchEvent({ commit }, eventSlug) {
-    let event = null
-    try {
-      event = await this.$api.event.getBySlug(eventSlug)
-    } catch {}
-    commit('setEvent', event)
+  fetchEvent({ commit }, eventSlug) {
+    return this.$api.event
+      .getBySlug(eventSlug)
+      .then(event => commit('setEvent', event))
   },
   fetchUser({ dispatch }) {
     return this.$auth.fetchUser().then(() => dispatch('fetchEventRegistration'))
