@@ -17,26 +17,28 @@
 
               <e-input
                 v-model="form.name"
-                name="eventName"
+                name="name"
                 :label="$t('forms.labels.eventName')"
                 rules="required"
               />
               <e-input
                 v-model="form.name_english"
-                name="eventNameInEnglish"
+                name="name_english"
                 :label="$t('forms.labels.eventNameInEnglish')"
               />
               <e-input
                 v-model="form.slug"
-                name="eventSlug"
+                name="slug"
                 :label="$t('forms.labels.eventSlug')"
               />
               <e-datetimepicker
                 v-model="form.starts_on"
+                name="starts_on"
                 :label="$t('forms.labels.eventStartDate')"
               ></e-datetimepicker>
               <e-datetimepicker
                 v-model="form.ends_on"
+                name="ends_on"
                 :label="$t('forms.labels.eventEndDate')"
               ></e-datetimepicker>
 
@@ -60,8 +62,12 @@
 </template>
 
 <script>
+import errorMixin from '~/mixins/errorMixin'
+
 export default {
   layout: 'admin',
+  mixins: [errorMixin],
+
   data() {
     return {
       error: null,
@@ -88,21 +94,8 @@ export default {
       this.loading = true
       this.$store
         .dispatch('admin/updateEvent', this.form)
-        .catch(this.handleError)
+        .catch(this.handleGenericError)
         .finally(() => (this.loading = false))
-    },
-    handleError(error) {
-      switch (error.name) {
-        case 'APIValidationError':
-          this.error = error.message || this.$t('genericErrors.formValidation')
-          this.$refs.form.setErrors(error.fields)
-          break
-        case 'APIError':
-          this.error = this.$t('genericErrors.api')
-          break
-        default:
-          this.error = this.$t('genericErrors.network')
-      }
     }
   }
 }

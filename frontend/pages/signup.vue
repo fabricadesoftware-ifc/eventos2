@@ -65,8 +65,11 @@
 </template>
 
 <script>
+import errorMixin from '~/mixins/errorMixin'
+
 export default {
   auth: false,
+  mixins: [errorMixin],
 
   data() {
     return {
@@ -87,21 +90,8 @@ export default {
       this.$api.user
         .create(this.form)
         .then(() => this.$router.push(this.localePath({ name: 'login' })))
-        .catch(this.handleError)
+        .catch(this.handleGenericError)
         .finally(() => (this.loading = false))
-    },
-    handleError(error) {
-      switch (error.name) {
-        case 'APIValidationError':
-          this.error = error.message || this.$t('genericErrors.formValidation')
-          this.$refs.form.setErrors(error.fields)
-          break
-        case 'APIError':
-          this.error = this.$t('genericErrors.api')
-          break
-        default:
-          this.error = this.$t('genericErrors.network')
-      }
     }
   }
 }

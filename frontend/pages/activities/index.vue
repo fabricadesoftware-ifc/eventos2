@@ -53,10 +53,14 @@
 </template>
 
 <script>
+import errorMixin from '~/mixins/errorMixin'
+
 /**
  * Lista das atividades do evento.
  */
 export default {
+  mixins: [errorMixin],
+
   async asyncData({ app, store }) {
     const activities = await app.$api.event.listActivities(
       store.state.event.slug
@@ -93,7 +97,7 @@ export default {
         .then(registration => {
           activity.registration = registration
         })
-        .catch(this.handleError)
+        .catch(this.handleGenericError)
     },
     onDeregister(activity) {
       const message = activity.is_open
@@ -112,28 +116,9 @@ export default {
             .then(() => {
               activity.registration = null
             })
-            .catch(this.handleError)
+            .catch(this.handleGenericError)
         }
       })
-    },
-    handleError(error) {
-      switch (error.name) {
-        case 'APIValidationError':
-          this.$buefy.toast.open({
-            duration: 5000,
-            message:
-              (error.fields && error.fields.activity_slug.join('\n')) ||
-              error.message,
-            position: 'is-bottom-right',
-            type: 'is-danger'
-          })
-          break
-        case 'APIError':
-          this.error = this.$t('genericErrors.api')
-          break
-        default:
-          this.error = this.$t('genericErrors.network')
-      }
     }
   }
 }

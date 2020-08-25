@@ -6,16 +6,21 @@
           <h1 class="title">{{ $t('pages.user-settings.title') }}</h1>
           <ValidationObserver ref="form" v-slot="{ handleSubmit }">
             <form @submit.prevent="handleSubmit(onSubmit)">
+              <div v-visible="!loading" class="field">
+                <b-message v-if="error" type="is-danger">
+                  {{ error }}
+                </b-message>
+              </div>
               <e-input
                 v-model="form.first_name"
-                name="firstName"
+                name="first_name"
                 :label="$t('forms.labels.firstName')"
                 rules="required"
                 horizontal
               />
               <e-input
                 v-model="form.last_name"
-                name="lastName"
+                name="last_name"
                 :label="$t('forms.labels.lastName')"
                 rules="required"
                 horizontal
@@ -44,7 +49,11 @@
 </template>
 
 <script>
+import errorMixin from '~/mixins/errorMixin'
+
 export default {
+  mixins: [errorMixin],
+
   data() {
     return {
       loading: false,
@@ -66,21 +75,8 @@ export default {
       this.$api.user
         .update(this.form)
         .then(() => this.$auth.fetchUser())
-        .catch(this.handleError)
+        .catch(this.handleGenericError)
         .finally(() => (this.loading = false))
-    },
-    handleError(error) {
-      switch (error.name) {
-        case 'APIValidationError':
-          this.error = error.message
-          this.$refs.form.setErrors(error.fields)
-          break
-        case 'APIError':
-          this.error = this.$t('genericErrors.api')
-          break
-        default:
-          this.error = this.$t('genericErrors.network')
-      }
     }
   }
 }
