@@ -87,25 +87,9 @@ export default {
       return activity
     })
     return {
-      loading: false,
       error: null,
       activities: activitiesLocalized
     }
   }
 }
 </script>
-
-<style lang="scss" scoped>
-.activity {
-  margin-bottom: 1em;
-}
-.activity .card-footer-item {
-  padding: 0;
-}
-.activity .button {
-  width: 100%;
-  height: 100%;
-  border-radius: 0;
-  border: none;
-}
-</style>

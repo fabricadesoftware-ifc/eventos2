@@ -23,9 +23,10 @@
               >
             </div>
           </div>
-          <b-message :type="openStatus.messageType">{{
-            openStatus.message
-          }}</b-message>
+          <b-message
+            :type="activityLocalized.is_open ? 'is-success' : 'is-info'"
+            >{{ statusMessage }}</b-message
+          >
           <h2 class="title is-4">
             {{
               $tc(
@@ -53,8 +54,8 @@ export default {
     const activity = await app.$api.activity.getBySlug(params.slug)
     if (store.state.locale === 'en' && activity.name_english) {
       activity.name = activity.name_english
-      delete activity.name_english
     }
+    delete activity.name_english
 
     const registrations = await app.$api.activity
       .listRegistrations(activity.slug)
@@ -88,24 +89,19 @@ export default {
         }
       ]
     },
-    openStatus() {
+    statusMessage() {
       const startsOn = this.$dayjs(this.activityLocalized.starts_on)
       const endsOn = this.$dayjs(this.activityLocalized.ends_on)
-      const now = this.$dayjs()
 
-      const isOpen = now.isBetween(startsOn, endsOn)
-      const willOpen = now.isBefore(startsOn)
+      const isOpen = this.activityLocalized.is_open
+      const willOpen = this.$dayjs().isBefore(startsOn)
 
       const status = isOpen ? 'isOpen' : willOpen ? 'willOpen' : 'wasOpen'
       const messagePath = `pages.admin-activities-slug-manage.status.${status}`
-
-      return {
-        message: this.$t(messagePath, {
-          startDate: startsOn.format('LLLL'),
-          endDate: endsOn.format('LLLL')
-        }),
-        messageType: isOpen ? 'is-success' : willOpen ? 'is-info' : 'is-warning'
-      }
+      return this.$t(messagePath, {
+        startDate: startsOn.format('LLLL'),
+        endDate: endsOn.format('LLLL')
+      })
     }
   }
 }

@@ -72,19 +72,13 @@ export default {
       }
     )
     const activitiesLocalized = activities.map(activity => {
-      let localizedName = activity.name
       if (store.state.locale === 'en' && activity.name_english) {
-        localizedName = activity.name_english
+        activity.name = activity.name_english
       }
-      return {
-        name: localizedName,
-        starts_on: activity.starts_on,
-        ends_on: activity.ends_on,
-        slug: activity.slug,
-        is_open: activity.is_open,
-        registration:
-          registrations.find(x => x.activity.slug === activity.slug) || null
-      }
+      delete activity.name_english
+      activity.registration =
+        registrations.find(x => x.activity.slug === activity.slug) || null
+      return activity
     })
     return {
       activities: activitiesLocalized
@@ -94,9 +88,7 @@ export default {
     onRegister(activity) {
       this.$api.activityRegistration
         .register({ activitySlug: activity.slug })
-        .then(registration => {
-          activity.registration = registration
-        })
+        .then(registration => (activity.registration = registration))
         .catch(this.handleGenericError)
     },
     onDeregister(activity) {

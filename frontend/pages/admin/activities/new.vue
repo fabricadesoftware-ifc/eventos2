@@ -95,9 +95,7 @@ export default {
           this.$router.push(this.localePath({ name: 'admin-activities' }))
         )
         .catch(this.handleGenericError)
-        .finally(() => {
-          this.loading = false
-        })
+        .finally(() => (this.loading = false))
     }
   }
 }
