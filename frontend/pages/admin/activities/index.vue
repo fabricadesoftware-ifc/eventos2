@@ -22,49 +22,52 @@
           </div>
           <div class="section">
             <b-table :data="activities" default-sort="name">
-              <template v-slot="{ row }">
-                <b-table-column
-                  field="name"
-                  :label="$t('pages.admin-activities.labels.name')"
-                  sortable
-                  >{{ row.name }}</b-table-column
-                >
-                <b-table-column
-                  field="registration_count"
-                  :label="$t('pages.admin-activities.labels.registrationCount')"
-                  width="100"
-                  sortable
-                  numeric
-                >
-                  {{ row.registration_count }}
-                </b-table-column>
-                <b-table-column
-                  field="status"
-                  :label="$t('pages.admin-activities.labels.status')"
-                  width="100"
-                  sortable
-                >
-                  <b-tag v-if="row.is_open" type="is-success">{{
-                    $t('pages.admin-activities.registrationsOpen')
-                  }}</b-tag>
-                </b-table-column>
-                <b-table-column
-                  :label="$t('pages.admin-activities.labels.actions')"
-                  width="200"
-                  numeric
-                >
+              <b-table-column
+                v-slot="props"
+                field="name"
+                :label="$t('pages.admin-activities.labels.name')"
+                sortable
+                >{{ props.row.name }}</b-table-column
+              >
+              <b-table-column
+                v-slot="props"
+                field="registration_count"
+                :label="$t('pages.admin-activities.labels.registrationCount')"
+                width="100"
+                sortable
+                numeric
+              >
+                {{ props.row.registration_count }}
+              </b-table-column>
+              <b-table-column
+                v-slot="props"
+                field="status"
+                :label="$t('pages.admin-activities.labels.status')"
+                width="100"
+                sortable
+              >
+                <b-tag v-if="props.row.is_open" type="is-success">{{
+                  $t('pages.admin-activities.registrationsOpen')
+                }}</b-tag>
+              </b-table-column>
+              <b-table-column
+                :label="$t('pages.admin-activities.labels.actions')"
+                width="200"
+                numeric
+              >
+                <template v-slot:default="props">
                   <b-button
                     tag="nuxt-link"
                     :to="
                       localePath({
                         name: 'admin-activities-slug-manage',
-                        params: { slug: row.slug }
+                        params: { slug: props.row.slug }
                       })
                     "
                     >{{ $t('pages.admin-activities.manageButton') }}</b-button
                   >
-                </b-table-column>
-              </template>
+                </template>
+              </b-table-column>
             </b-table>
           </div>
         </main>
