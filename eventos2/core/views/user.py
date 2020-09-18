@@ -1,3 +1,4 @@
+from drf_spectacular.utils import OpenApiParameter, extend_schema
 from rest_framework import status
 from rest_framework.decorators import action
 from rest_framework.response import Response
@@ -12,6 +13,7 @@ class UserViewSet(CViewSet):
     queryset = User.objects.filter(is_active=True)
     permission_classes = [PerActionPermissions]
     per_action_permissions = {
+        "list": PerActionPermissions.ALLOW_AUTHENTICATED,
         "create": PerActionPermissions.ALLOW_ANY,
         "current": PerActionPermissions.ALLOW_AUTHENTICATED,
         "current_update": PerActionPermissions.ALLOW_AUTHENTICATED,
@@ -22,6 +24,15 @@ class UserViewSet(CViewSet):
         if self.action == "create":
             return UserCreateSerializer
         return UserSerializer
+
+    @extend_schema(
+        responses={200: UserSerializer(many=True)},
+        parameters=[OpenApiParameter("email", required=True)],
+    )
+    def list(self, request):
+        email = request.query_params.get("email")
+        users = User.objects.filter(is_active=True, email__iexact=email)
+        return Response(self.get_serializer(users, many=True).data)
 
     @action(
         detail=False, url_path="current",
