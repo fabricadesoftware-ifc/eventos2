@@ -4,6 +4,9 @@ import { required, email } from 'vee-validate/dist/rules'
 
 import EInput from '~/components/EInput'
 import EDatetimepicker from '~/components/EDatetimepicker'
+import ERadioCard from '~/components/ERadioCard'
+import ESelect from '~/components/ESelect'
+import EUpload from '~/components/EUpload'
 
 /**
  * Registrar rules
@@ -15,7 +18,10 @@ extend('email', email)
  * Registrar componentes globais
  */
 Vue.component('EInput', EInput)
+Vue.component('ERadioCard', ERadioCard)
+Vue.component('ESelect', ESelect)
 Vue.component('EDatetimepicker', EDatetimepicker)
+Vue.component('EUpload', EUpload)
 Vue.component('ValidationObserver', ValidationObserver)
 
 export default ({ app }) => {

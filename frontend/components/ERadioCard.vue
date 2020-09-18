@@ -2,9 +2,11 @@
   <label class="card">
     <div class="card-content">
       <b-radio
-        v-model="selectedValue"
         :name="name"
-        @input="$emit('select', value)"
+        :disabled="disabled"
+        :native-value="nativeValue"
+        :value="value"
+        @input="$emit('input', $event)"
       >
         <slot></slot>
       </b-radio>
@@ -17,23 +19,22 @@
  * Wrapper sobre o radio do Buefy (sem validação)
  */
 export default {
-  model: {
-    prop: 'selectedValue',
-    event: 'select'
-  },
   props: {
     name: {
       type: String,
       default: ''
     },
     value: {
-      type: [String, Number, Object],
-      default: ''
-    }
-  },
-  data() {
-    return {
-      selectedValue: null
+      type: [String, Object, null],
+      default: null
+    },
+    nativeValue: {
+      type: [String, Object, null],
+      default: null
+    },
+    disabled: {
+      type: Boolean,
+      default: false
     }
   }
 }
