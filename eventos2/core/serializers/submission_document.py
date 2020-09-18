@@ -10,7 +10,7 @@ class SubmissionDocumentSerializer(serializers.ModelSerializer):
         source="document",
         queryset=Document.objects.all(),
         slug_field="attachment_key",
-        required=False,
+        required=True,
         write_only=True,
     )
     document = DocumentSerializer(read_only=True)
