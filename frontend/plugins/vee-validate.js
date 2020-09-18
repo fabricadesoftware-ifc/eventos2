@@ -1,6 +1,6 @@
 import Vue from 'vue'
 import { extend, ValidationObserver, configure } from 'vee-validate'
-import { required, email } from 'vee-validate/dist/rules'
+import { required, email, mimes } from 'vee-validate/dist/rules'
 
 import EInput from '~/components/EInput'
 import EDatetimepicker from '~/components/EDatetimepicker'
@@ -13,6 +13,7 @@ import EUpload from '~/components/EUpload'
  */
 extend('required', required)
 extend('email', email)
+extend('mimes', mimes)
 
 /**
  * Registrar componentes globais

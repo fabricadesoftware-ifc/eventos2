@@ -3,7 +3,8 @@
     "activities": "Atividades",
     "configuration": "Configuração",
     "overview": "Visão geral",
-    "title": "Área de administração"
+    "title": "Área de administração",
+    "tracks": "Tracks"
   },
   "appName": "Eventos2",
   "components": {
@@ -21,7 +22,20 @@
         "logout": "Sair",
         "settings": "Preferências"
       }
+    },
+    "upload": {
+      "placeholder": "Escolher um arquivo"
+    },
+    "userSearch": {
+      "addButton": "Adicionar",
+      "heading": "Procurar usuários",
+      "noResults": "Nenhum usuário encontrado.",
+      "searchButton": "Procurar"
     }
+  },
+  "dialogs": {
+    "cancelButton": "Cancelar",
+    "confirmButton": "Confirmar"
   },
   "forms": {
     "labels": {
@@ -38,10 +52,22 @@
       "eventStartDate": "Data de início",
       "firstName": "Nome",
       "lastName": "Sobrenome",
-      "password": "Senha"
+      "password": "Senha",
+      "submissionDocumentSlotEndDate": "Data de término",
+      "submissionDocumentSlotName": "Nome",
+      "submissionDocumentSlotNameInEnglish": "Nome em inglês",
+      "submissionDocumentSlotStartDate": "Data de início",
+      "submissionTitle": "Título da submissão",
+      "track": "Track",
+      "trackEndDate": "Data de término",
+      "trackName": "Nome",
+      "trackNameInEnglish": "Nome em inglês",
+      "trackSlug": "Slug",
+      "trackStartDate": "Data de início"
     },
     "validation": {
       "email": "Por favor, informe um endereço de e-mail válido.",
+      "mimes": "Por favor, selecione um arquivo do tipo requisitado.",
       "required": "Este campo é obrigatório."
     }
   },
@@ -113,6 +139,58 @@
       },
       "title": "Inscrições"
     },
+    "admin-tracks": {
+      "addButton": "Novo track",
+      "editButton": "Editar",
+      "labels": {
+        "actions": "Ações",
+        "name": "Nome",
+        "status": "Status",
+        "submissionCount": "Submissões"
+      },
+      "manageButton": "Gerenciar",
+      "submissionsOpen": "Submissões abertas",
+      "title": "Gerenciar tracks"
+    },
+    "admin-tracks-new": {
+      "addSubmissionDocumentSlotButton": "Adicionar documento",
+      "description": "Descreva o seu track.",
+      "submitButton": "Adicionar",
+      "title": "Novo track"
+    },
+    "admin-tracks-slug-edit": {
+      "description": "Descreva o seu track.",
+      "submitButton": "Salvar",
+      "title": "Editar track"
+    },
+    "admin-tracks-slug-manage": {
+      "editButton": "Editar esse track",
+      "labels": {
+        "authors": "Autores",
+        "submissionTitle": "Título"
+      },
+      "manageSubmissionDocumentSlots": "Gerenciar documentos requeridos",
+      "noSubmissionDocumentSlotsMessage": "Agora falta configurar quais documentos serão requeridos das submissões.",
+      "status": {
+        "isOpen": "As submissões estão abertas até {endDate}.",
+        "wasOpen": "As submissões estão fechadas desde {endDate}.",
+        "willOpen": "As submissões serão abertas em {startDate}."
+      },
+      "submissionCount": "Nenhuma submissão ainda | 1 submissão | {n} submissões",
+      "title": "Gerenciar track"
+    },
+    "admin-tracks-slug-manage-submission-document-slots": {
+      "description": "Descreva os documentos requeridos para as submissões.",
+      "emptyMessage": "Nenhum documento.",
+      "labels": {
+        "endDate": "Término",
+        "name": "Nome",
+        "startDate": "Início"
+      },
+      "submitButton": "Adicionar",
+      "title": "Gerenciar documentos para submissões do track",
+      "titleCurrentSlots": "Documentos atuais"
+    },
     "error": {
       "adviceEventNotFound": "Por favor, verifique se há erros de digitação no endereço da página.",
       "goHomeButton": "Voltar ao início",
@@ -122,6 +200,7 @@
     "index": {
       "manageActivitiesButton": "Gerenciar atividades",
       "manageRegistrationButton": "Gerenciar inscrição",
+      "newSubmissionButton": "Nova submissão",
       "registerButton": "Inscreva-se já!"
     },
     "login": {
@@ -133,6 +212,38 @@
       "description": "Por favor, infome seus dados para criar uma conta.",
       "submitButton": "Criar conta",
       "title": "Criar conta"
+    },
+    "submissions-new": {
+      "clearButton": "Limpar tudo",
+      "clearDialogMessage": "Você tem certeza que deseja limpar todas as informações?",
+      "nextStepButton": "Próxima etapa",
+      "steps": {
+        "authors": {
+          "label": "Autores",
+          "removeButton": "Remover",
+          "selectedAuthors": "Autores selecionados"
+        },
+        "confirm": {
+          "authors": "Autor: {authors} | Autores: {authors}",
+          "description": "Por favor, confira as informações da submissão.",
+          "label": "Confirmar"
+        },
+        "details": {
+          "label": "Informações",
+          "trackPlaceholder": "Escolha um track"
+        },
+        "documents": {
+          "chooseFile": "Escolher um arquivo ({fileTypes})",
+          "description": "Esse documento é obrigatório. | Esses documentos são obrigatórios.",
+          "label": "Documentos"
+        },
+        "done": {
+          "description": "Submissão concluída.",
+          "label": "Pronto"
+        }
+      },
+      "submitButton": "Submeter",
+      "title": "Nova submissão"
     },
     "user-registration": {
       "hasNoRegistration": "Você não se inscreveu nesse evento.",

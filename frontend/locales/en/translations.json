@@ -3,7 +3,8 @@
     "activities": "Activities",
     "configuration": "Configuration",
     "overview": "Overview",
-    "title": "Administration area"
+    "title": "Administration area",
+    "tracks": "Tracks"
   },
   "appName": "Eventos2",
   "components": {
@@ -21,7 +22,20 @@
         "logout": "Log out",
         "settings": "Settings"
       }
+    },
+    "upload": {
+      "placeholder": "Choose a file"
+    },
+    "userSearch": {
+      "addButton": "Add",
+      "heading": "Search for users",
+      "noResults": "No users found.",
+      "searchButton": "Search"
     }
+  },
+  "dialogs": {
+    "cancelButton": "Cancel",
+    "confirmButton": "Confirm"
   },
   "forms": {
     "labels": {
@@ -38,10 +52,22 @@
       "eventStartDate": "Start date",
       "firstName": "First name",
       "lastName": "Last name",
-      "password": "Password"
+      "password": "Password",
+      "submissionDocumentSlotEndDate": "End date",
+      "submissionDocumentSlotName": "Name",
+      "submissionDocumentSlotNameInEnglish": "Name in english",
+      "submissionDocumentSlotStartDate": "Start date",
+      "submissionTitle": "Submission title",
+      "track": "Track",
+      "trackEndDate": "End date",
+      "trackName": "Name",
+      "trackNameInEnglish": "Name in english",
+      "trackSlug": "Slug",
+      "trackStartDate": "Start date"
     },
     "validation": {
       "email": "Please provide a valid e-mail address.",
+      "mimes": "Please select a file of the requested type.",
       "required": "This field is required."
     }
   },
@@ -113,6 +139,58 @@
       },
       "title": "Registrations"
     },
+    "admin-tracks": {
+      "addButton": "New track",
+      "editButton": "Edit",
+      "labels": {
+        "actions": "Actions",
+        "name": "Name",
+        "status": "Status",
+        "submissionCount": "Submissions"
+      },
+      "manageButton": "Manage",
+      "submissionsOpen": "Submissions open",
+      "title": "Manage tracks"
+    },
+    "admin-tracks-new": {
+      "addSubmissionDocumentSlotButton": "Add document",
+      "description": "Describe your track.",
+      "submitButton": "Add",
+      "title": "New track"
+    },
+    "admin-tracks-slug-edit": {
+      "description": "Describe your track.",
+      "submitButton": "Save",
+      "title": "Edit track"
+    },
+    "admin-tracks-slug-manage": {
+      "editButton": "Edit this track",
+      "labels": {
+        "authors": "Authors",
+        "submissionTitle": "Title"
+      },
+      "manageSubmissionDocumentSlots": "Manage required documents",
+      "noSubmissionDocumentSlotsMessage": "All that's missing is specifying what documents are required for each submission.",
+      "status": {
+        "isOpen": "Submissions are open until {endDate}.",
+        "wasOpen": "Submissions are closed since {endDate}.",
+        "willOpen": "Submissions will open on {startDate}."
+      },
+      "submissionCount": "No submissions yet | 1 submission | {n} submissions",
+      "title": "Manage track"
+    },
+    "admin-tracks-slug-manage-submission-document-slots": {
+      "description": "Describe the required documents for submissions.",
+      "emptyMessage": "No documents yet.",
+      "labels": {
+        "endDate": "End",
+        "name": "Name",
+        "startDate": "Start"
+      },
+      "submitButton": "Add",
+      "title": "Manage track submission document slots",
+      "titleCurrentSlots": "Current documents"
+    },
     "error": {
       "adviceEventNotFound": "Please double check the address for typing errors.",
       "goHomeButton": "Go home",
@@ -122,6 +200,7 @@
     "index": {
       "manageActivitiesButton": "Manage activities",
       "manageRegistrationButton": "Manage registration",
+      "newSubmissionButton": "Make a new submission",
       "registerButton": "Register today!"
     },
     "login": {
@@ -133,6 +212,38 @@
       "description": "Please enter your data to create an account.",
       "submitButton": "Sign up",
       "title": "Sign up"
+    },
+    "submissions-new": {
+      "clearButton": "Clear everything",
+      "clearDialogMessage": "Are you sure you want to clear all of the entered information?",
+      "nextStepButton": "Next step",
+      "steps": {
+        "authors": {
+          "label": "Authors",
+          "removeButton": "Remove",
+          "selectedAuthors": "Selected authors"
+        },
+        "confirm": {
+          "authors": "Author: {authors} | Authors: {authors}",
+          "description": "Please review your submission information.",
+          "label": "Review"
+        },
+        "details": {
+          "label": "Details",
+          "trackPlaceholder": "Select a track"
+        },
+        "documents": {
+          "chooseFile": "Choose a file ({fileTypes})",
+          "description": "The following document is required. | The following documents are required.",
+          "label": "Documents"
+        },
+        "done": {
+          "description": "Your submission is done.",
+          "label": "Done"
+        }
+      },
+      "submitButton": "Submit",
+      "title": "New submission"
     },
     "user-registration": {
       "hasNoRegistration": "You have not registered to this event.",

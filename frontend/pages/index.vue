@@ -22,6 +22,13 @@
             <b-button
               type="is-primary"
               tag="nuxt-link"
+              :to="localePath({ name: 'submissions-new' })"
+            >
+              {{ $t('pages.index.newSubmissionButton') }}
+            </b-button>
+            <b-button
+              type="is-secondary"
+              tag="nuxt-link"
               :to="localePath({ name: 'user-registration' })"
             >
               {{ $t('pages.index.manageRegistrationButton') }}
