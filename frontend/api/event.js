@@ -20,6 +20,9 @@ export function createEventAPIClient($axios) {
     },
     listActivities(slug) {
       return $axios.$get(`api/v1/events/${slug}/activities`)
+    },
+    listTracks(slug) {
+      return $axios.$get(`api/v1/events/${slug}/tracks`)
     }
   }
 }
