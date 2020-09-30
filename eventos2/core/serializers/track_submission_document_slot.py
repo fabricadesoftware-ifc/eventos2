@@ -40,13 +40,8 @@ class TrackSubmissionDocumentSlotSerializer(
 class TrackSubmissionDocumentSlotCreateSerializer(
     TrackSubmissionDocumentSlotBaseSerializer, serializers.ModelSerializer
 ):
-    track_slug = serializers.SlugRelatedField(
-        source="track",
-        slug_field="slug",
-        queryset=Track.available_objects.all(),
-        write_only=True,
-    )
+    track = serializers.PrimaryKeyRelatedField(queryset=Track.available_objects.all())
 
     class Meta:
         model = TrackSubmissionDocumentSlot
-        fields = ["track_slug", "id", "name", "name_english", "starts_on", "ends_on"]
+        fields = ["track", "id", "name", "name_english", "starts_on", "ends_on"]

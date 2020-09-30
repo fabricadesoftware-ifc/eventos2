@@ -11,9 +11,7 @@ class SubmissionBaseSerializer(serializers.Serializer):
 
 
 class SubmissionCreateSerializer(SubmissionBaseSerializer):
-    track = serializers.SlugRelatedField(
-        slug_field="slug", queryset=Track.objects.all()
-    )
+    track = serializers.PrimaryKeyRelatedField(queryset=Track.objects.all())
     title = serializers.CharField(
         help_text="The submission's title in its native language", max_length=255
     )

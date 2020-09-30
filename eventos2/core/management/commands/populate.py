@@ -111,7 +111,6 @@ class Command(BaseCommand):
             event=event,
             name="Atividade {}".format(n),
             name_english="Activity {}".format(n),
-            slug="atividade-{}".format(n),
             starts_on=starts_on,
             ends_on=ends_on,
         )
@@ -128,7 +127,6 @@ class Command(BaseCommand):
             event=event,
             name="Track {}".format(n),
             name_english="Track {}".format(n),
-            slug="track-{}".format(n),
             starts_on=starts_on,
             ends_on=ends_on,
         )

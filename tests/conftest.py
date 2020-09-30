@@ -66,13 +66,12 @@ def event_factory():
 
 @pytest.fixture
 def activity_factory():
-    def _factory(*, event, slug, owners, starts_on=None, ends_on=None):
+    def _factory(*, event, name, owners, starts_on=None, ends_on=None):
         default_starts_on = timezone.now()
         default_ends_on = default_starts_on + timedelta(days=10)
         activity = Activity.objects.create(
             event=event,
-            slug=slug,
-            name=slug,
+            name=name,
             starts_on=starts_on or default_starts_on,
             ends_on=ends_on or default_ends_on,
         )
@@ -94,13 +93,12 @@ def submission_factory():
 
 @pytest.fixture
 def track_factory():
-    def _factory(*, event, slug, starts_on=None, ends_on=None):
+    def _factory(*, event, name, starts_on=None, ends_on=None):
         default_starts_on = timezone.now()
         default_ends_on = default_starts_on + timedelta(days=10)
         track = Track.objects.create(
             event=event,
-            slug=slug,
-            name=slug,
+            name=name,
             starts_on=starts_on or default_starts_on,
             ends_on=ends_on or default_ends_on,
         )

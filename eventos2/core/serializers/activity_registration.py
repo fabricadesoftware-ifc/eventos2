@@ -13,14 +13,12 @@ class ActivityRegistrationBaseSerializer(serializers.Serializer):
 
 
 class ActivityRegistrationCreateSerializer(ActivityRegistrationBaseSerializer):
-    activity = serializers.SlugRelatedField(
-        slug_field="slug", queryset=Activity.objects.all()
-    )
+    activity = serializers.PrimaryKeyRelatedField(queryset=Activity.objects.all())
 
     def validate(self, data):
         if not data["activity"].is_open:
             raise serializers.ValidationError(
-                {"activity_slug": "Registrations to this activity are closed."}
+                {"activity": "Registrations to this activity are closed."}
             )
         return data
 

@@ -5,9 +5,7 @@
         <main class="section">
           <h1 class="title">
             {{
-              $t(
-                'pages.admin-tracks-slug-manage-submission-document-slots.title'
-              )
+              $t('pages.admin-tracks-id-manage-submission-document-slots.title')
             }}
           </h1>
 
@@ -18,7 +16,7 @@
             <b-message v-else type="is-info">
               {{
                 $t(
-                  'pages.admin-tracks-slug-manage-submission-document-slots.description'
+                  'pages.admin-tracks-id-manage-submission-document-slots.description'
                 )
               }}
             </b-message>
@@ -57,7 +55,7 @@
                     :loading="loading"
                     >{{
                       $t(
-                        'pages.admin-tracks-slug-manage-submission-document-slots.submitButton'
+                        'pages.admin-tracks-id-manage-submission-document-slots.submitButton'
                       )
                     }}</b-button
                   >
@@ -69,7 +67,7 @@
           <h2 class="title is-4">
             {{
               $t(
-                'pages.admin-tracks-slug-manage-submission-document-slots.titleCurrentSlots'
+                'pages.admin-tracks-id-manage-submission-document-slots.titleCurrentSlots'
               )
             }}
           </h2>
@@ -78,7 +76,7 @@
               v-slot="props"
               :label="
                 $t(
-                  'pages.admin-tracks-slug-manage-submission-document-slots.labels.name'
+                  'pages.admin-tracks-id-manage-submission-document-slots.labels.name'
                 )
               "
             >
@@ -88,7 +86,7 @@
               v-slot="props"
               :label="
                 $t(
-                  'pages.admin-tracks-slug-manage-submission-document-slots.labels.startDate'
+                  'pages.admin-tracks-id-manage-submission-document-slots.labels.startDate'
                 )
               "
             >
@@ -98,7 +96,7 @@
               v-slot="props"
               :label="
                 $t(
-                  'pages.admin-tracks-slug-manage-submission-document-slots.labels.endDate'
+                  'pages.admin-tracks-id-manage-submission-document-slots.labels.endDate'
                 )
               "
             >
@@ -108,7 +106,7 @@
               <div class="has-text-grey">
                 {{
                   $t(
-                    'pages.admin-tracks-slug-manage-submission-document-slots.emptyMessage'
+                    'pages.admin-tracks-id-manage-submission-document-slots.emptyMessage'
                   )
                 }}
               </div>
@@ -138,9 +136,9 @@ export default {
   mixins: [errorMixin],
 
   async asyncData({ app, params, store }) {
-    const track = await app.$api.track.getBySlug(params.slug)
+    const track = await app.$api.track.getById(params.id)
     const slots = await app.$api.track
-      .listSubmissionDocumentSlots(params.slug)
+      .listSubmissionDocumentSlots(params.id)
       .then(slots =>
         slots.map(slot =>
           slotToItem({ locale: store.state.locale, dayjs: app.$dayjs, slot })
@@ -163,7 +161,7 @@ export default {
     onSubmit() {
       this.loading = true
       this.$api.trackSubmissionDocumentSlot
-        .create({ trackSlug: this.track.slug, ...this.form })
+        .create({ trackId: this.track.id, ...this.form })
         .then(slot =>
           slotToItem({
             locale: this.$store.state.locale,

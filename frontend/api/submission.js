@@ -1,8 +1,8 @@
 export function createSubmissionAPIClient($axios) {
   return {
-    create({ trackSlug, title, title_english, other_authors }) {
+    create({ trackId, title, title_english, other_authors }) {
       return $axios.$post(`api/v1/submissions/`, {
-        track: trackSlug,
+        track: trackId,
         title,
         title_english,
         other_authors

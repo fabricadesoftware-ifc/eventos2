@@ -13,12 +13,12 @@
                 tag="nuxt-link"
                 :to="
                   localePath({
-                    name: 'admin-activities-slug-edit',
-                    params: { slug: activityLocalized.slug }
+                    name: 'admin-activities-id-edit',
+                    params: { id: activityLocalized.id }
                   })
                 "
                 >{{
-                  $t('pages.admin-activities-slug-manage.editButton')
+                  $t('pages.admin-activities-id-manage.editButton')
                 }}</b-button
               >
             </div>
@@ -30,7 +30,7 @@
           <h2 class="title is-4">
             {{
               $tc(
-                'pages.admin-activities-slug-manage.registrationCount',
+                'pages.admin-activities-id-manage.registrationCount',
                 registrations.length
               )
             }}
@@ -51,14 +51,14 @@
 export default {
   layout: 'admin',
   async asyncData({ app, params, store }) {
-    const activity = await app.$api.activity.getBySlug(params.slug)
+    const activity = await app.$api.activity.getById(params.id)
     if (store.state.locale === 'en' && activity.name_english) {
       activity.name = activity.name_english
     }
     delete activity.name_english
 
     const registrations = await app.$api.activity
-      .listRegistrations(activity.slug)
+      .listRegistrations(activity.id)
       .then(registrations =>
         registrations.map(registration => ({
           ...registration,
@@ -79,12 +79,12 @@ export default {
       return [
         {
           field: 'user.fullName',
-          label: this.$t('pages.admin-activities-slug-manage.labels.name'),
+          label: this.$t('pages.admin-activities-id-manage.labels.name'),
           sortable: true
         },
         {
           field: 'user.email',
-          label: this.$t('pages.admin-activities-slug-manage.labels.email'),
+          label: this.$t('pages.admin-activities-id-manage.labels.email'),
           sortable: true
         }
       ]
@@ -97,7 +97,7 @@ export default {
       const willOpen = this.$dayjs().isBefore(startsOn)
 
       const status = isOpen ? 'isOpen' : willOpen ? 'willOpen' : 'wasOpen'
-      const messagePath = `pages.admin-activities-slug-manage.status.${status}`
+      const messagePath = `pages.admin-activities-id-manage.status.${status}`
       return this.$t(messagePath, {
         startDate: startsOn.format('LLLL'),
         endDate: endsOn.format('LLLL')

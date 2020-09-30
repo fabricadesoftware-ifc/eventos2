@@ -13,11 +13,11 @@ def test_register_valid(api_client, activity_factory, event_factory, user_factor
     api_client.force_authenticate(user=user)
     event = event_factory(slug="event-a", owners=[])
     EventRegistration.objects.create(event=event, user=user)
-    activity = activity_factory(event=event, slug="activity-a", owners=[])
+    activity = activity_factory(event=event, name="Activity A", owners=[])
 
     # QUANDO a API é chamada para registrar o usuário na activity.
     resp = api_client.post(
-        reverse("activity-registration-list"), {"activity": activity.slug}
+        reverse("activity-registration-list"), {"activity": activity.id}
     )
 
     # ENTÃO a reposta deve ser de sucesso
@@ -35,14 +35,14 @@ def test_register_duplicate(api_client, activity_factory, event_factory, user_fa
     event = event_factory(slug="event-a", owners=[])
     event_registration = EventRegistration.objects.create(event=event, user=user)
     # E DADO uma activity na qual o usuário já está registrado.
-    activity = activity_factory(event=event, slug="activity-a", owners=[])
+    activity = activity_factory(event=event, name="Activity A", owners=[])
     ActivityRegistration.objects.create(
         activity=activity, event_registration=event_registration
     )
 
     # QUANDO a API é chamada para registrar o usuário na activity novamente.
     resp = api_client.post(
-        reverse("activity-registration-list"), {"activity": activity.slug}
+        reverse("activity-registration-list"), {"activity": activity.id}
     )
 
     # ENTÃO a reposta deve ser de falha
@@ -60,11 +60,11 @@ def test_register_not_registered_to_event(
     user = user_factory(name="user", permissions=[])
     api_client.force_authenticate(user=user)
     event = event_factory(slug="event-a", owners=[])
-    activity = activity_factory(event=event, slug="activity-a", owners=[])
+    activity = activity_factory(event=event, name="Activity A", owners=[])
 
     # QUANDO a API é chamada para registrar o usuário na activity.
     resp = api_client.post(
-        reverse("activity-registration-list"), {"activity": activity.slug}
+        reverse("activity-registration-list"), {"activity": activity.id}
     )
 
     # ENTÃO a reposta deve ser de falta de permissões
@@ -95,7 +95,7 @@ def test_register_out_of_registration_period(
     EventRegistration.objects.create(event=event, user=user)
     activity = activity_factory(
         event=event,
-        slug="activity-a",
+        name="Activity A",
         owners=[],
         starts_on=event.starts_on,
         ends_on=event.ends_on,
@@ -105,12 +105,12 @@ def test_register_out_of_registration_period(
 
     # QUANDO a API é chamada para registrar o usuário na activity.
     resp = api_client.post(
-        reverse("activity-registration-list"), {"activity": activity.slug}
+        reverse("activity-registration-list"), {"activity": activity.id}
     )
 
     # ENTÃO a reposta de falha deve conter o erro no campo activity.
     assert resp.status_code == status.HTTP_400_BAD_REQUEST
-    assert len(resp.data["activity_slug"]) != 0
+    assert len(resp.data["activity"]) != 0
     # E ENTÃO a registration não deve ser criada.
     assert ActivityRegistration.objects.count() == 0
 
@@ -123,7 +123,7 @@ def test_unregister_valid(api_client, activity_factory, event_factory, user_fact
     event = event_factory(slug="event-a", owners=[])
     event_registration = EventRegistration.objects.create(event=event, user=user)
     # E DADO uma activity na qual o usuário está registrado.
-    activity = activity_factory(event=event, slug="activity-a", owners=[])
+    activity = activity_factory(event=event, name="Activity A", owners=[])
     registration = ActivityRegistration.objects.create(
         activity=activity, event_registration=event_registration
     )
@@ -155,7 +155,7 @@ def test_unregister_other_user_unauthorized(
         event=event, user=target_user
     )
     # E DADO uma activity na qual o usuário alvo já está registrado.
-    activity = activity_factory(event=event, slug="activity-a", owners=[])
+    activity = activity_factory(event=event, name="Activity A", owners=[])
     target_activity_registration = ActivityRegistration.objects.create(
         activity=activity, event_registration=target_event_registration
     )
@@ -183,8 +183,8 @@ def test_list_registrations_for_user_and_event(
     event_registration_a = EventRegistration.objects.create(event=event_a, user=user)
     event_registration_b = EventRegistration.objects.create(event=event_b, user=user)
     # E DADO uma activity em cada evento, nas quais o usuaŕio está registrado.
-    activity_a = activity_factory(event=event_a, slug="activity-a", owners=[])
-    activity_b = activity_factory(event=event_b, slug="activity-b", owners=[])
+    activity_a = activity_factory(event=event_a, name="Activity A", owners=[])
+    activity_b = activity_factory(event=event_b, name="Activity B", owners=[])
     ActivityRegistration.objects.create(
         activity=activity_a, event_registration=event_registration_a
     )
@@ -202,4 +202,4 @@ def test_list_registrations_for_user_and_event(
     # ENTÃO apenas a inscrição do usuário na atividade do evento A será retornada.
     assert resp.status_code == status.HTTP_200_OK
     assert len(resp.data) == 1
-    assert resp.data[0]["activity"]["slug"] == activity_a.slug
+    assert resp.data[0]["activity"]["id"] == activity_a.id

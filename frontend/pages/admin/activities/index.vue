@@ -60,8 +60,8 @@
                     tag="nuxt-link"
                     :to="
                       localePath({
-                        name: 'admin-activities-slug-manage',
-                        params: { slug: props.row.slug }
+                        name: 'admin-activities-id-manage',
+                        params: { id: props.row.id }
                       })
                     "
                     >{{ $t('pages.admin-activities.manageButton') }}</b-button

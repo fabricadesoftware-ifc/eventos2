@@ -7,7 +7,7 @@
           <div class="columns is-multiline">
             <div
               v-for="activity in activities"
-              :key="activity.slug"
+              :key="activity.id"
               class="column is-half"
             >
               <div class="card">
@@ -77,7 +77,7 @@ export default {
       }
       delete activity.name_english
       activity.registration =
-        registrations.find(x => x.activity.slug === activity.slug) || null
+        registrations.find(x => x.activity.id === activity.id) || null
       return activity
     })
     return {
@@ -87,7 +87,7 @@ export default {
   methods: {
     onRegister(activity) {
       this.$api.activityRegistration
-        .register({ activitySlug: activity.slug })
+        .register({ activityId: activity.id })
         .then(registration => (activity.registration = registration))
         .catch(this.handleGenericError)
     },

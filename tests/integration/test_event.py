@@ -280,7 +280,7 @@ def test_list_activities(api_client, user_factory, event_factory, activity_facto
     user = user_factory(name="user", permissions=["core.view_activities_for_event"])
     api_client.force_authenticate(user=user)
     event = event_factory(slug="event-a", owners=[user])
-    activity_a = activity_factory(event=event, slug="activity-a", owners=[])
+    activity_a = activity_factory(event=event, name="Activity A", owners=[])
 
     # QUANDO a API é chamada para listar as activities do evento.
     resp = api_client.get(reverse("event-list-activities", args=[event.slug]))
@@ -298,7 +298,7 @@ def test_list_tracks(api_client, user_factory, event_factory, track_factory):
     user = user_factory(name="user", permissions=["core.view_tracks_for_event"])
     api_client.force_authenticate(user=user)
     event = event_factory(slug="event-a", owners=[user])
-    track_a = track_factory(event=event, slug="track-a")
+    track_a = track_factory(event=event, name="Track A")
 
     # QUANDO a API é chamada para listar os tracks do evento.
     resp = api_client.get(reverse("event-list-tracks", args=[event.slug]))

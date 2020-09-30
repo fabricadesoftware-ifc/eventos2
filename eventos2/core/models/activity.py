@@ -10,9 +10,6 @@ class Activity(SoftDeletableModel):
     event = models.ForeignKey(
         Event, on_delete=models.PROTECT, related_name="activities"
     )
-    slug = models.CharField(
-        max_length=255, unique=True, help_text="A unique, readable identifier"
-    )
     name = models.CharField(
         max_length=255, help_text="The activity's name in its native language"
     )

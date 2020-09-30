@@ -13,24 +13,24 @@
                 tag="nuxt-link"
                 :to="
                   localePath({
-                    name: 'admin-tracks-slug-edit',
-                    params: { slug: trackLocalized.slug }
+                    name: 'admin-tracks-id-edit',
+                    params: { id: trackLocalized.id }
                   })
                 "
-                >{{ $t('pages.admin-tracks-slug-manage.editButton') }}</b-button
+                >{{ $t('pages.admin-tracks-id-manage.editButton') }}</b-button
               >
               <b-button
                 type="is-primary"
                 tag="nuxt-link"
                 :to="
                   localePath({
-                    name: 'admin-tracks-slug-manage-slots',
-                    params: { slug: trackLocalized.slug }
+                    name: 'admin-tracks-id-manage-slots',
+                    params: { id: trackLocalized.id }
                   })
                 "
                 >{{
                   $t(
-                    'pages.admin-tracks-slug-manage.manageSubmissionDocumentSlots'
+                    'pages.admin-tracks-id-manage.manageSubmissionDocumentSlots'
                   )
                 }}</b-button
               >
@@ -44,7 +44,7 @@
             <h2 class="title is-4">
               {{
                 $tc(
-                  'pages.admin-tracks-slug-manage.submissionCount',
+                  'pages.admin-tracks-id-manage.submissionCount',
                   submissions.length
                 )
               }}
@@ -61,7 +61,7 @@
               <div class="mb-4">
                 {{
                   $t(
-                    'pages.admin-tracks-slug-manage.noSubmissionDocumentSlotsMessage'
+                    'pages.admin-tracks-id-manage.noSubmissionDocumentSlotsMessage'
                   )
                 }}
               </div>
@@ -71,14 +71,14 @@
                 tag="nuxt-link"
                 :to="
                   localePath({
-                    name: 'admin-tracks-slug-manage-slots',
-                    params: { slug: trackLocalized.slug }
+                    name: 'admin-tracks-id-manage-slots',
+                    params: { id: trackLocalized.id }
                   })
                 "
                 icon-left="arrow-right"
                 >{{
                   $t(
-                    'pages.admin-tracks-slug-manage.manageSubmissionDocumentSlots'
+                    'pages.admin-tracks-id-manage.manageSubmissionDocumentSlots'
                   )
                 }}</b-button
               >
@@ -94,18 +94,18 @@
 export default {
   layout: 'admin',
   async asyncData({ app, params, store }) {
-    const track = await app.$api.track.getBySlug(params.slug)
+    const track = await app.$api.track.getById(params.id)
     if (store.state.locale === 'en' && track.name_english) {
       track.name = track.name_english
     }
     delete track.name_english
 
     const submissionDocumentSlots = await app.$api.track.listSubmissionDocumentSlots(
-      track.slug
+      track.id
     )
 
     const submissions = await app.$api.track
-      .listSubmissions(track.slug)
+      .listSubmissions(track.id)
       .then(submissions =>
         submissions.map(submission => {
           const authors = submission.authors.map(author => ({
@@ -131,14 +131,12 @@ export default {
       return [
         {
           field: 'title',
-          label: this.$t(
-            'pages.admin-tracks-slug-manage.labels.submissionTitle'
-          ),
+          label: this.$t('pages.admin-tracks-id-manage.labels.submissionTitle'),
           sortable: true
         },
         {
           field: 'authorsStr',
-          label: this.$t('pages.admin-tracks-slug-manage.labels.authors'),
+          label: this.$t('pages.admin-tracks-id-manage.labels.authors'),
           sortable: true
         }
       ]
@@ -151,7 +149,7 @@ export default {
       const willOpen = this.$dayjs().isBefore(startsOn)
 
       const status = isOpen ? 'isOpen' : willOpen ? 'willOpen' : 'wasOpen'
-      const messagePath = `pages.admin-tracks-slug-manage.status.${status}`
+      const messagePath = `pages.admin-tracks-id-manage.status.${status}`
       return this.$t(messagePath, {
         startDate: startsOn.format('LLLL'),
         endDate: endsOn.format('LLLL')

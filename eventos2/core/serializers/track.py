@@ -32,7 +32,7 @@ class TrackSerializer(TrackBaseSerializer, serializers.ModelSerializer):
     class Meta:
         model = Track
         fields = [
-            "slug",
+            "id",
             "name",
             "name_english",
             "starts_on",
@@ -53,8 +53,8 @@ class TrackCreateSerializer(TrackBaseSerializer, serializers.ModelSerializer):
     class Meta:
         model = Track
         fields = [
+            "id",
             "event_slug",
-            "slug",
             "name",
             "name_english",
             "starts_on",

@@ -16,7 +16,6 @@ from eventos2.utils.viewsets import CRUDViewSet
 
 
 class TrackViewSet(CRUDViewSet):
-    lookup_field = "slug"
     queryset = Track.available_objects.all()
     permission_classes = [PerActionPermissions]
     per_action_permissions = {
@@ -48,7 +47,7 @@ class TrackViewSet(CRUDViewSet):
     @action(
         detail=True, url_path="submissions", url_name="list-submissions",
     )
-    def list_submissions(self, request, slug=None):
+    def list_submissions(self, request, pk=None):
         track = self.get_object()
         serializer = SubmissionDetailSerializer(track.submissions.all(), many=True)
         return Response(serializer.data)
@@ -59,7 +58,7 @@ class TrackViewSet(CRUDViewSet):
         url_path="submission_document_slots",
         url_name="list-submission-document-slots",
     )
-    def list_submission_document_slots(self, request, slug=None):
+    def list_submission_document_slots(self, request, pk=None):
         track = self.get_object()
         serializer = TrackSubmissionDocumentSlotSerializer(
             track.submission_document_slots.all(), many=True

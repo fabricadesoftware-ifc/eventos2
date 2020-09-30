@@ -3,9 +3,9 @@ export function createTrackSubmissionDocumentSlotAPIClient($axios) {
     getById(id) {
       return $axios.$get(`api/v1/track_submission_document_slots/${id}/`)
     },
-    create({ trackSlug, name, name_english, starts_on, ends_on }) {
+    create({ trackId, name, name_english, starts_on, ends_on }) {
       return $axios.$post(`api/v1/track_submission_document_slots/`, {
-        track_slug: trackSlug,
+        track: trackId,
         name,
         name_english,
         starts_on,

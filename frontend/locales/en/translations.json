@@ -42,7 +42,6 @@
       "activityEndDate": "End date",
       "activityName": "Name",
       "activityNameInEnglish": "Name in english",
-      "activitySlug": "Slug",
       "activityStartDate": "Start date",
       "email": "Email",
       "eventEndDate": "End date",
@@ -62,7 +61,6 @@
       "trackEndDate": "End date",
       "trackName": "Name",
       "trackNameInEnglish": "Name in english",
-      "trackSlug": "Slug",
       "trackStartDate": "Start date"
     },
     "validation": {
@@ -103,17 +101,12 @@
       "registrationsOpen": "Registrations open",
       "title": "Manage activities"
     },
-    "admin-activities-new": {
-      "description": "Describe your activity.",
-      "submitButton": "Add",
-      "title": "New activity"
-    },
-    "admin-activities-slug-edit": {
+    "admin-activities-id-edit": {
       "description": "Describe your activity.",
       "submitButton": "Save",
       "title": "Edit activity"
     },
-    "admin-activities-slug-manage": {
+    "admin-activities-id-manage": {
       "editButton": "Edit this activity",
       "labels": {
         "email": "Email",
@@ -126,6 +119,11 @@
         "willOpen": "Registrations will open on {startDate}."
       },
       "title": "Manage activity"
+    },
+    "admin-activities-new": {
+      "description": "Describe your activity.",
+      "submitButton": "Add",
+      "title": "New activity"
     },
     "admin-eventDetails": {
       "description": "Describe your event.",
@@ -152,18 +150,12 @@
       "submissionsOpen": "Submissions open",
       "title": "Manage tracks"
     },
-    "admin-tracks-new": {
-      "addSubmissionDocumentSlotButton": "Add document",
-      "description": "Describe your track.",
-      "submitButton": "Add",
-      "title": "New track"
-    },
-    "admin-tracks-slug-edit": {
+    "admin-tracks-id-edit": {
       "description": "Describe your track.",
       "submitButton": "Save",
       "title": "Edit track"
     },
-    "admin-tracks-slug-manage": {
+    "admin-tracks-id-manage": {
       "editButton": "Edit this track",
       "labels": {
         "authors": "Authors",
@@ -179,7 +171,7 @@
       "submissionCount": "No submissions yet | 1 submission | {n} submissions",
       "title": "Manage track"
     },
-    "admin-tracks-slug-manage-submission-document-slots": {
+    "admin-tracks-id-manage-submission-document-slots": {
       "description": "Describe the required documents for submissions.",
       "emptyMessage": "No documents yet.",
       "labels": {
@@ -190,6 +182,12 @@
       "submitButton": "Add",
       "title": "Manage track submission document slots",
       "titleCurrentSlots": "Current documents"
+    },
+    "admin-tracks-new": {
+      "addSubmissionDocumentSlotButton": "Add document",
+      "description": "Describe your track.",
+      "submitButton": "Add",
+      "title": "New track"
     },
     "error": {
       "adviceEventNotFound": "Please double check the address for typing errors.",

@@ -21,7 +21,7 @@
                   :label="$t('pages.submissions-new.steps.details.label')"
                 >
                   <e-select
-                    v-model="form.trackSlug"
+                    v-model="form.trackId"
                     :label="$t('forms.labels.track')"
                     :placeholder="
                       $t('pages.submissions-new.steps.details.trackPlaceholder')
@@ -31,8 +31,8 @@
                   >
                     <option
                       v-for="track in openTracks"
-                      :key="track.slug"
-                      :value="track.slug"
+                      :key="track.id"
+                      :value="track.id"
                       >{{ track.name }}</option
                     >
                   </e-select>
@@ -126,7 +126,7 @@
                   <div class="title is-5">
                     {{ $t('pages.submissions-new.steps.confirm.description') }}
                   </div>
-                  <div v-if="form.trackSlug && form.title" class="panel">
+                  <div v-if="form.trackId && form.title" class="panel">
                     <div class="panel-block">
                       <e-status-icon
                         v-model="status.submission"
@@ -134,9 +134,7 @@
                       />
                       <div class="control">
                         {{ $t('forms.labels.track') }}:
-                        {{
-                          openTracks.find(x => x.slug === form.trackSlug).name
-                        }}
+                        {{ openTracks.find(x => x.id === form.trackId).name }}
                       </div>
                     </div>
                     <div class="panel-block">
@@ -247,7 +245,7 @@ export default {
     const preSelectedTrack = getFirstIfSingleItem(openTracks)
 
     const initialForm = {
-      trackSlug: preSelectedTrack ? preSelectedTrack.slug : null,
+      trackId: preSelectedTrack ? preSelectedTrack.id : null,
       title: '',
       authors: [(await app.$auth.fetchUser()).data],
       files: {}
@@ -296,12 +294,12 @@ export default {
     }
   },
   watch: {
-    'form.trackSlug': {
+    'form.trackId': {
       immediate: true,
-      handler(trackSlug) {
-        if (trackSlug) {
+      handler(trackId) {
+        if (trackId) {
           this.$api.track
-            .listSubmissionDocumentSlots(trackSlug)
+            .listSubmissionDocumentSlots(trackId)
             .then(slots => (this.submissionDocumentSlots = slots))
         } else {
           this.submissionDocumentSlots = null
@@ -378,7 +376,7 @@ export default {
         x => x.public_id !== this.$auth.user.public_id
       )
       const submission = await this.$api.submission.create({
-        trackSlug: this.form.trackSlug,
+        trackId: this.form.trackId,
         title: this.form.title,
         other_authors: otherAuthors.map(x => x.public_id)
       })

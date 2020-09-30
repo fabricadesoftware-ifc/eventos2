@@ -15,18 +15,14 @@ def test_submit_valid(
     api_client.force_authenticate(user=user)
     event = event_factory(slug="event-a", owners=[])
     EventRegistration.objects.create(event=event, user=user)
-    track = track_factory(event=event, slug="track-a")
+    track = track_factory(event=event, name="Track A")
     # E DADO um segundo usuário.
     other_user = user_factory(name="other-user", permissions=[])
 
     # QUANDO a API é chamada para submeter no track.
     resp = api_client.post(
         reverse("submission-list"),
-        {
-            "track": track.slug,
-            "title": "Title",
-            "other_authors": [other_user.public_id],
-        },
+        {"track": track.id, "title": "Title", "other_authors": [other_user.public_id]},
     )
 
     # ENTÃO a reposta deve ser de sucesso
@@ -45,11 +41,11 @@ def test_submit_not_registered_to_event(
     user = user_factory(name="user", permissions=[])
     api_client.force_authenticate(user=user)
     event = event_factory(slug="event-a", owners=[])
-    track = track_factory(event=event, slug="track-a")
+    track = track_factory(event=event, name="Track A")
 
     # QUANDO a API é chamada para submeter no track.
     resp = api_client.post(
-        reverse("submission-list"), {"track": track.slug, "title": "Title"}
+        reverse("submission-list"), {"track": track.id, "title": "Title"}
     )
 
     # ENTÃO a reposta deve ser de falta de permissões
@@ -79,14 +75,14 @@ def test_submit_out_of_submission_period(
     )
     EventRegistration.objects.create(event=event, user=user)
     track = track_factory(
-        event=event, slug="track-a", starts_on=event.starts_on, ends_on=event.ends_on
+        event=event, name="Track A", starts_on=event.starts_on, ends_on=event.ends_on
     )
     # E DADO que já passou o tempo de submissão
     freezer.move_to(parse_to_aware_datetime("2020-03-03"))
 
     # QUANDO a API é chamada para submeter no track.
     resp = api_client.post(
-        reverse("submission-list"), {"track": track.slug, "title": "Title"}
+        reverse("submission-list"), {"track": track.id, "title": "Title"}
     )
 
     # ENTÃO a reposta de falha deve conter o erro no campo track.

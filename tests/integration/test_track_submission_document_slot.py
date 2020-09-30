@@ -14,14 +14,14 @@ def test_create_valid(api_client, user_factory, event_factory, track_factory):
     user = user_factory(name="user", permissions=["core.change_event"])
     api_client.force_authenticate(user=user)
     event = event_factory(slug="event-a", owners=[user])
-    track = track_factory(event=event, slug="track-a")
+    track = track_factory(event=event, name="Track A")
 
     # E DADO dados de slot válidos.
     # QUANDO a API é chamada.
     resp = api_client.post(
         reverse("track-submission-document-slot-list"),
         {
-            "track_slug": track.slug,
+            "track": track.id,
             "name": "Slot A",
             "starts_on": timezone.now(),
             "ends_on": timezone.now(),
@@ -43,14 +43,14 @@ def test_create_invalid_date_order(
     user = user_factory(name="user", permissions=["core.change_event"])
     api_client.force_authenticate(user=user)
     event = event_factory(slug="event-a", owners=[user])
-    track = track_factory(event=event, slug="track-a")
+    track = track_factory(event=event, name="Track A")
 
     # E DADO dados de slot inválidos (data de término antes do início).
     # QUANDO a API é chamada.
     resp = api_client.post(
         reverse("track-submission-document-slot-list"),
         {
-            "track_slug": track.slug,
+            "track": track.id,
             "name": "Slot A",
             "starts_on": timezone.now(),
             "ends_on": timezone.now() - timedelta(days=1),
@@ -77,7 +77,7 @@ def test_create_invalid_dates_outside_of_track(
         ends_on=parse_to_aware_datetime("2020-03-03"),
     )
     track = track_factory(
-        event=event, slug="track-a", starts_on=event.starts_on, ends_on=event.ends_on
+        event=event, name="Track A", starts_on=event.starts_on, ends_on=event.ends_on
     )
 
     # E DADO dados de slot inválidos (datas fora dos limites do track).
@@ -85,7 +85,7 @@ def test_create_invalid_dates_outside_of_track(
     resp = api_client.post(
         reverse("track-submission-document-slot-list"),
         {
-            "track_slug": track.slug,
+            "track": track.id,
             "name": "Slot A",
             "starts_on": parse_to_aware_datetime("2020-01-01"),
             "ends_on": parse_to_aware_datetime("2020-04-04"),
@@ -105,14 +105,14 @@ def test_create_unauthorized(api_client, user_factory, event_factory, track_fact
     user = user_factory(name="user", permissions=["core.change_event"])
     api_client.force_authenticate(user=user)
     event = event_factory(slug="event-a", owners=[])
-    track = track_factory(event=event, slug="track-a")
+    track = track_factory(event=event, name="Track A")
 
     # E DADO dados de slot válidos.
     # QUANDO a API é chamada.
     resp = api_client.post(
         reverse("track-submission-document-slot-list"),
         {
-            "track_slug": track.slug,
+            "track": track.id,
             "name": "Slot A",
             "starts_on": timezone.now(),
             "ends_on": timezone.now(),
@@ -138,7 +138,7 @@ def test_update_valid(
     api_client.force_authenticate(user=user)
     event = event_factory(slug="event-a", owners=[user])
     track = track_factory(
-        event=event, slug="track-a", starts_on=event.starts_on, ends_on=event.ends_on
+        event=event, name="Track A", starts_on=event.starts_on, ends_on=event.ends_on
     )
     # E DADO um slot existente no track.
     slot = track_submission_document_slot_factory(
@@ -179,7 +179,7 @@ def test_update_unauthorized(
     user = user_factory(name="user", permissions=["core.change_event"])
     api_client.force_authenticate(user=user)
     event = event_factory(slug="event-a", owners=[])
-    track = track_factory(event=event, slug="track-a")
+    track = track_factory(event=event, name="Track A")
     # E DADO um slot existente no track.
     slot = track_submission_document_slot_factory(track=track, name="Slot A")
 
@@ -212,7 +212,7 @@ def test_delete_valid(
     user = user_factory(name="user", permissions=["core.change_event"])
     api_client.force_authenticate(user=user)
     event = event_factory(slug="event-a", owners=[user])
-    track = track_factory(event=event, slug="track-a")
+    track = track_factory(event=event, name="Track A")
     # E DADO um slot existente no track.
     slot = track_submission_document_slot_factory(track=track, name="Slot A")
 
@@ -241,7 +241,7 @@ def test_delete_unauthorized(
     user = user_factory(name="user", permissions=["core.change_event"])
     api_client.force_authenticate(user=user)
     event = event_factory(slug="event-a", owners=[])
-    track = track_factory(event=event, slug="track-a")
+    track = track_factory(event=event, name="Track A")
     # E DADO um slot existente no track.
     slot = track_submission_document_slot_factory(track=track, name="Slot A")
 

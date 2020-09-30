@@ -42,7 +42,6 @@
       "activityEndDate": "Data de término",
       "activityName": "Nome",
       "activityNameInEnglish": "Nome em inglês",
-      "activitySlug": "Slug",
       "activityStartDate": "Data de início",
       "email": "E-mail",
       "eventEndDate": "Data de término",
@@ -62,7 +61,6 @@
       "trackEndDate": "Data de término",
       "trackName": "Nome",
       "trackNameInEnglish": "Nome em inglês",
-      "trackSlug": "Slug",
       "trackStartDate": "Data de início"
     },
     "validation": {
@@ -103,17 +101,12 @@
       "registrationsOpen": "Inscrições abertas",
       "title": "Gerenciar atividades"
     },
-    "admin-activities-new": {
-      "description": "Descreva a sua atividade.",
-      "submitButton": "Adicionar",
-      "title": "Nova atividade"
-    },
-    "admin-activities-slug-edit": {
+    "admin-activities-id-edit": {
       "description": "Descreva a sua atividade.",
       "submitButton": "Salvar",
       "title": "Editar atividade"
     },
-    "admin-activities-slug-manage": {
+    "admin-activities-id-manage": {
       "editButton": "Editar essa atividade",
       "labels": {
         "email": "E-mail",
@@ -126,6 +119,11 @@
         "willOpen": "As inscrições serão abertas em {startDate}."
       },
       "title": "Gerenciar atividade"
+    },
+    "admin-activities-new": {
+      "description": "Descreva a sua atividade.",
+      "submitButton": "Adicionar",
+      "title": "Nova atividade"
     },
     "admin-eventDetails": {
       "description": "Descreva o seu evento.",
@@ -152,18 +150,12 @@
       "submissionsOpen": "Submissões abertas",
       "title": "Gerenciar tracks"
     },
-    "admin-tracks-new": {
-      "addSubmissionDocumentSlotButton": "Adicionar documento",
-      "description": "Descreva o seu track.",
-      "submitButton": "Adicionar",
-      "title": "Novo track"
-    },
-    "admin-tracks-slug-edit": {
+    "admin-tracks-id-edit": {
       "description": "Descreva o seu track.",
       "submitButton": "Salvar",
       "title": "Editar track"
     },
-    "admin-tracks-slug-manage": {
+    "admin-tracks-id-manage": {
       "editButton": "Editar esse track",
       "labels": {
         "authors": "Autores",
@@ -179,7 +171,7 @@
       "submissionCount": "Nenhuma submissão ainda | 1 submissão | {n} submissões",
       "title": "Gerenciar track"
     },
-    "admin-tracks-slug-manage-submission-document-slots": {
+    "admin-tracks-id-manage-submission-document-slots": {
       "description": "Descreva os documentos requeridos para as submissões.",
       "emptyMessage": "Nenhum documento.",
       "labels": {
@@ -190,6 +182,12 @@
       "submitButton": "Adicionar",
       "title": "Gerenciar documentos para submissões do track",
       "titleCurrentSlots": "Documentos atuais"
+    },
+    "admin-tracks-new": {
+      "addSubmissionDocumentSlotButton": "Adicionar documento",
+      "description": "Descreva o seu track.",
+      "submitButton": "Adicionar",
+      "title": "Novo track"
     },
     "error": {
       "adviceEventNotFound": "Por favor, verifique se há erros de digitação no endereço da página.",

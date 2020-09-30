@@ -32,7 +32,7 @@ class ActivitySerializer(ActivityBaseSerializer, serializers.ModelSerializer):
     class Meta:
         model = Activity
         fields = [
-            "slug",
+            "id",
             "name",
             "name_english",
             "starts_on",
@@ -53,8 +53,8 @@ class ActivityCreateSerializer(ActivityBaseSerializer, serializers.ModelSerializ
     class Meta:
         model = Activity
         fields = [
+            "id",
             "event_slug",
-            "slug",
             "name",
             "name_english",
             "starts_on",

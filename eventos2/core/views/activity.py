@@ -15,7 +15,6 @@ from eventos2.utils.viewsets import CRUDViewSet
 
 
 class ActivityViewSet(CRUDViewSet):
-    lookup_field = "slug"
     queryset = Activity.available_objects.all()
     permission_classes = [PerActionPermissions]
     per_action_permissions = {
@@ -46,7 +45,7 @@ class ActivityViewSet(CRUDViewSet):
 
     @extend_schema(responses={200: ActivityRegistrationUserListSerializer(many=True)})
     @action(detail=True, url_path="registrations", url_name="list-registrations")
-    def list_registrations(self, request, slug=None):
+    def list_registrations(self, request, pk=None):
         activity = self.get_object()
         serializer = ActivityRegistrationUserListSerializer(
             activity.registrations, many=True

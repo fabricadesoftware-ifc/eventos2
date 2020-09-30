@@ -20,7 +20,7 @@ def test_create_valid(
     user = user_factory(name="user", permissions=["core.change_submission"])
     api_client.force_authenticate(user=user)
     event = event_factory(slug="event-a", owners=[])
-    track = track_factory(event=event, slug="track-a")
+    track = track_factory(event=event, name="Track A")
     slot = track_submission_document_slot_factory(track=track, name="Slot A")
     # E DADO uma submissão do usuário no track.
     submission = submission_factory(track=track, title="Submission A", authors=[user])
@@ -59,7 +59,7 @@ def test_create_unauthorized(
     user = user_factory(name="user", permissions=["core.change_submission"])
     api_client.force_authenticate(user=user)
     event = event_factory(slug="event-a", owners=[])
-    track = track_factory(event=event, slug="track-a")
+    track = track_factory(event=event, name="Track A")
     slot = track_submission_document_slot_factory(track=track, name="Slot A")
     # E DADO uma submissão não pertencente ao usuário no track.
     submission = submission_factory(track=track, title="Submission A", authors=[])

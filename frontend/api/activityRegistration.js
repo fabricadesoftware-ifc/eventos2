@@ -8,9 +8,9 @@ export function createActivityRegistrationAPIClient($axios) {
         }
       })
     },
-    register({ activitySlug }) {
+    register({ activityId }) {
       return $axios.$post(`api/v1/activity_registrations/`, {
-        activity: activitySlug
+        activity: activityId
       })
     },
     deregister({ registrationId }) {

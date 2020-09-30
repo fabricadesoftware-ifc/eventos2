@@ -29,12 +29,6 @@
                 :label="$t('forms.labels.trackNameInEnglish')"
                 rules="required"
               />
-              <e-input
-                v-model="form.slug"
-                name="slug"
-                :label="$t('forms.labels.trackSlug')"
-                rules="required"
-              />
               <e-datetimepicker
                 v-model="form.starts_on"
                 name="starts_on"
@@ -81,7 +75,6 @@ export default {
       form: {
         name: '',
         name_english: '',
-        slug: '',
         starts_on: new Date(),
         ends_on: new Date()
       }

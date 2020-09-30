@@ -61,8 +61,8 @@
                     tag="nuxt-link"
                     :to="
                       localePath({
-                        name: 'admin-tracks-slug-manage',
-                        params: { slug: props.row.slug }
+                        name: 'admin-tracks-id-manage',
+                        params: { id: props.row.id }
                       })
                     "
                     >{{ $t('pages.admin-tracks.manageButton') }}</b-button

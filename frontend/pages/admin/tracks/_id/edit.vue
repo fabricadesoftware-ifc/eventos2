@@ -4,7 +4,7 @@
       <div class="column">
         <main class="section">
           <h1 class="title">
-            {{ $t('pages.admin-activities-slug-edit.title') }}
+            {{ $t('pages.admin-tracks-id-edit.title') }}
           </h1>
           <ValidationObserver ref="form" v-slot="{ handleSubmit }">
             <form @submit.prevent="handleSubmit(onSubmit)">
@@ -13,36 +13,31 @@
                   {{ error }}
                 </b-message>
                 <b-message v-else type="is-info">
-                  {{ $t('pages.admin-activities-slug-edit.description') }}
+                  {{ $t('pages.admin-tracks-id-edit.description') }}
                 </b-message>
               </div>
 
               <e-input
                 v-model="form.name"
                 name="name"
-                :label="$t('forms.labels.activityName')"
+                :label="$t('forms.labels.trackName')"
                 rules="required"
               />
               <e-input
                 v-model="form.name_english"
                 name="name_english"
-                :label="$t('forms.labels.activityNameInEnglish')"
+                :label="$t('forms.labels.trackNameInEnglish')"
                 rules="required"
-              />
-              <e-input
-                v-model="form.slug"
-                name="slug"
-                :label="$t('forms.labels.activitySlug')"
               />
               <e-datetimepicker
                 v-model="form.starts_on"
                 name="starts_on"
-                :label="$t('forms.labels.activityStartDate')"
+                :label="$t('forms.labels.trackStartDate')"
               />
               <e-datetimepicker
                 v-model="form.ends_on"
                 name="ends_on"
-                :label="$t('forms.labels.activityEndDate')"
+                :label="$t('forms.labels.trackEndDate')"
               />
 
               <div class="field">
@@ -53,7 +48,7 @@
                     icon-left="arrow-right"
                     :loading="loading"
                     >{{
-                      $t('pages.admin-activities-slug-edit.submitButton')
+                      $t('pages.admin-tracks-id-edit.submitButton')
                     }}</b-button
                   >
                 </div>
@@ -74,30 +69,29 @@ export default {
   mixins: [errorMixin],
 
   async asyncData({ app, params }) {
-    const activity = await app.$api.activity.getBySlug(params.slug)
+    const track = await app.$api.track.getById(params.id)
     return {
       loading: false,
       error: null,
-      currentSlug: activity.slug,
+      track,
       form: {
-        name: activity.name,
-        name_english: activity.name_english,
-        slug: activity.slug,
-        starts_on: new Date(activity.starts_on),
-        ends_on: new Date(activity.ends_on)
+        name: track.name,
+        name_english: track.name_english,
+        starts_on: new Date(track.starts_on),
+        ends_on: new Date(track.ends_on)
       }
     }
   },
   methods: {
     onSubmit() {
       this.loading = true
-      this.$api.activity
-        .update(this.currentSlug, this.form)
+      this.$api.track
+        .update(this.track.id, this.form)
         .then(() =>
           this.$router.push(
             this.localePath({
-              name: 'admin-activities-slug-manage',
-              params: { slug: this.form.slug }
+              name: 'admin-tracks-id-manage',
+              params: { id: this.track.id }
             })
           )
         )
