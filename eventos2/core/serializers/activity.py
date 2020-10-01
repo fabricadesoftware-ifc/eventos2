@@ -1,3 +1,5 @@
+from drf_spectacular.types import OpenApiTypes
+from drf_spectacular.utils import extend_schema_field
 from rest_framework import serializers
 
 from eventos2.core.models import Activity, Event
@@ -27,7 +29,11 @@ class ActivityBaseSerializer(serializers.Serializer):
 
 
 class ActivitySerializer(ActivityBaseSerializer, serializers.ModelSerializer):
-    registration_count = serializers.ReadOnlyField(source="registrations.count")
+    registration_count = serializers.SerializerMethodField()
+
+    @extend_schema_field(OpenApiTypes.DECIMAL)
+    def get_registration_count(self, obj):
+        return obj.registrations.count()
 
     class Meta:
         model = Activity
