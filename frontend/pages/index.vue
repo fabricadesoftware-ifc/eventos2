@@ -20,6 +20,7 @@
           </b-button>
           <div v-else>
             <b-button
+              v-if="event.has_tracks"
               type="is-primary"
               tag="nuxt-link"
               :to="localePath({ name: 'submissions-new' })"
@@ -27,18 +28,19 @@
               {{ $t('pages.index.newSubmissionButton') }}
             </b-button>
             <b-button
+              v-if="event.has_activities"
+              :type="event.has_tracks ? 'is-secondary' : 'is-primary'"
+              tag="nuxt-link"
+              :to="localePath({ name: 'activities' })"
+            >
+              {{ $t('pages.index.manageActivitiesButton') }}
+            </b-button>
+            <b-button
               type="is-secondary"
               tag="nuxt-link"
               :to="localePath({ name: 'user-registration' })"
             >
               {{ $t('pages.index.manageRegistrationButton') }}
-            </b-button>
-            <b-button
-              type="is-secondary"
-              tag="nuxt-link"
-              :to="localePath({ name: 'activities' })"
-            >
-              {{ $t('pages.index.manageActivitiesButton') }}
             </b-button>
           </div>
         </main>

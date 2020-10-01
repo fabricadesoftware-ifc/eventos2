@@ -32,6 +32,14 @@ class Event(SoftDeletableModel):
     def is_open(self):
         return self.is_open_on(timezone.now())
 
+    @property
+    def has_activities(self):
+        return self.activities(manager="available_objects").exists()
+
+    @property
+    def has_tracks(self):
+        return self.tracks(manager="available_objects").exists()
+
     def __str__(self):  # pragma: no cover - internal use
         return self.name
 
