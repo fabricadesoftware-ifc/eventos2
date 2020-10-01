@@ -5,7 +5,7 @@
         <main class="section">
           <h1 class="title">{{ $t('pages.user-registration.title') }}</h1>
 
-          <div v-if="eventUserRegistration">
+          <div v-if="eventRegistration">
             {{ $t('pages.user-registration.hasRegistration') }}
           </div>
           <div v-else>
@@ -18,11 +18,11 @@
 </template>
 
 <script>
-import { mapGetters } from 'vuex'
+import { mapState } from 'vuex'
 
 export default {
   computed: {
-    ...mapGetters(['eventUserRegistration'])
+    ...mapState(['eventRegistration'])
   }
 }
 </script>

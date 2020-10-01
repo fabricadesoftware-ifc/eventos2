@@ -3,15 +3,15 @@
     <div class="columns is-gapless">
       <div class="column is-10">
         <main class="section">
-          <h1 class="title">{{ eventName }}</h1>
+          <h1 class="title">{{ eventNameLocalized }}</h1>
           <p>
-            {{ eventStartDate.format('LLL') }}
+            {{ eventStartDate }}
             &ndash;
-            {{ eventEndDate.format('LLL') }}
+            {{ eventEndDate }}
           </p>
 
           <b-button
-            v-if="!eventUserRegistration"
+            v-if="!eventRegistration"
             type="is-primary"
             :loading="loading"
             @click="onRegister"
@@ -48,25 +48,30 @@
 </template>
 
 <script>
-import { mapGetters } from 'vuex'
-
 /**
  * Página inicial de um evento.
  */
 export default {
   auth: false,
-  asyncData() {
-    return {
-      loading: false
+  asyncData({ app, store }) {
+    const event = store.state.event
+
+    let eventNameLocalized = event.name
+    if (store.state.locale === 'en' && event.name_english) {
+      eventNameLocalized = event.name_english
     }
-  },
-  computed: {
-    ...mapGetters([
-      'eventName',
-      'eventStartDate',
-      'eventEndDate',
-      'eventUserRegistration'
-    ])
+
+    const eventStartDate = app.$dayjs(event.starts_on).format('LLL')
+    const eventEndDate = app.$dayjs(event.ends_on).format('LLL')
+
+    return {
+      loading: false,
+      event,
+      eventNameLocalized,
+      eventStartDate,
+      eventEndDate,
+      eventRegistration: store.state.eventRegistration
+    }
   },
   methods: {
     onRegister() {

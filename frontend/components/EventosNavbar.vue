@@ -6,7 +6,7 @@
         class="navbar-item"
         :to="localePath({ name: 'index' })"
       >
-        {{ eventName }}
+        {{ eventNameLocalized }}
       </b-navbar-item>
     </template>
     <template v-slot:end>
@@ -47,8 +47,6 @@
 </template>
 
 <script>
-import { mapGetters } from 'vuex'
-
 /**
  * Navbar geral do sistema.
  */
@@ -71,7 +69,16 @@ export default {
     isLoggedin() {
       return this.$auth.loggedIn
     },
-    ...mapGetters(['eventName'])
+    eventNameLocalized() {
+      const event = this.$store.state.event
+      if (!event) {
+        return
+      }
+      if (this.$store.state.locale === 'en' && event.name_english) {
+        return event.name_english
+      }
+      return event.name
+    }
   },
 
   methods: {

@@ -1,4 +1,3 @@
-import dayjs from '~/utils/dayjs'
 import { parseEventSlug } from '~/utils/url'
 
 export const state = () => ({
@@ -91,29 +90,4 @@ export const actions = {
   }
 }
 
-export const getters = {
-  eventName(state) {
-    if (state.event === null) {
-      return null
-    }
-    if (state.locale === 'en' && state.event.name_english) {
-      return state.event.name_english
-    }
-    return state.event.name
-  },
-  eventStartDate(state) {
-    if (state.event === null) {
-      return null
-    }
-    return dayjs(state.event.starts_on)
-  },
-  eventEndDate(state) {
-    if (state.event === null) {
-      return null
-    }
-    return dayjs(state.event.ends_on)
-  },
-  eventUserRegistration(state) {
-    return state.eventRegistration
-  }
-}
+export const getters = {}
