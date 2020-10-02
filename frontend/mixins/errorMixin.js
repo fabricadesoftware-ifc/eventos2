@@ -11,7 +11,7 @@ function showError(message, error) {
   if (this.error !== undefined) {
     this.error = message
   }
-  if (this.$refs.form) {
+  if (this.$refs.form && error.fields) {
     this.$refs.form.setErrors(error.fields)
   } else {
     // Se existe só um campo com erro, usá-lo como mensagem de erro.
