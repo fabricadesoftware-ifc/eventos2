@@ -42,6 +42,13 @@ class TrackSubmissionDocumentSlot(models.Model):
     starts_on = models.DateTimeField()
     ends_on = models.DateTimeField()
 
+    def is_open_on(self, date):
+        return self.starts_on <= date <= self.ends_on
+
+    @property
+    def is_open(self):
+        return self.is_open_on(timezone.now())
+
     @property
     def event(self):  # pragma: no cover - no complexity
         return self.track.event

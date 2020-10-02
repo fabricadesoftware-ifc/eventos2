@@ -31,7 +31,7 @@ class TrackSubmissionDocumentSlotSerializer(
 ):
     class Meta:
         model = TrackSubmissionDocumentSlot
-        fields = ["id", "name", "name_english", "starts_on", "ends_on"]
+        fields = ["id", "name", "name_english", "starts_on", "ends_on", "is_open"]
 
     def create(self, validated_data):  # pragma: no cover - no complexity
         raise NotImplementedError("Use TrackSubmissionDocumentSlotCreateSerializer")

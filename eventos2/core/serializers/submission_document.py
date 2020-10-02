@@ -15,6 +15,13 @@ class SubmissionDocumentSerializer(serializers.ModelSerializer):
     )
     document = DocumentSerializer(read_only=True)
 
+    def validate(self, data):
+        if not data["slot"].is_open:
+            raise serializers.ValidationError(
+                {"slot": "Submissions to this slot are closed."}
+            )
+        return data
+
     class Meta:
         model = SubmissionDocument
         fields = [
