@@ -52,6 +52,34 @@ def test_create_duplicate_user(api_client, user_factory):
 
 
 @pytest.mark.django_db
+def test_list_valid(api_client, user_factory):
+    # DADO dois usuário, um deles autenticado.
+    user_a = user_factory(name="user-a", permissions=[])
+    api_client.force_authenticate(user=user_a)
+    user_b = user_factory(name="user-b", permissions=[])
+
+    # QUANDO a API é chamada para buscar pelo user b.
+    resp = api_client.get("{}?email={}".format(reverse("user-list"), user_b.email))
+
+    # ENTÃO a resposta deve ser de sucesso e conter o user b.
+    assert resp.status_code == status.HTTP_200_OK
+    assert resp.data[0]["public_id"] == user_b.public_id
+
+
+@pytest.mark.django_db
+def test_list_unauthorized(api_client, user_factory):
+    # DADO nenhum usuário autenticado.
+
+    # QUANDO a API é chamada para buscar por um usuário.
+    resp = api_client.get(
+        "{}?email={}".format(reverse("user-list"), "example@example.com")
+    )
+
+    # ENTÃO a resposta deve ser de falta de permissão.
+    assert resp.status_code == status.HTTP_401_UNAUTHORIZED
+
+
+@pytest.mark.django_db
 def test_retrieve_current_valid(api_client, user_factory):
     # DADO um user autenticado.
     user = user_factory(name="user", permissions=[])
