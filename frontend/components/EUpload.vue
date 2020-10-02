@@ -14,10 +14,13 @@
       :label="label"
     >
       <b-upload :id="inputId" v-model="innerValue" :name="name">
-        <div class="button is-primary is-fullwidth">
+        <div
+          class="button is-primary is-fullwidth"
+          :class="{ 'is-loading': loading }"
+        >
           <b-icon icon="upload"></b-icon>
           <span>{{
-            innerValue.name ||
+            (innerValue && innerValue.name) ||
             placeholder ||
             $t('components.upload.placeholder')
           }}</span>
@@ -63,6 +66,10 @@ export default {
       default: null
     },
     horizontal: {
+      type: Boolean,
+      default: false
+    },
+    loading: {
       type: Boolean,
       default: false
     }
