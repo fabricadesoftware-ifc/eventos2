@@ -14,7 +14,7 @@
             </div>
             <div class="error-message">{{ message }}</div>
             <b-button
-              v-if="hasEvent"
+              v-if="event"
               icon-left="home"
               type="is-primary"
               size="is-medium"
@@ -32,6 +32,8 @@
 </template>
 
 <script>
+import { mapState } from 'vuex'
+
 import EventosNavbar from '~/components/EventosNavbar'
 
 export default {
@@ -46,17 +48,8 @@ export default {
       default: null
     }
   },
-  asyncData({ store }) {
-    return {
-      hasEvent: !!store.state.event
-    }
-  },
-  data() {
-    return {
-      hasEvent: false
-    }
-  },
   computed: {
+    ...mapState(['event']),
     headerMessage() {
       const message = this.hasEvent ? 'header' : 'headerEventNotFound'
       return this.$t(`pages.error.${message}`)
