@@ -214,7 +214,9 @@
     "submissions-new": {
       "clearButton": "Limpar tudo",
       "clearDialogMessage": "Você tem certeza que deseja limpar todas as informações?",
-      "nextStepButton": "Próxima etapa",
+      "errorNoOpenTracks": "O periodo de submissões acabou. Todos os tracks estão fechados.",
+      "nextStepButton": "Continuar",
+      "previousStepButton": "Voltar",
       "steps": {
         "authors": {
           "label": "Autores",
@@ -228,6 +230,7 @@
         },
         "details": {
           "label": "Informações",
+          "trackClosed": "(fechado)",
           "trackPlaceholder": "Escolha um track"
         },
         "documents": {
@@ -236,8 +239,10 @@
           "label": "Documentos"
         },
         "done": {
+          "addAnotherSubmissionButton": "Fazer outra submissão",
           "description": "Submissão concluída.",
-          "label": "Pronto"
+          "label": "Pronto",
+          "viewSubmissionsButton": "Ver as suas submissões"
         }
       },
       "submitButton": "Submeter",

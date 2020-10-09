@@ -214,7 +214,9 @@
     "submissions-new": {
       "clearButton": "Clear everything",
       "clearDialogMessage": "Are you sure you want to clear all of the entered information?",
-      "nextStepButton": "Next step",
+      "errorNoOpenTracks": "The submission period has elapsed. All tracks have been closed.",
+      "nextStepButton": "Next",
+      "previousStepButton": "Go back",
       "steps": {
         "authors": {
           "label": "Authors",
@@ -228,6 +230,7 @@
         },
         "details": {
           "label": "Details",
+          "trackClosed": "(closed)",
           "trackPlaceholder": "Select a track"
         },
         "documents": {
@@ -236,8 +239,10 @@
           "label": "Documents"
         },
         "done": {
+          "addAnotherSubmissionButton": "Make another submission",
           "description": "Your submission is done.",
-          "label": "Done"
+          "label": "Done",
+          "viewSubmissionsButton": "View your submissions"
         }
       },
       "submitButton": "Submit",
