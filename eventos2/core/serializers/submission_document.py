@@ -5,7 +5,18 @@ from eventos2.media.models import Document
 from eventos2.media.serializers import DocumentSerializer
 
 
-class SubmissionDocumentSerializer(serializers.ModelSerializer):
+class SubmissionDocumentBaseSerializer(serializers.Serializer):
+    def validate(self, data):
+        if not data["slot"].is_open:
+            raise serializers.ValidationError(
+                {"slot": "Submissions to this slot are closed."}
+            )
+        return data
+
+
+class SubmissionDocumentSerializer(
+    SubmissionDocumentBaseSerializer, serializers.ModelSerializer
+):
     document_attachment_key = serializers.SlugRelatedField(
         source="document",
         queryset=Document.objects.all(),
@@ -14,13 +25,6 @@ class SubmissionDocumentSerializer(serializers.ModelSerializer):
         write_only=True,
     )
     document = DocumentSerializer(read_only=True)
-
-    def validate(self, data):
-        if not data["slot"].is_open:
-            raise serializers.ValidationError(
-                {"slot": "Submissions to this slot are closed."}
-            )
-        return data
 
     class Meta:
         model = SubmissionDocument
@@ -32,7 +36,6 @@ class SubmissionDocumentSerializer(serializers.ModelSerializer):
             "submitted_on",
         ]
         extra_kwargs = {
-            "slot": {"write_only": True},
             "submission": {"write_only": True},
             "submitted_on": {"read_only": True},
         }

@@ -485,12 +485,17 @@ export default {
       const otherAuthors = this.form.authors.filter(
         x => x.public_id !== this.$auth.user.public_id
       )
-      let submission
       try {
-        submission = await this.$api.submission.create({
+        await this.$api.submission.create({
           trackId: this.form.trackId,
           title: this.form.title,
-          other_authors: otherAuthors.map(x => x.public_id)
+          other_authors: otherAuthors.map(x => x.public_id),
+          documents: Object.entries(this.uploadedDocuments).map(
+            ([slotId, document]) => ({
+              slot: slotId,
+              document_attachment_key: document.attachment_key
+            })
+          )
         })
         this.status.submissionCreated = true
       } catch (err) {
@@ -498,22 +503,6 @@ export default {
         this.isSubmitting = false
         this.handleGenericError(err)
         return
-      }
-
-      for (const [slotId, document] of Object.entries(this.uploadedDocuments)) {
-        try {
-          await this.$api.submission.addDocument({
-            submissionId: submission.id,
-            slotId,
-            attachmentKey: document.attachment_key
-          })
-          this.$set(this.status.documentsLinked, slotId, true)
-        } catch (err) {
-          this.$set(this.status.documentsLinked, slotId, false)
-          this.isSubmitting = false
-          this.handleGenericError(err)
-          return
-        }
       }
 
       setTimeout(() => {
