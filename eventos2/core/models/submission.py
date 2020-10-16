@@ -24,6 +24,11 @@ class Submission(SoftDeletableModel):
     def event(self):  # pragma: no cover - no complexity
         return self.track.event
 
+    class Meta:
+        permissions = [
+            ("add_review_to_submission", "Can add a review to a submission"),
+        ]
+
 
 class SubmissionAuthorship(models.Model):
     submission = models.ForeignKey(

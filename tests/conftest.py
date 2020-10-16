@@ -11,6 +11,7 @@ from eventos2.core.models import (
     Event,
     Submission,
     Track,
+    TrackReviewQuestion,
     TrackSubmissionDocumentSlot,
     User,
 )
@@ -103,6 +104,17 @@ def track_factory():
             ends_on=ends_on or default_ends_on,
         )
         return track
+
+    return _factory
+
+
+@pytest.fixture
+def track_review_question_factory():
+    def _factory(*, track, text, answer_type=TrackReviewQuestion.AnswerType.TEXT):
+        question = TrackReviewQuestion.objects.create(
+            track=track, text=text, answer_type=answer_type
+        )
+        return question
 
     return _factory
 

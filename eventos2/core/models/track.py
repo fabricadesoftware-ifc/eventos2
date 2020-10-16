@@ -52,3 +52,20 @@ class TrackSubmissionDocumentSlot(models.Model):
     @property
     def event(self):  # pragma: no cover - no complexity
         return self.track.event
+
+
+class TrackReviewQuestion(models.Model):
+    class AnswerType(models.TextChoices):
+        YES_NO = "yes_no"
+        GRADE_ZERO_TO_TEN = "grade_zero_to_ten"
+        TEXT = "text"
+
+    track = models.ForeignKey(
+        Track, on_delete=models.PROTECT, related_name="review_questions"
+    )
+    text = models.CharField(max_length=255)
+    answer_type = models.CharField(max_length=255, choices=AnswerType.choices)
+
+    @property
+    def event(self):  # pragma: no cover - no complexity
+        return self.track.event
