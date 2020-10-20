@@ -1,15 +1,9 @@
 from rest_framework import serializers
 
-from eventos2.core.models import Review, ReviewAnswer, Submission, TrackReviewQuestion
+from eventos2.core.models import Review, ReviewAnswer, Submission
+from eventos2.core.serializers.review_answer import ReviewAnswerSerializer
 from eventos2.core.serializers.submission import SubmissionDetailSerializer
 from eventos2.core.serializers.user import UserSerializer
-
-
-class ReviewAnswerSerializer(serializers.Serializer):
-    question = serializers.PrimaryKeyRelatedField(
-        queryset=TrackReviewQuestion.objects.all()
-    )
-    text = serializers.CharField(max_length=255)
 
 
 class ReviewCreateSerializer(serializers.Serializer):

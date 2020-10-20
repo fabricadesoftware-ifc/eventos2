@@ -48,6 +48,7 @@ class Event(SoftDeletableModel):
             ("view_registrations_for_event", "Can view registrations for an event"),
             ("view_activities_for_event", "Can view activities for an event"),
             ("view_tracks_for_event", "Can view tracks for an event"),
+            ("view_submissions_for_event", "Can view submissions for an event"),
             (
                 "view_activity_registrations_for_event",
                 "Can view activity registrations for an event",

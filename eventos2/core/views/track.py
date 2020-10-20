@@ -6,7 +6,6 @@ from rest_framework.response import Response
 
 from eventos2.core.models import Track
 from eventos2.core.serializers import (
-    SubmissionDetailSerializer,
     TrackCreateSerializer,
     TrackSerializer,
     TrackSubmissionDocumentSlotSerializer,
@@ -42,15 +41,6 @@ class TrackViewSet(CRUDViewSet):
 
         serializer.save()
         return Response(serializer.data, status=status.HTTP_200_OK)
-
-    @extend_schema(responses={200: SubmissionDetailSerializer(many=True)})
-    @action(
-        detail=True, url_path="submissions", url_name="list-submissions",
-    )
-    def list_submissions(self, request, pk=None):
-        track = self.get_object()
-        serializer = SubmissionDetailSerializer(track.submissions.all(), many=True)
-        return Response(serializer.data)
 
     @extend_schema(responses={200: TrackSubmissionDocumentSlotSerializer(many=True)})
     @action(

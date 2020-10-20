@@ -251,28 +251,6 @@ def test_delete_unauthorized(api_client, user_factory, event_factory, track_fact
 
 
 @pytest.mark.django_db
-def test_list_submissions(
-    api_client, user_factory, event_factory, track_factory, submission_factory
-):
-    # DADO um usuário autenticado, um evento pertencente a ele, e um track no evento.
-    user = user_factory(name="user", permissions=["core.change_event"])
-    api_client.force_authenticate(user=user)
-    event = event_factory(slug="event-a", owners=[user])
-    track = track_factory(event=event, name="Track A")
-    # E DADO uma submission no track.
-    submission_a = submission_factory(track=track, title="Submission A", authors=[])
-
-    # QUANDO a API é chamada para listar as submissions do track.
-    resp = api_client.get(reverse("track-list-submissions", args=[track.id]))
-
-    # ENTÃO as submissions serão retornadas
-    assert resp.status_code == status.HTTP_200_OK
-
-    assert len(resp.data) == 1
-    assert resp.data[0]["title"] == submission_a.title
-
-
-@pytest.mark.django_db
 def test_list_submission_document_slots(
     api_client,
     user_factory,

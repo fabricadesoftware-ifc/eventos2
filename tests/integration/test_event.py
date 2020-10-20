@@ -308,3 +308,52 @@ def test_list_tracks(api_client, user_factory, event_factory, track_factory):
 
     assert len(resp.data) == 1
     assert resp.data[0]["name"] == track_a.name
+
+
+@pytest.mark.django_db
+def test_list_submissions(
+    api_client, user_factory, event_factory, track_factory, submission_factory
+):
+    # DADO um usuário autenticado, um evento pertencente a ele, e um track no evento.
+    user = user_factory(name="user", permissions=["core.view_submissions_for_event"])
+    api_client.force_authenticate(user=user)
+    event = event_factory(slug="event-a", owners=[user])
+    track_a = track_factory(event=event, name="Track A")
+    submission_a = submission_factory(track=track_a, title="Submission A", authors=[])
+
+    # QUANDO a API é chamada para listar as submissions do evento.
+    resp = api_client.get(reverse("event-list-submissions", args=[event.slug]))
+
+    # ENTÃO as submissions serão retornados
+    assert resp.status_code == status.HTTP_200_OK
+
+    assert len(resp.data) == 1
+    assert resp.data[0]["title"] == submission_a.title
+
+
+@pytest.mark.django_db
+def test_list_submissions_filter(
+    api_client, user_factory, event_factory, track_factory, submission_factory
+):
+    # DADO um usuário autenticado, um evento pertencente a ele, e um track no evento.
+    user = user_factory(name="user", permissions=["core.view_submissions_for_event"])
+    api_client.force_authenticate(user=user)
+    event = event_factory(slug="event-a", owners=[user])
+    track_a = track_factory(event=event, name="Track A")
+    submission_a = submission_factory(
+        track=track_a, title="Submissão com título maçã!", authors=[]
+    )
+    submission_factory(track=track_a, title="Outra submissão", authors=[])
+
+    # QUANDO a API é chamada para listar as submissions do evento.
+    resp = api_client.get(
+        "{}?track={}&title=maca".format(
+            reverse("event-list-submissions", args=[event.slug]), track_a.id
+        )
+    )
+
+    # ENTÃO as submissions serão retornados
+    assert resp.status_code == status.HTTP_200_OK
+
+    assert len(resp.data) == 1
+    assert resp.data[0]["title"] == submission_a.title
