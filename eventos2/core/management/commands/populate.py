@@ -97,6 +97,7 @@ class Command(BaseCommand):
             email=email, username=email, first_name="User", last_name=str(n)
         )
         user.set_password("user{}".format(n))
+        user.save()
         return user
 
     @staticmethod

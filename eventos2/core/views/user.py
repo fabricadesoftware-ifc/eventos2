@@ -3,8 +3,12 @@ from rest_framework import status
 from rest_framework.decorators import action
 from rest_framework.response import Response
 
-from eventos2.core.models import User
-from eventos2.core.serializers import UserCreateSerializer, UserSerializer
+from eventos2.core.models import Submission, User
+from eventos2.core.serializers import (
+    SubmissionDetailWithReviewsSerializer,
+    UserCreateSerializer,
+    UserSerializer,
+)
 from eventos2.utils.permissions import PerActionPermissions
 from eventos2.utils.viewsets import CViewSet
 
@@ -18,6 +22,7 @@ class UserViewSet(CViewSet):
         "current": PerActionPermissions.ALLOW_AUTHENTICATED,
         "current_update": PerActionPermissions.ALLOW_AUTHENTICATED,
         "current_destroy": PerActionPermissions.ALLOW_AUTHENTICATED,
+        "current_list_submissions": PerActionPermissions.ALLOW_AUTHENTICATED,
     }
 
     def get_serializer_class(self):
@@ -60,3 +65,18 @@ class UserViewSet(CViewSet):
         user = User.objects.filter().get(pk=request.user.pk)
         user.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
+
+    @extend_schema(responses={200: SubmissionDetailWithReviewsSerializer(many=True)},)
+    @action(
+        detail=False,
+        url_path="current/submissions",
+        url_name="current-list-submissions",
+    )
+    def current_list_submissions(self, request, slug=None):
+        user = User.objects.filter().get(pk=request.user.pk)
+
+        serializer = SubmissionDetailWithReviewsSerializer(
+            Submission.available_objects.filter(authors__in=[user]).order_by("-id"),
+            many=True,
+        )
+        return Response(serializer.data)

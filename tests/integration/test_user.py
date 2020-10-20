@@ -163,3 +163,25 @@ def test_delete_current_invalid(api_client):
 
     # ENTÃO a resposta deve ser falta de permissão
     assert resp.status_code == status.HTTP_401_UNAUTHORIZED
+
+
+@pytest.mark.django_db
+def test_list_submissions_current(
+    api_client, user_factory, event_factory, track_factory, submission_factory
+):
+    # DADO um user autenticado.
+    user = user_factory(name="user", permissions=[])
+    api_client.force_authenticate(user=user)
+    # E DADO uma submissão do user
+    event = event_factory(slug="Event A", owners=[])
+    track = track_factory(event=event, name="Track A")
+    submission = submission_factory(track=track, title="Submission A", authors=[user])
+
+    # QUANDO a API é chamada para listar as submissões do user atual.
+    resp = api_client.get(reverse("user-current-list-submissions"))
+
+    # ENTÃO a resposta deve ser de sucesso.
+    assert resp.status_code == status.HTTP_200_OK
+    # E ENTÃO a responsta deve conter a submissão do user.
+    assert len(resp.data) == 1
+    assert resp.data[0]["title"] == submission.title
