@@ -22,9 +22,6 @@ export function createTrackAPIClient($axios) {
     },
     listSubmissionDocumentSlots(id) {
       return $axios.$get(`api/v1/tracks/${id}/submission_document_slots/`)
-    },
-    listSubmissions(id) {
-      return $axios.$get(`api/v1/tracks/${id}/submissions/`)
     }
   }
 }

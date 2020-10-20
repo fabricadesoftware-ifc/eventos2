@@ -104,8 +104,8 @@ export default {
       track.id
     )
 
-    const submissions = await app.$api.track
-      .listSubmissions(track.id)
+    const submissions = await app.$api.event
+      .listSubmissionsInTrack(store.state.event.slug, track.id)
       .then(submissions =>
         submissions.map(submission => {
           const authors = submission.authors.map(author => ({
