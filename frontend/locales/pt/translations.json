@@ -256,6 +256,18 @@
     "user-settings": {
       "submitButton": "Salvar",
       "title": "Suas preferências"
+    },
+    "user-submissions": {
+      "documentSubmittedOn": "enviado em",
+      "empty": "Nenhuma submissão ainda.",
+      "firstSubmissionButton": "Faça a sua primeira submissão",
+      "itemAuthors": "Autores",
+      "itemDocuments": "Documentos",
+      "itemTrack": "Track",
+      "statusAccepted": "Aprovada",
+      "statusRejected": "Rejeitada",
+      "statusWaitingReview": "Esperando avaliação",
+      "title": "Minhas submissões"
     }
   }
 }

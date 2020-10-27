@@ -12,7 +12,7 @@ from eventos2.core.models import (
 from eventos2.core.serializers.review_answer import ReviewAnswerSerializer
 from eventos2.core.serializers.submission_document import (
     SubmissionDocumentBaseSerializer,
-    SubmissionDocumentSerializer,
+    SubmissionDocumentDetailWithSlotSerializer,
 )
 from eventos2.core.serializers.track import TrackSerializer
 from eventos2.core.serializers.user import UserSerializer
@@ -112,13 +112,12 @@ class SubmissionDetailSerializer(SubmissionBaseSerializer):
     title = serializers.CharField()
     title_english = serializers.CharField(required=False)
     authors = UserSerializer(many=True)
-    documents = SubmissionDocumentSerializer(many=True)
+    documents = SubmissionDocumentDetailWithSlotSerializer(many=True)
 
 
 class SubmissionDetailWithReviewsSerializer(SubmissionDetailSerializer):
     class ReviewInlineSerializer(serializers.Serializer):
         id = serializers.IntegerField()
-        author = UserSerializer()
         answers = ReviewAnswerSerializer(many=True)
 
     id = serializers.IntegerField()
@@ -126,5 +125,5 @@ class SubmissionDetailWithReviewsSerializer(SubmissionDetailSerializer):
     title = serializers.CharField()
     title_english = serializers.CharField(required=False)
     authors = UserSerializer(many=True)
-    documents = SubmissionDocumentSerializer(many=True)
+    documents = SubmissionDocumentDetailWithSlotSerializer(many=True)
     reviews = ReviewInlineSerializer(many=True)

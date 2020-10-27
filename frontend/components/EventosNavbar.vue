@@ -10,6 +10,16 @@
       </b-navbar-item>
     </template>
     <template v-slot:end>
+      <b-navbar-item
+        v-if="isLoggedin"
+        tag="nuxt-link"
+        exact-active-class="is-active"
+        :to="localePath({ name: 'user-submissions' })"
+      >
+        <b-icon icon="book-multiple"></b-icon>
+        <span>{{ $t('pages.user-submissions.title') }}</span>
+      </b-navbar-item>
+
       <b-navbar-dropdown v-if="isLoggedin">
         <template v-slot:label>
           <b-icon icon="account-circle"></b-icon>

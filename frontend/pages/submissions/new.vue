@@ -211,11 +211,17 @@
                           )
                         }}</b-button
                       >
-                      <b-button type="is-primary" icon-left="arrow-right">{{
-                        $t(
-                          'pages.submissions-new.steps.done.viewSubmissionsButton'
-                        )
-                      }}</b-button>
+                      <b-button
+                        type="is-primary"
+                        icon-left="arrow-right"
+                        tag="nuxt-link"
+                        :to="localePath({ name: 'user-submissions' })"
+                        >{{
+                          $t(
+                            'pages.submissions-new.steps.done.viewSubmissionsButton'
+                          )
+                        }}</b-button
+                      >
                     </div>
                   </b-message>
                 </b-step-item>

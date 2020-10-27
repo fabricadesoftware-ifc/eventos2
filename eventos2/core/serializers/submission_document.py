@@ -1,8 +1,12 @@
 from rest_framework import serializers
 
 from eventos2.core.models import SubmissionDocument
+from eventos2.core.serializers.track_submission_document_slot import (
+    TrackSubmissionDocumentSlotSerializer,
+)
 from eventos2.media.models import Document
 from eventos2.media.serializers import DocumentSerializer
+from eventos2.utils.serializers import ReadOnlyModelSerializer
 
 
 class SubmissionDocumentBaseSerializer(serializers.Serializer):
@@ -42,3 +46,18 @@ class SubmissionDocumentSerializer(
 
     def update(self, instance, validated_data):  # pragma: no cover - no complexity
         raise NotImplementedError
+
+
+class SubmissionDocumentDetailWithSlotSerializer(
+    SubmissionDocumentBaseSerializer, ReadOnlyModelSerializer
+):
+    slot = TrackSubmissionDocumentSlotSerializer()
+    document = DocumentSerializer(read_only=True)
+
+    class Meta:
+        model = SubmissionDocument
+        fields = [
+            "slot",
+            "document",
+            "submitted_on",
+        ]

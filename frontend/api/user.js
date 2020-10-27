@@ -16,6 +16,9 @@ export function createUserAPIClient($axios) {
         first_name,
         last_name
       })
+    },
+    listSubmissions() {
+      return $axios.$get(`api/v1/users/current/submissions/`)
     }
   }
 }
