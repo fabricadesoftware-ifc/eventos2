@@ -182,6 +182,38 @@ def test_list_submissions_current(
 
     # ENTÃO a resposta deve ser de sucesso.
     assert resp.status_code == status.HTTP_200_OK
-    # E ENTÃO a responsta deve conter a submissão do user.
+    # E ENTÃO a resposta deve conter a submissão do user.
     assert len(resp.data) == 1
     assert resp.data[0]["title"] == submission.title
+
+
+@pytest.mark.django_db
+def test_list_review_requests(
+    api_client,
+    user_factory,
+    event_factory,
+    track_factory,
+    submission_factory,
+    review_factory,
+):
+    # DADO um user autenticado.
+    user = user_factory(name="User A", permissions=[])
+    api_client.force_authenticate(user=user)
+    # E DADO uma submissão de outro user
+    event = event_factory(slug="Event A", owners=[])
+    track = track_factory(event=event, name="Track A")
+    other_user = user_factory(name="User B", permissions=[])
+    submission = submission_factory(
+        track=track, title="Submission A", authors=[other_user]
+    )
+    # E DADO uma review pendente.
+    review_factory(submission=submission, author=user)
+
+    # QUANDO a API é chamada para listar as reviews pendentes do user atual.
+    resp = api_client.get(reverse("user-current-list-review-requests"))
+
+    # ENTÃO a resposta deve ser de sucesso.
+    assert resp.status_code == status.HTTP_200_OK
+    # E ENTÃO a resposta deve conter a submissão pendente a ser avaliada pelo usuário.
+    assert len(resp.data) == 1
+    assert resp.data[0]["submission"]["title"] == submission.title

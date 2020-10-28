@@ -5,6 +5,7 @@ from rest_framework.response import Response
 
 from eventos2.core.models import Submission, User
 from eventos2.core.serializers import (
+    ReviewRequestInlineSerializer,
     SubmissionDetailWithReviewsSerializer,
     UserCreateSerializer,
     UserSerializer,
@@ -23,6 +24,7 @@ class UserViewSet(CViewSet):
         "current_update": PerActionPermissions.ALLOW_AUTHENTICATED,
         "current_destroy": PerActionPermissions.ALLOW_AUTHENTICATED,
         "current_list_submissions": PerActionPermissions.ALLOW_AUTHENTICATED,
+        "current_list_review_requests": PerActionPermissions.ALLOW_AUTHENTICATED,
     }
 
     def get_serializer_class(self):
@@ -79,4 +81,19 @@ class UserViewSet(CViewSet):
             Submission.available_objects.filter(authors__in=[user]).order_by("-id"),
             many=True,
         )
+        return Response(serializer.data)
+
+    @extend_schema(responses={200: ReviewRequestInlineSerializer(many=True)},)
+    @action(
+        detail=False,
+        url_path="current/review_requests",
+        url_name="current-list-review-requests",
+    )
+    def current_list_review_requests(self, request, slug=None):
+        user = User.objects.filter().get(pk=request.user.pk)
+
+        reviews = user.reviews.order_by("-id").all()
+        pending_reviews = [x for x in reviews if x.is_pending]
+
+        serializer = ReviewRequestInlineSerializer(pending_reviews, many=True,)
         return Response(serializer.data)

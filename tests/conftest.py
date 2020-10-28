@@ -9,6 +9,7 @@ from rest_framework.test import APIClient
 from eventos2.core.models import (
     Activity,
     Event,
+    Review,
     Submission,
     Track,
     TrackReviewQuestion,
@@ -88,6 +89,15 @@ def submission_factory():
         submission = Submission.objects.create(track=track, title=title,)
         submission.authors.add(*authors)
         return submission
+
+    return _factory
+
+
+@pytest.fixture
+def review_factory():
+    def _factory(*, submission, author):
+        review = Review.objects.create(submission=submission, author=author)
+        return review
 
     return _factory
 

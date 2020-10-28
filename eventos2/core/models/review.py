@@ -11,6 +11,10 @@ class Review(models.Model):
     )
     author = models.ForeignKey(User, on_delete=models.PROTECT, related_name="reviews")
 
+    @property
+    def is_pending(self):
+        return self.answers.count() == 0
+
     class Meta:
         constraints = [
             models.UniqueConstraint(

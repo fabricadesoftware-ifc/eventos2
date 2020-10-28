@@ -127,3 +127,11 @@ class SubmissionDetailWithReviewsSerializer(SubmissionDetailSerializer):
     authors = UserSerializer(many=True)
     documents = SubmissionDocumentDetailWithSlotSerializer(many=True)
     reviews = ReviewInlineSerializer(many=True)
+
+
+class SubmissionDetailWithoutAuthorsSerializer(SubmissionBaseSerializer):
+    id = serializers.IntegerField()
+    track = TrackSerializer()
+    title = serializers.CharField()
+    title_english = serializers.CharField(required=False)
+    documents = SubmissionDocumentDetailWithSlotSerializer(many=True)

@@ -16,9 +16,8 @@ class ReviewViewSet(ViewSet):
         in_serializer.is_valid(raise_exception=True)
         data = in_serializer.validated_data
 
-        submission = data["submission"]
-
-        if not request.user.has_perm("core.add_review_to_submission", submission):
+        review_request = data["request"]
+        if not request.user.has_perm("core.answer_review", review_request):
             raise PermissionDenied("You're not authorized to review this submission.")
 
         review = in_serializer.save(author=request.user)

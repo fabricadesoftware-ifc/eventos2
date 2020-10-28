@@ -16,6 +16,9 @@ router.register(
     basename="event-registration",
 )
 router.register(r"reviews", views.ReviewViewSet, basename="review")
+router.register(
+    r"review_requests", views.ReviewRequestViewSet, basename="review-request"
+)
 router.register(r"submissions", views.SubmissionViewSet, basename="submission")
 router.register(
     r"submission_documents",
