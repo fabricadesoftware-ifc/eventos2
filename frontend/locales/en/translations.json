@@ -61,6 +61,8 @@
       "trackEndDate": "End date",
       "trackName": "Name",
       "trackNameInEnglish": "Name in english",
+      "trackReviewQuestionAnswerType": "Answer type",
+      "trackReviewQuestionText": "Text",
       "trackStartDate": "Start date"
     },
     "validation": {
@@ -161,6 +163,7 @@
         "authors": "Authors",
         "submissionTitle": "Title"
       },
+      "manageReviewQuestions": "Manage review questions",
       "manageSubmissionDocumentSlots": "Manage required documents",
       "noSubmissionDocumentSlotsMessage": "All that's missing is specifying what documents are required for each submission.",
       "status": {
@@ -170,6 +173,22 @@
       },
       "submissionCount": "No submissions yet | 1 submission | {n} submissions",
       "title": "Manage track"
+    },
+    "admin-tracks-id-manage-review-questions": {
+      "answerTypes": {
+        "gradeZeroToTen": "Grade (0 to 10)",
+        "text": "Text",
+        "yesNo": "Yes or no"
+      },
+      "description": "Describe the required questions for submission reviews.",
+      "emptyMessage": "No questions yet.",
+      "labels": {
+        "answerType": "Answer type",
+        "text": "Text"
+      },
+      "submitButton": "Add",
+      "title": "Manage track review questions",
+      "titleCurrentSlots": "Current questions"
     },
     "admin-tracks-id-manage-submission-document-slots": {
       "description": "Describe the required documents for submissions.",

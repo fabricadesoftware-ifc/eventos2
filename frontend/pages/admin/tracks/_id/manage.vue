@@ -20,6 +20,19 @@
                 >{{ $t('pages.admin-tracks-id-manage.editButton') }}</b-button
               >
               <b-button
+                type="is-secondary"
+                tag="nuxt-link"
+                :to="
+                  localePath({
+                    name: 'admin-tracks-id-manage-review-questions',
+                    params: { id: trackLocalized.id }
+                  })
+                "
+                >{{
+                  $t('pages.admin-tracks-id-manage.manageReviewQuestions')
+                }}</b-button
+              >
+              <b-button
                 type="is-primary"
                 tag="nuxt-link"
                 :to="

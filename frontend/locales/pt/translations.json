@@ -61,6 +61,8 @@
       "trackEndDate": "Data de término",
       "trackName": "Nome",
       "trackNameInEnglish": "Nome em inglês",
+      "trackReviewQuestionAnswerType": "Tipo de resposta",
+      "trackReviewQuestionText": "Texto",
       "trackStartDate": "Data de início"
     },
     "validation": {
@@ -161,6 +163,7 @@
         "authors": "Autores",
         "submissionTitle": "Título"
       },
+      "manageReviewQuestions": "Gerenciar perguntas de avaliação",
       "manageSubmissionDocumentSlots": "Gerenciar documentos requeridos",
       "noSubmissionDocumentSlotsMessage": "Agora falta configurar quais documentos serão requeridos das submissões.",
       "status": {
@@ -170,6 +173,22 @@
       },
       "submissionCount": "Nenhuma submissão ainda | 1 submissão | {n} submissões",
       "title": "Gerenciar track"
+    },
+    "admin-tracks-id-manage-review-questions": {
+      "answerTypes": {
+        "gradeZeroToTen": "Nota (0 a 10)",
+        "text": "Texto",
+        "yesNo": "Sim ou não"
+      },
+      "description": "Descreva as questões requeridas para a avaliação das submissões.",
+      "emptyMessage": "Nenhuma questão.",
+      "labels": {
+        "answerType": "Tipo de resposta",
+        "text": "Texto"
+      },
+      "submitButton": "Adicionar",
+      "title": "Gerenciar questões para avaliações do track",
+      "titleCurrentSlots": "Questões atuais"
     },
     "admin-tracks-id-manage-submission-document-slots": {
       "description": "Descreva os documentos requeridos para as submissões.",

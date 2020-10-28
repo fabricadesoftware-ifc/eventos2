@@ -5,6 +5,7 @@ import { createEventAPIClient } from '~/api/event'
 import { createEventRegistrationAPIClient } from '~/api/eventRegistration'
 import { createSubmissionAPIClient } from '~/api/submission'
 import { createTrackAPIClient } from '~/api/track'
+import { createTrackReviewQuestionAPIClient } from '~/api/trackReviewQuestion'
 import { createTrackSubmissionDocumentSlotAPIClient } from '~/api/trackSubmissionDocumentSlot'
 import { createUserAPIClient } from '~/api/user'
 
@@ -22,6 +23,7 @@ export function createAPIClient($axios) {
     eventRegistration: createEventRegistrationAPIClient($axios),
     submission: createSubmissionAPIClient($axios),
     track: createTrackAPIClient($axios),
+    trackReviewQuestion: createTrackReviewQuestionAPIClient($axios),
     trackSubmissionDocumentSlot: createTrackSubmissionDocumentSlotAPIClient(
       $axios
     ),
