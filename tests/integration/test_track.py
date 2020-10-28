@@ -275,3 +275,32 @@ def test_list_submission_document_slots(
     assert resp.status_code == status.HTTP_200_OK
     assert len(resp.data) == 1
     assert resp.data[0]["name"] == slot_a.name
+
+
+@pytest.mark.django_db
+def test_list_review_questions(
+    api_client,
+    user_factory,
+    event_factory,
+    track_factory,
+    track_review_question_factory,
+):
+    # DADO um usuário autenticado, um evento pertencente a ele, e um track no evento.
+    user = user_factory(
+        name="user", permissions=["core.view_review_questions_for_track"]
+    )
+    api_client.force_authenticate(user=user)
+    event = event_factory(slug="event-a", owners=[user])
+    track = track_factory(event=event, name="Track A")
+    # E DADO uma review question no track.
+    question_a = track_review_question_factory(
+        track=track, text="Question A", answer_type="text"
+    )
+
+    # QUANDO a API é chamada para listar as questions do track.
+    resp = api_client.get(reverse("track-list-review-questions", args=[track.id]))
+
+    # ENTÃO as questions serão retornadas
+    assert resp.status_code == status.HTTP_200_OK
+    assert len(resp.data) == 1
+    assert resp.data[0]["text"] == question_a.text

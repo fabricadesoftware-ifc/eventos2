@@ -26,6 +26,10 @@ class Track(SoftDeletableModel):
     class Meta:
         permissions = [
             ("add_submission_to_track", "Can add a submission to a track"),
+            (
+                "view_review_questions_for_track",
+                "Can view review questions for a track",
+            ),
         ]
 
 

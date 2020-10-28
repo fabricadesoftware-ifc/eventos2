@@ -7,6 +7,7 @@ rules.add_perm("core.delete_event", predicates.is_event_owner)
 rules.add_perm("core.view_activities_for_event", rules.is_authenticated)
 rules.add_perm("core.view_registrations_for_event", predicates.is_event_owner)
 rules.add_perm("core.view_submissions_for_event", predicates.is_event_owner)
+rules.add_perm("core.view_review_questions_for_track", predicates.is_event_owner)
 rules.add_perm("core.view_tracks_for_event", rules.is_authenticated)
 rules.add_perm("core.view_activity_registrations_for_event", predicates.is_event_owner)
 rules.add_perm(

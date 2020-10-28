@@ -7,6 +7,7 @@ from rest_framework.response import Response
 from eventos2.core.models import Track
 from eventos2.core.serializers import (
     TrackCreateSerializer,
+    TrackReviewQuestionSerializer,
     TrackSerializer,
     TrackSubmissionDocumentSlotSerializer,
 )
@@ -24,6 +25,7 @@ class TrackViewSet(CRUDViewSet):
         "destroy": "core.change_event",
         "list_submissions": "core.change_event",
         "list_submission_document_slots": "core.view_tracks_for_event",
+        "list_review_questions": "core.view_review_questions_for_track",
     }
 
     def get_serializer_class(self):
@@ -52,5 +54,16 @@ class TrackViewSet(CRUDViewSet):
         track = self.get_object()
         serializer = TrackSubmissionDocumentSlotSerializer(
             track.submission_document_slots.all(), many=True
+        )
+        return Response(serializer.data)
+
+    @extend_schema(responses={200: TrackReviewQuestionSerializer(many=True)})
+    @action(
+        detail=True, url_path="review_questions", url_name="list-review-questions",
+    )
+    def list_review_questions(self, request, pk=None):
+        track = self.get_object()
+        serializer = TrackReviewQuestionSerializer(
+            track.review_questions.all(), many=True
         )
         return Response(serializer.data)
