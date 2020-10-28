@@ -5,6 +5,7 @@ import { required, email, mimes } from 'vee-validate/dist/rules'
 import EInput from '~/components/EInput'
 import EDatetimepicker from '~/components/EDatetimepicker'
 import ERadioCard from '~/components/ERadioCard'
+import ERadioGroup from '~/components/ERadioGroup'
 import ESelect from '~/components/ESelect'
 import EUpload from '~/components/EUpload'
 
@@ -20,6 +21,7 @@ extend('mimes', mimes)
  */
 Vue.component('EInput', EInput)
 Vue.component('ERadioCard', ERadioCard)
+Vue.component('ERadioGroup', ERadioGroup)
 Vue.component('ESelect', ESelect)
 Vue.component('EDatetimepicker', EDatetimepicker)
 Vue.component('EUpload', EUpload)
