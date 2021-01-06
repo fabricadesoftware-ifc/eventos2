@@ -16,7 +16,7 @@ variables:
   POSTGRES_PASSWORD: unsafe-password-for-testing
 
   # Configuration for the deploy stage
-  TEST_SSH_HOST_KEY: "[app1.fabricadesoftware.ifc.edu.br]:1022 ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIE1u+sxf1LVqV/i4RRQ8NT1L+6XOH40qZJYYZcMZlkFn"
+  TEST_SSH_HOST_KEY: "[app2.fabricadesoftware.ifc.edu.br]:1022 ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIE1u+sxf1LVqV/i4RRQ8NT1L+6XOH40qZJYYZcMZlkFn"
   CI_REGISTRY_IMAGE_BACKEND: $CI_REGISTRY_IMAGE/backend
   CI_REGISTRY_IMAGE_BACKEND_CACHE: $CI_REGISTRY_IMAGE/backend/cache
   CI_REGISTRY_IMAGE_FRONTEND: $CI_REGISTRY_IMAGE/frontend
@@ -98,8 +98,8 @@ deploy_backend:
   stage: deploy
   image: yurihs/gitlab-ci-ssh:1
   script:
-    - . setup-ssh --local-name app1 --host app1.fabricadesoftware.ifc.edu.br --port 1022 --user dokku --private-key "$TEST_SSH_PRIVATE_KEY" --host-key "$TEST_SSH_HOST_KEY"
-    - ssh app1 deploy-from-registry eventos2-backend $CI_COMMIT_SHORT_SHA
+    - . setup-ssh --local-name app2 --host app2.fabricadesoftware.ifc.edu.br --port 1022 --user dokku --private-key "$TEST_SSH_PRIVATE_KEY" --host-key "$TEST_SSH_HOST_KEY"
+    - ssh app2 deploy-from-registry eventos2-backend $CI_COMMIT_SHORT_SHA
   only:
     - master
   needs:
@@ -109,8 +109,8 @@ deploy_frontend:
   stage: deploy
   image: yurihs/gitlab-ci-ssh:1
   script:
-    - . setup-ssh --local-name app1 --host app1.fabricadesoftware.ifc.edu.br --port 1022 --user dokku --private-key "$TEST_SSH_PRIVATE_KEY" --host-key "$TEST_SSH_HOST_KEY"
-    - ssh app1 deploy-from-registry eventos2-frontend $CI_COMMIT_SHORT_SHA
+    - . setup-ssh --local-name app2 --host app2.fabricadesoftware.ifc.edu.br --port 1022 --user dokku --private-key "$TEST_SSH_PRIVATE_KEY" --host-key "$TEST_SSH_HOST_KEY"
+    - ssh app2 deploy-from-registry eventos2-frontend $CI_COMMIT_SHORT_SHA
   only:
     - master
   needs:
