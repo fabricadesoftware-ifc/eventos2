@@ -49,25 +49,12 @@
               >
             </div>
           </div>
+
           <div v-if="!needsConfiguration">
             <b-message
               :type="trackLocalized.is_open ? 'is-success' : 'is-info'"
               >{{ statusMessage }}</b-message
             >
-            <h2 class="title is-4">
-              {{
-                $tc(
-                  'pages.admin-tracks-id-manage.submissionCount',
-                  submissions.length
-                )
-              }}
-            </h2>
-            <b-table
-              v-if="submissions.length"
-              :data="submissions"
-              :columns="submissionColumns"
-              default-sort="id"
-            />
           </div>
           <div v-else>
             <b-message type="is-warning">
@@ -116,44 +103,15 @@ export default {
     const submissionDocumentSlots = await app.$api.track.listSubmissionDocumentSlots(
       track.id
     )
+    const needsConfiguration =
+      !submissionDocumentSlots || submissionDocumentSlots.length === 0
 
-    const submissions = await app.$api.event
-      .listSubmissionsInTrack(store.state.event.slug, track.id)
-      .then(submissions =>
-        submissions.map(submission => {
-          const authors = submission.authors.map(author => ({
-            ...author,
-            fullName: author.first_name + ' ' + author.last_name
-          }))
-          const authorsStr = authors.map(author => author.fullName).join('; ')
-          return {
-            ...submission,
-            authors,
-            authorsStr
-          }
-        })
-      )
     return {
       trackLocalized: track,
-      submissionDocumentSlots,
-      submissions
+      needsConfiguration
     }
   },
   computed: {
-    submissionColumns() {
-      return [
-        {
-          field: 'title',
-          label: this.$t('pages.admin-tracks-id-manage.labels.submissionTitle'),
-          sortable: true
-        },
-        {
-          field: 'authorsStr',
-          label: this.$t('pages.admin-tracks-id-manage.labels.authors'),
-          sortable: true
-        }
-      ]
-    },
     statusMessage() {
       const startsOn = this.$dayjs(this.trackLocalized.starts_on)
       const endsOn = this.$dayjs(this.trackLocalized.ends_on)
@@ -167,12 +125,6 @@ export default {
         startDate: startsOn.format('LLLL'),
         endDate: endsOn.format('LLLL')
       })
-    },
-    needsConfiguration() {
-      return (
-        !this.submissionDocumentSlots ||
-        this.submissionDocumentSlots.length === 0
-      )
     }
   }
 }

@@ -3,8 +3,8 @@
     "activities": "Atividades",
     "configuration": "Configuração",
     "overview": "Visão geral",
-    "title": "Área de administração",
-    "tracks": "Tracks"
+    "submissions": "Submissões",
+    "title": "Área de administração"
   },
   "appName": "Eventos2",
   "components": {
@@ -139,6 +139,24 @@
       },
       "title": "Inscrições"
     },
+    "admin-submissions": {
+      "editButton": "Editar esse track",
+      "emptyMessage": "Nenhuma submissão ai\\nda.",
+      "labels": {
+        "actions": "Ações",
+        "authors": "Autores",
+        "submissionTitle": "Título"
+      },
+      "manageReviewQuestions": "Gerenciar perguntas de avaliação",
+      "manageSubmissionDocumentSlots": "Gerenciar documentos requeridos",
+      "status": {
+        "isOpen": "As submissões estão abertas até {endDate}.",
+        "wasOpen": "As submissões estão fechadas desde {endDate}.",
+        "willOpen": "As submissões serão abertas em {startDate}."
+      },
+      "submissionCount": "Nenhuma submissão ainda | 1 submissão | {n} submissões",
+      "title": "Submissões"
+    },
     "admin-tracks": {
       "addButton": "Novo track",
       "editButton": "Editar",
@@ -159,10 +177,6 @@
     },
     "admin-tracks-id-manage": {
       "editButton": "Editar esse track",
-      "labels": {
-        "authors": "Autores",
-        "submissionTitle": "Título"
-      },
       "manageReviewQuestions": "Gerenciar perguntas de avaliação",
       "manageSubmissionDocumentSlots": "Gerenciar documentos requeridos",
       "noSubmissionDocumentSlotsMessage": "Agora falta configurar quais documentos serão requeridos das submissões.",
@@ -171,7 +185,6 @@
         "wasOpen": "As submissões estão fechadas desde {endDate}.",
         "willOpen": "As submissões serão abertas em {startDate}."
       },
-      "submissionCount": "Nenhuma submissão ainda | 1 submissão | {n} submissões",
       "title": "Gerenciar track"
     },
     "admin-tracks-id-manage-review-questions": {

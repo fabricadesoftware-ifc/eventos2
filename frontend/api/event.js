@@ -24,6 +24,9 @@ export function createEventAPIClient($axios) {
     listTracks(slug) {
       return $axios.$get(`api/v1/events/${slug}/tracks`)
     },
+    listSubmissions(slug) {
+      return $axios.$get(`api/v1/events/${slug}/submissions`)
+    },
     listSubmissionsInTrack(slug, trackId) {
       return $axios.$get(`api/v1/events/${slug}/submissions?track=${trackId}`)
     }

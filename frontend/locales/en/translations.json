@@ -3,8 +3,8 @@
     "activities": "Activities",
     "configuration": "Configuration",
     "overview": "Overview",
-    "title": "Administration area",
-    "tracks": "Tracks"
+    "submissions": "Submissions",
+    "title": "Administration area"
   },
   "appName": "Eventos2",
   "components": {
@@ -139,6 +139,24 @@
       },
       "title": "Registrations"
     },
+    "admin-submissions": {
+      "editButton": "Edit this track",
+      "emptyMessage": "No submissions yet.",
+      "labels": {
+        "actions": "Actions",
+        "authors": "Authors",
+        "submissionTitle": "Title"
+      },
+      "manageReviewQuestions": "Manage review questions",
+      "manageSubmissionDocumentSlots": "Manage required documents",
+      "status": {
+        "isOpen": "Submissions are open until {endDate}.",
+        "wasOpen": "Submissions are closed since {endDate}.",
+        "willOpen": "Submissions will open on {startDate}."
+      },
+      "submissionCount": "No submissions yet | 1 submission | {n} submissions",
+      "title": "Submissions"
+    },
     "admin-tracks": {
       "addButton": "New track",
       "editButton": "Edit",
@@ -159,10 +177,6 @@
     },
     "admin-tracks-id-manage": {
       "editButton": "Edit this track",
-      "labels": {
-        "authors": "Authors",
-        "submissionTitle": "Title"
-      },
       "manageReviewQuestions": "Manage review questions",
       "manageSubmissionDocumentSlots": "Manage required documents",
       "noSubmissionDocumentSlotsMessage": "All that's missing is specifying what documents are required for each submission.",
@@ -171,7 +185,6 @@
         "wasOpen": "Submissions are closed since {endDate}.",
         "willOpen": "Submissions will open on {startDate}."
       },
-      "submissionCount": "No submissions yet | 1 submission | {n} submissions",
       "title": "Manage track"
     },
     "admin-tracks-id-manage-review-questions": {
