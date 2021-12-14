@@ -24,9 +24,8 @@ export function createAPIClient($axios) {
     submission: createSubmissionAPIClient($axios),
     track: createTrackAPIClient($axios),
     trackReviewQuestion: createTrackReviewQuestionAPIClient($axios),
-    trackSubmissionDocumentSlot: createTrackSubmissionDocumentSlotAPIClient(
-      $axios
-    ),
+    trackSubmissionDocumentSlot:
+      createTrackSubmissionDocumentSlotAPIClient($axios),
     user: createUserAPIClient($axios)
   }
 }

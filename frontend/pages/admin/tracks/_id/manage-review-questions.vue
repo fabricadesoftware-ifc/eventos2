@@ -100,7 +100,7 @@
             >
               {{ props.row.answer_type }}
             </b-table-column>
-            <template v-slot:empty>
+            <template #empty>
               <div class="has-text-grey">
                 {{
                   $t(
@@ -140,8 +140,8 @@ const questionToItem = ({ i18n, question }) => {
 }
 
 export default {
-  layout: 'admin',
   mixins: [errorMixin],
+  layout: 'admin',
 
   async asyncData({ app, params, store }) {
     const track = await app.$api.track.getById(params.id)

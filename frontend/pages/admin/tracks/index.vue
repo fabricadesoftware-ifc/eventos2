@@ -45,7 +45,7 @@
                 width="100"
                 sortable
               >
-                <template v-slot:default="props">
+                <template #default="props">
                   <b-tag v-if="props.row.is_open" type="is-success">{{
                     $t('pages.admin-tracks.submissionsOpen')
                   }}</b-tag>
@@ -56,7 +56,7 @@
                 width="200"
                 numeric
               >
-                <template v-slot:default="props">
+                <template #default="props">
                   <b-button
                     tag="nuxt-link"
                     :to="

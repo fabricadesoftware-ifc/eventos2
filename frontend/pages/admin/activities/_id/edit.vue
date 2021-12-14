@@ -65,8 +65,8 @@
 import errorMixin from '~/mixins/errorMixin'
 
 export default {
-  layout: 'admin',
   mixins: [errorMixin],
+  layout: 'admin',
 
   async asyncData({ app, params }) {
     const activity = await app.$api.activity.getById(params.id)

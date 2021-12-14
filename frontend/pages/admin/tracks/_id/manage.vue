@@ -100,9 +100,8 @@ export default {
     }
     delete track.name_english
 
-    const submissionDocumentSlots = await app.$api.track.listSubmissionDocumentSlots(
-      track.id
-    )
+    const submissionDocumentSlots =
+      await app.$api.track.listSubmissionDocumentSlots(track.id)
     const needsConfiguration =
       !submissionDocumentSlots || submissionDocumentSlots.length === 0
 

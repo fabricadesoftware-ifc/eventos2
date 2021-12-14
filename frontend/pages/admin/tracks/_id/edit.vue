@@ -65,8 +65,8 @@
 import errorMixin from '~/mixins/errorMixin'
 
 export default {
-  layout: 'admin',
   mixins: [errorMixin],
+  layout: 'admin',
 
   async asyncData({ app, params }) {
     const track = await app.$api.track.getById(params.id)

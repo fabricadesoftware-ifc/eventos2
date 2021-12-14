@@ -65,12 +65,11 @@ export default {
     const activities = await app.$api.event.listActivities(
       store.state.event.slug
     )
-    const registrations = await app.$api.activityRegistration.listByUserAndEvent(
-      {
+    const registrations =
+      await app.$api.activityRegistration.listByUserAndEvent({
         userPublicId: app.$auth.user.public_id,
         eventSlug: store.state.event.slug
-      }
-    )
+      })
     const activitiesLocalized = activities.map(activity => {
       if (store.state.locale === 'en' && activity.name_english) {
         activity.name = activity.name_english

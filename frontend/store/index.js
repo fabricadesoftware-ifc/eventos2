@@ -69,12 +69,11 @@ export const actions = {
     let eventRegistrations = []
     if (state.event && this.$auth.user) {
       try {
-        eventRegistrations = await this.$api.eventRegistration.listByUserAndEvent(
-          {
+        eventRegistrations =
+          await this.$api.eventRegistration.listByUserAndEvent({
             userPublicId: this.$auth.user.public_id,
             eventSlug: state.event.slug
-          }
-        )
+          })
       } catch {}
     }
     commit('setEventRegistration', eventRegistrations[0] || null)

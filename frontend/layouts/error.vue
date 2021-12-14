@@ -38,14 +38,19 @@ import EventosNavbar from '~/components/EventosNavbar'
 
 export default {
   name: 'NuxtError',
-  layout: 'blank',
   components: {
     EventosNavbar
   },
+  layout: 'blank',
   props: {
     error: {
       type: Object,
       default: null
+    }
+  },
+  head() {
+    return {
+      title: this.message
     }
   },
   computed: {
@@ -68,11 +73,6 @@ export default {
   methods: {
     goHome() {
       this.$router.go(this.localePath({ name: 'index' }))
-    }
-  },
-  head() {
-    return {
-      title: this.message
     }
   }
 }

@@ -38,11 +38,12 @@
                       :key="track.id"
                       :value="track.id"
                       :disabled="!track.is_open"
-                      >{{ track.name }}
+                    >
+                      {{ track.name }}
                       <template v-if="!track.is_open">{{
                         $t('pages.submissions-new.steps.details.trackClosed')
-                      }}</template></option
-                    >
+                      }}</template>
+                    </option>
                   </e-select>
                   <e-input
                     v-model="form.title"
@@ -226,7 +227,7 @@
                   </b-message>
                 </b-step-item>
 
-                <template v-slot:navigation="{ previous, next }">
+                <template #navigation="{ previous, next }">
                   <div v-show="!isStep('done')" class="is-pulled-right">
                     <b-button
                       type="is-danger"
@@ -289,8 +290,7 @@ const validContentTypes = {
   PDF: 'application/pdf',
   ODT: 'application/vnd.oasis.opendocument.text',
   DOC: 'application/msword',
-  DOCX:
-    'application/vnd.openxmlformats-officedocument.wordprocessingml.document'
+  DOCX: 'application/vnd.openxmlformats-officedocument.wordprocessingml.document'
 }
 const validExtensions = Object.keys(validContentTypes)
 const validMimeTypes = Object.values(validContentTypes)

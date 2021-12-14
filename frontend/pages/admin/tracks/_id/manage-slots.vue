@@ -102,7 +102,7 @@
             >
               {{ props.row.ends_on }}
             </b-table-column>
-            <template v-slot:empty>
+            <template #empty>
               <div class="has-text-grey">
                 {{
                   $t(
@@ -132,8 +132,8 @@ const slotToItem = ({ locale, dayjs, slot }) => {
 }
 
 export default {
-  layout: 'admin',
   mixins: [errorMixin],
+  layout: 'admin',
 
   async asyncData({ app, params, store }) {
     const track = await app.$api.track.getById(params.id)

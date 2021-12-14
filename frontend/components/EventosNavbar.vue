@@ -1,6 +1,6 @@
 <template>
   <b-navbar type="is-primary" shadow>
-    <template v-slot:brand>
+    <template #brand>
       <b-navbar-item
         tag="nuxt-link"
         class="navbar-item"
@@ -9,7 +9,7 @@
         {{ eventNameLocalized }}
       </b-navbar-item>
     </template>
-    <template v-slot:end>
+    <template #end>
       <b-navbar-item
         v-if="isLoggedin"
         tag="nuxt-link"
@@ -21,7 +21,7 @@
       </b-navbar-item>
 
       <b-navbar-dropdown v-if="isLoggedin">
-        <template v-slot:label>
+        <template #label>
           <b-icon icon="account-circle"></b-icon>
           {{ currentUser.first_name }}
         </template>
@@ -40,7 +40,7 @@
       </b-navbar-dropdown>
 
       <b-navbar-dropdown class="is-hidden-touch">
-        <template v-slot:label>
+        <template #label>
           <b-icon icon="translate"></b-icon>
           <span>{{ currentLocale.name }}</span>
         </template>

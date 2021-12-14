@@ -8,7 +8,7 @@
         exact-active-class="is-active"
         :to="localePath(link.to)"
       >
-        <template v-slot:label>
+        <template #label>
           <b-icon v-if="link.icon" :icon="link.icon"></b-icon>
           <span>{{ link.title }}</span>
         </template>

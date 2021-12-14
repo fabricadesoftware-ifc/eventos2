@@ -55,7 +55,7 @@
                 width="200"
                 numeric
               >
-                <template v-slot:default="props">
+                <template #default="props">
                   <b-button
                     tag="nuxt-link"
                     :to="

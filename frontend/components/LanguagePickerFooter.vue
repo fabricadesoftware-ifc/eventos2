@@ -1,6 +1,6 @@
 <template>
   <b-dropdown position="is-bottom-left">
-    <template v-slot:trigger>
+    <template #trigger>
       <b-button
         type="is-primary"
         icon-left="translate"
