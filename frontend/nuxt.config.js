@@ -32,6 +32,7 @@ export default {
   },
 
   buildModules: [
+    '@nuxtjs/eslint-module',
     '@nuxtjs/axios',
     '@nuxtjs/auth-next',
     '@nuxtjs/style-resources',
@@ -44,16 +45,6 @@ export default {
   build: {
     transpile: ['vee-validate/dist/rules'],
     extend(config, ctx) {
-      // Run eslint and show errors when hot-reloading
-      if (ctx.isDev && ctx.isClient) {
-        config.module.rules.push({
-          enforce: 'pre',
-          test: /\.(js|vue)$/,
-          loader: 'eslint-loader',
-          exclude: /(node_modules)/
-        })
-      }
-
       // Use inline source maps for the server, and regular ones for the client.
       // Allows the VSCode debugger to work.
       if (ctx.isDev) {
