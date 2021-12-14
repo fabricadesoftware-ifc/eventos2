@@ -22,7 +22,9 @@ class EventRegistrationViewSet(GenericViewSet):
             "list": EventRegistrationBaseSerializer,
         }.get(self.action, None)
 
-    @extend_schema(responses={200: EventRegistrationDetailSerializer},)
+    @extend_schema(
+        responses={200: EventRegistrationDetailSerializer},
+    )
     def create(self, request):
         in_serializer = self.get_serializer(data=request.data)
         in_serializer.is_valid(raise_exception=True)

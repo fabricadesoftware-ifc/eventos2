@@ -17,6 +17,7 @@ DEBUG = env("DEBUG", bool, False)
 ALLOWED_HOSTS = env("ALLOWED_HOSTS", list, ["127.0.0.1", "localhost"])
 
 DATABASES = {"default": env.db()}
+DEFAULT_AUTO_FIELD = "django.db.models.AutoField"
 
 EMAIL_CONFIG = env.email_url("EMAIL_URL", default="memorymail://")
 vars().update(EMAIL_CONFIG)
@@ -130,7 +131,7 @@ MEDIA_URL = "/api/media/"
 
 MEDIA_ROOT = os.path.join(BASE_DIR, "media/")
 
-FILE_UPLOAD_PERMISSIONS = 0o640
+FILE_UPLOAD_PERMISSIONS = 0o644
 
 
 # Django Rest Framework

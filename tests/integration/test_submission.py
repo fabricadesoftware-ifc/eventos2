@@ -129,7 +129,8 @@ def test_submit_missing_document(
 
     # QUANDO a API é chamada para submeter no track.
     resp = api_client.post(
-        reverse("submission-list"), {"track": track.id, "title": "Title"},
+        reverse("submission-list"),
+        {"track": track.id, "title": "Title"},
     )
 
     # ENTÃO a reposta de falha deve conter o erro no campo documents,

@@ -8,7 +8,8 @@ from eventos2.core.serializers.submission import (
 
 class ReviewRequestCreateSerializer(serializers.ModelSerializer):
     author = serializers.SlugRelatedField(
-        slug_field="public_id", queryset=User.objects.filter(is_active=True),
+        slug_field="public_id",
+        queryset=User.objects.filter(is_active=True),
     )
     submission = serializers.PrimaryKeyRelatedField(
         queryset=Submission.available_objects.all()

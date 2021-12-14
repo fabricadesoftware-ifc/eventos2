@@ -200,7 +200,8 @@ def test_update_unauthorized(api_client, user_factory, event_factory, track_fact
 
     # QUANDO a API é chamada para editar o track.
     resp = api_client.put(
-        reverse("track-detail", args=[track.id]), {"name": track.name + " modified"},
+        reverse("track-detail", args=[track.id]),
+        {"name": track.name + " modified"},
     )
 
     # ENTÃO a resposta deve ser de falta de permissões.

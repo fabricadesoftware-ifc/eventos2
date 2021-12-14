@@ -27,7 +27,8 @@ class UpdateModelMixin(object):
 
 
 class CViewSet(
-    CreateModelMixin, viewsets.GenericViewSet,
+    CreateModelMixin,
+    viewsets.GenericViewSet,
 ):
     """
     Create only.

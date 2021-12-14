@@ -42,7 +42,8 @@ class UserViewSet(CViewSet):
         return Response(self.get_serializer(users, many=True).data)
 
     @action(
-        detail=False, url_path="current",
+        detail=False,
+        url_path="current",
     )
     def current(self, request):
         user = User.objects.filter(is_active=True).get(pk=request.user.pk)
@@ -68,7 +69,9 @@ class UserViewSet(CViewSet):
         user.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
 
-    @extend_schema(responses={200: SubmissionDetailWithReviewsSerializer(many=True)},)
+    @extend_schema(
+        responses={200: SubmissionDetailWithReviewsSerializer(many=True)},
+    )
     @action(
         detail=False,
         url_path="current/submissions",
@@ -83,7 +86,9 @@ class UserViewSet(CViewSet):
         )
         return Response(serializer.data)
 
-    @extend_schema(responses={200: ReviewRequestInlineSerializer(many=True)},)
+    @extend_schema(
+        responses={200: ReviewRequestInlineSerializer(many=True)},
+    )
     @action(
         detail=False,
         url_path="current/review_requests",
@@ -95,5 +100,8 @@ class UserViewSet(CViewSet):
         reviews = user.reviews.order_by("-id").all()
         pending_reviews = [x for x in reviews if x.is_pending]
 
-        serializer = ReviewRequestInlineSerializer(pending_reviews, many=True,)
+        serializer = ReviewRequestInlineSerializer(
+            pending_reviews,
+            many=True,
+        )
         return Response(serializer.data)

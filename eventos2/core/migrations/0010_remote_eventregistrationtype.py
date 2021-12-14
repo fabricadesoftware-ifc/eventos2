@@ -12,7 +12,8 @@ class Migration(migrations.Migration):
 
     operations = [
         migrations.RemoveField(
-            model_name="eventregistration", name="registration_type",
+            model_name="eventregistration",
+            name="registration_type",
         ),
         migrations.AddField(
             model_name="eventregistration",
@@ -24,5 +25,7 @@ class Migration(migrations.Migration):
             ),
             preserve_default=False,
         ),
-        migrations.DeleteModel(name="EventRegistrationType",),
+        migrations.DeleteModel(
+            name="EventRegistrationType",
+        ),
     ]

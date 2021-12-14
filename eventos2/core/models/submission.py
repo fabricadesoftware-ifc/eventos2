@@ -41,7 +41,9 @@ class SubmissionAuthorship(models.Model):
 
 class SubmissionDocument(models.Model):
     slot = models.ForeignKey(
-        TrackSubmissionDocumentSlot, on_delete=models.PROTECT, related_name="documents",
+        TrackSubmissionDocumentSlot,
+        on_delete=models.PROTECT,
+        related_name="documents",
     )
     submission = models.ForeignKey(
         Submission, on_delete=models.PROTECT, related_name="documents"

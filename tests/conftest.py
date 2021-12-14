@@ -86,7 +86,10 @@ def activity_factory():
 @pytest.fixture
 def submission_factory():
     def _factory(*, track, title, authors):
-        submission = Submission.objects.create(track=track, title=title,)
+        submission = Submission.objects.create(
+            track=track,
+            title=title,
+        )
         submission.authors.add(*authors)
         return submission
 
@@ -148,7 +151,10 @@ def track_submission_document_slot_factory():
 @pytest.fixture
 def document_factory():
     def _factory(*, file_path, content_type):
-        document = Document.objects.create(file=file_path, content_type=content_type,)
+        document = Document.objects.create(
+            file=file_path,
+            content_type=content_type,
+        )
         return document
 
     return _factory

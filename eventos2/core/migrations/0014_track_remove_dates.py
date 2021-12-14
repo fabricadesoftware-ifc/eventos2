@@ -10,6 +10,12 @@ class Migration(migrations.Migration):
     ]
 
     operations = [
-        migrations.RemoveField(model_name="track", name="ends_on",),
-        migrations.RemoveField(model_name="track", name="starts_on",),
+        migrations.RemoveField(
+            model_name="track",
+            name="ends_on",
+        ),
+        migrations.RemoveField(
+            model_name="track",
+            name="starts_on",
+        ),
     ]

@@ -10,6 +10,12 @@ class Migration(migrations.Migration):
     ]
 
     operations = [
-        migrations.RemoveField(model_name="activity", name="slug",),
-        migrations.RemoveField(model_name="track", name="slug",),
+        migrations.RemoveField(
+            model_name="activity",
+            name="slug",
+        ),
+        migrations.RemoveField(
+            model_name="track",
+            name="slug",
+        ),
     ]

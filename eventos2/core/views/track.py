@@ -59,7 +59,9 @@ class TrackViewSet(CRUDViewSet):
 
     @extend_schema(responses={200: TrackReviewQuestionSerializer(many=True)})
     @action(
-        detail=True, url_path="review_questions", url_name="list-review-questions",
+        detail=True,
+        url_path="review_questions",
+        url_name="list-review-questions",
     )
     def list_review_questions(self, request, pk=None):
         track = self.get_object()
