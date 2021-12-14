@@ -29,7 +29,7 @@ stages:
 
 test_backend:
   stage: test
-  image: yurihs/python-poetry:1.0.10
+  image: yurihs/python-poetry:1.1.12
   cache:
     key:
       files:
@@ -51,7 +51,7 @@ test_backend:
 
 test_frontend:
   stage: test
-  image: node:12-buster
+  image: node:14-buster
   cache:
     key:
       files:
